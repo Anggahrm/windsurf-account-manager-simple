@@ -92,23 +92,23 @@
             <div class="empty-icon">
               <el-icon><CreditCard /></el-icon>
             </div>
-            <p>NoneBIN，Please add</p>
+            <p>None BIN, Please add</p>
           </div>
         </div>
       </div>
       
-      <!-- right side：generatemanager -->
+      <!-- right side: generate manager -->
       <div class="generator-panel">
         <div class="section-header">
           <div class="section-icon">
             <el-icon><Cpu /></el-icon>
           </div>
-          <span>cardgenerate</span>
+          <span>Card Generate</span>
         </div>
         
         <div class="generator-options">
           <div class="option-row">
-            <span class="option-label">generateCount</span>
+            <span class="option-label">Generate Count</span>
             <el-input-number
               v-model="generateCount"
               :min="1"

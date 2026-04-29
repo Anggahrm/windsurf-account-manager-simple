@@ -64,7 +64,7 @@ impl WindsurfService {
 
     /// Build update plan request body
     /// 
-    /// Protobuf 结构 (UpdatePlanRequest):
+    /// Protobuf structure (UpdatePlanRequest):
     /// - Field 1 (LengthDelimited): auth_token (string)
     /// - Field 2 (Varint): price (StripePrice enum)
     /// - Field 3 (Varint): preview (bool) - Preview mode
@@ -231,7 +231,7 @@ impl WindsurfService {
 
         let mut body = Vec::new();
 
-        // 字段1: auth_token (string, field number 1, wire type 2)
+        // Field 1: auth_token (string, field number 1, wire type 2)
         body.push(0x0a); // field 1, wire type 2 (length-delimited)
         let mut len = token_length;
         while len >= 0x80 {
@@ -241,24 +241,24 @@ impl WindsurfService {
         body.push(len as u8);
         body.extend_from_slice(token_bytes);
 
-        // 字段3: start_trial (bool, field number 3, wire type 0)
+        // Field 3: start_trial (bool, field number 3, wire type 0)
         if start_trial {
             body.push(0x18); // field 3, wire type 0 (0x18 = (3 << 3) | 0)
             body.push(0x01); // value = true
         }
 
-        // 字段4: Success URL (string, field number 4, wire type 2)
+        // Field 4: Success URL (string, field number 4, wire type 2)
         body.push(0x22); // field 4, wire type 2 (0x22 = (4 << 3) | 2)
         body.push(success_url_length as u8);
         body.extend_from_slice(success_url_bytes);
 
-        // 字段5: Cancel URL (string, field number 5, wire type 2)
+        // Field 5: Cancel URL (string, field number 5, wire type 2)
         body.push(0x2a); // field 5, wire type 2 (0x2a = (5 << 3) | 2)
         body.push(cancel_url_length as u8);
         body.extend_from_slice(cancel_url_bytes);
 
-        // 字段6: seats (int64, field number 6, wire type 0)
-        // 所有团队/企业类计划需要 seats，个人计划(Pro/Max/Trial/Free等)不设置
+        // Field 6: seats (int64, field number 6, wire type 0)
+        // All team/enterprise plans need seats, individual plans (Pro/Max/Trial/Free, etc.) do not set
         if matches!(teams_tier, 1 | 3 | 4 | 5 | 7 | 10 | 11 | 12 | 14 | 15) {
             let seat_count = seats.unwrap_or(1);
             if seat_count > 0 {
@@ -267,7 +267,7 @@ impl WindsurfService {
             }
         }
 
-        // 字段7: team_name (string, field number 7, wire type 2) - Teams/Enterprise 需要
+        // Field 7: team_name (string, field number 7, wire type 2) - Teams/Enterprise needs
         if let Some(name) = team_name {
             if !name.is_empty() {
                 let name_bytes = name.as_bytes();
@@ -277,15 +277,15 @@ impl WindsurfService {
             }
         }
 
-        // 字段8: teams_tier (enum, field number 8, wire type 0)
+        // Field 8: teams_tier (enum, field number 8, wire type 0)
         body.push(0x40); // field 8, wire type 0 (varint)
         body.push(teams_tier as u8);
 
-        // 字段9: payment_period (enum, field number 9, wire type 0)
+        // Field 9: payment_period (enum, field number 9, wire type 0)
         body.push(0x48); // field 9, wire type 0 (varint)
         body.push(payment_period as u8);
 
-        // 字段10: turnstile_token (string, field number 10, wire type 2) - start_trial=true 时所有计划均需
+        // Field 10: turnstile_token (string, field number 10, wire type 2) - start_trial=true all plans require
         if let Some(turnstile) = turnstile_token {
             let turnstile_bytes = turnstile.as_bytes();
             body.push(0x52); // field 10, wire type 2 (0x52 = (10 << 3) | 2)
@@ -408,7 +408,7 @@ impl WindsurfService {
                 }
             }
             
-            // 两次请求之间稍作延迟
+            // Add slight delay between requests
             if i < retry_times - 1 {
                 tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
             }
@@ -424,7 +424,7 @@ impl WindsurfService {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/GetTeamCreditEntries", WINDSURF_BASE_URL);
         
-        // GetTeamCreditEntries的body格式: 0x0a + token长度 + token
+        // GetTeamCreditEntries body format: 0x0a + token length + token
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
         
@@ -444,7 +444,7 @@ impl WindsurfService {
         println!("[GetTeamCreditEntries] Token length: {} bytes", token_length);
         println!("[GetTeamCreditEntries] Request body length: {} bytes", full_body.len());
         
-        // 打印前几个字节用于调试
+        // Print first few bytes for debugging
         if full_body.len() >= 3 {
             println!("[GetTeamCreditEntries] Body prefix: {:02x} {:02x} {:02x}", full_body[0], full_body[1], full_body[2]);
         }
@@ -509,7 +509,7 @@ impl WindsurfService {
                         },
                         Err(e) => {
                             println!("[GetTeamCreditEntries] Failed to parse response: {}", e);
-                            // 返回原始响应以便调试
+                            // Return original response for debugging
                             let raw_response = if response_bytes.starts_with(b"data:application/proto;base64,") {
                                 String::from_utf8_lossy(&response_bytes).to_string()
                             } else {
@@ -545,8 +545,8 @@ impl WindsurfService {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/GetTeamBilling", WINDSURF_BASE_URL);
         
-        // GetTeamBilling的body格式: 0x0a + token长度 + token
-        // 注意：不是 0x0a 0xa1 0x07，那是UpdatePlan用的
+        // GetTeamBilling body format: 0x0a + token length + token
+        // Note: not 0x0a 0xa1 0x07, that's for UpdatePlan
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
         
@@ -629,20 +629,20 @@ impl WindsurfService {
         }
     }
 
-    /// 更新订阅计划
+    /// Update subscription plan
     /// 
     /// # Arguments
     /// * `token` - Firebase ID Token
-    /// * `plan_type` - 计划类型（teams, pro, enterprise 等）
-    /// * `payment_period` - 付款周期（1=月付, 2=年付）
-    /// * `preview` - 预览模式（true=仅预览不实际执行）
+    /// * `plan_type` - Plan type (teams, pro, enterprise, etc.)
+    /// * `payment_period` - Payment period (1=Monthly, 2=Yearly)
+    /// * `preview` - Preview mode (true=preview only, not actual execution)
     pub async fn update_plan(&self, ctx: &AuthContext, plan_type: &str, payment_period: u8, preview: bool) -> AppResult<serde_json::Value> {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/UpdatePlan", WINDSURF_BASE_URL);
         
-        // 验证 payment_period
+        // Validate payment_period
         let period = if payment_period == 2 { 2 } else { 1 };
-        let period_name = if period == 2 { "年付" } else { "月付" };
+        let period_name = if period == 2 { "Yearly" } else { "Monthly" };
         
         println!("[UpdatePlan] plan_type={}, period={}, preview={}", plan_type, period_name, preview);
         
@@ -675,13 +675,13 @@ impl WindsurfService {
         
         println!("[UpdatePlan] Response status: {}, size: {} bytes", status_code, response_bytes.len());
         
-        // 尝试解析 Protobuf 响应
+        // Try to parse Protobuf response
         if status_code == 200 && response_bytes.len() > 0 {
             match crate::services::proto_parser::ProtobufParser::parse_update_plan_response(&response_bytes) {
                 Ok(parsed) => {
                     println!("[UpdatePlan] Successfully parsed response");
                     
-                    // 检查是否有支付失败原因
+                    // Check if there is payment failure reason
                     let payment_failure = parsed.get("payment_failure_reason")
                         .and_then(|v| v.as_str())
                         .unwrap_or("");
@@ -710,7 +710,7 @@ impl WindsurfService {
             }
         }
         
-        // 解析失败时返回原始响应
+        // Return original response when parsing fails
         let raw_response = if response_bytes.starts_with(b"data:application/proto;base64,") {
             String::from_utf8_lossy(&response_bytes).to_string()
         } else {
@@ -729,14 +729,14 @@ impl WindsurfService {
         }))
     }
 
-    /// 取消订阅
+    /// Cancel subscription
     ///
     /// # Arguments
     /// * `token` - Firebase ID Token
-    /// * `reason` - 取消原因（例如："too_expensive", "not_using", "missing_features", "switching_service", "other"）
+    /// * `reason` - Cancellation reason (e.g.: "too_expensive", "not_using", "missing_features", "switching_service", "other")
     ///
     /// # Returns
-    /// 返回包含操作结果的 JSON 对象
+    /// Returns JSON object containing operation result
     pub async fn cancel_plan(&self, ctx: &AuthContext, reason: &str) -> AppResult<serde_json::Value> {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/CancelPlan", WINDSURF_BASE_URL);
@@ -787,13 +787,13 @@ impl WindsurfService {
         }))
     }
 
-    /// 恢复订阅
+    /// Resume subscription
     ///
     /// # Arguments
     /// * `token` - Firebase ID Token
     ///
     /// # Returns
-    /// 返回包含操作结果的 JSON 对象
+    /// Returns JSON object containing operation result
     pub async fn resume_plan(&self, ctx: &AuthContext) -> AppResult<serde_json::Value> {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/CancelPlan", WINDSURF_BASE_URL);
@@ -843,22 +843,22 @@ impl WindsurfService {
         }))
     }
 
-    /// 获取一次性 auth_token（供 Windsurf 桌面客户端 OAuth 回调登录使用）
+    /// Get one-time auth_token (for Windsurf desktop client OAuth callback login)
     ///
-    /// # 背景
-    /// Windsurf 桌面客户端通过 `windsurf://codeium.windsurf#access_token=<one_time_auth_token>`
-    /// 触发登录，该一次性票据由后端 `GetOneTimeAuthToken` RPC 颁发。
+    /// # Background
+    /// Windsurf desktop client triggers login via `windsurf://codeium.windsurf#access_token=<one_time_auth_token>`
+    /// This one-time ticket is issued by the backend `GetOneTimeAuthToken` RPC.
     ///
-    /// # 鉴权兼容性
-    /// - Firebase 账号：入参 `auth_token` = Firebase ID Token，请求仅需 `x-auth-token` 头
-    /// - Devin 账号：入参 `auth_token` = `devin-session-token$...` 形式的 session_token；
-    ///   请求还须附带 `X-Devin-Auth1-Token` / `X-Devin-Account-Id` /
-    ///   `X-Devin-Primary-Org-Id` / `X-Devin-Session-Token` 4 个扩展头
+    /// # Authentication Compatibility
+    /// - Firebase account: input `auth_token` = Firebase ID Token, request only needs `x-auth-token` header
+    /// - Devin account: input `auth_token` = `devin-session-token$...` format session_token;
+    ///   request must also include 4 extension headers: `X-Devin-Auth1-Token` / `X-Devin-Account-Id` /
+    ///   `X-Devin-Primary-Org-Id` / `X-Devin-Session-Token`
     ///
-    /// `with_auth(ctx)` 会根据 `ctx.devin` 自动分流，调用方无需感知具体账号体系。
+    /// `with_auth(ctx)` automatically routes based on `ctx.devin`, caller does not need to be aware of specific account system.
     ///
     /// # Returns
-    /// 成功时返回一次性 auth_token 字符串
+    /// Returns one-time auth_token string on success
     pub async fn get_one_time_auth_token(&self, ctx: &AuthContext) -> AppResult<String> {
         let token = ctx.token_str();
         let url = format!(
@@ -866,7 +866,7 @@ impl WindsurfService {
             WINDSURF_BASE_URL
         );
 
-        // 请求体：GetOneTimeAuthTokenRequest { auth_token = 1 }
+        // Request body: GetOneTimeAuthTokenRequest { auth_token = 1 }
         let body = self.encode_string_field(1, token);
 
         let response = self.client
@@ -894,19 +894,19 @@ impl WindsurfService {
         if status_code != 200 {
             let err_text = String::from_utf8_lossy(&response_body).to_string();
             return Err(AppError::Api(format!(
-                "GetOneTimeAuthToken 请求失败: status={}, body={}",
+                "GetOneTimeAuthToken request failed: status={}, body={}",
                 status_code, err_text
             )));
         }
 
-        // 响应体：GetOneTimeAuthTokenResponse { auth_token = 1 }
+        // Response body: GetOneTimeAuthTokenResponse { auth_token = 1 }
         let mut parser = super::proto_parser::ProtobufParser::new(response_body.to_vec());
         let parsed = parser.parse_message()
-            .map_err(|e| AppError::Api(format!("解析 GetOneTimeAuthToken 响应失败: {}", e)))?;
+            .map_err(|e| AppError::Api(format!("Failed to parse GetOneTimeAuthToken response: {}", e)))?;
 
         let auth_token = parsed.get("string_1")
             .and_then(|v| v.as_str())
-            .ok_or_else(|| AppError::Api("GetOneTimeAuthToken 响应中未找到 auth_token 字段".to_string()))?;
+            .ok_or_else(|| AppError::Api("GetOneTimeAuthToken response does not contain auth_token field".to_string()))?;
 
         Ok(auth_token.to_string())
     }
@@ -915,7 +915,7 @@ impl WindsurfService {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/GetCurrentUser", WINDSURF_BASE_URL);
         
-        // 构建请求体：0x0a + token长度(varint) + token + 0x10 0x01 0x18 0x01 0x20 0x01
+        // Build request body: 0x0a + token length (varint) + token + 0x10 0x01 0x18 0x01 0x20 0x01
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
         
@@ -931,7 +931,7 @@ impl WindsurfService {
         
         body.extend_from_slice(token_bytes);
         
-        // 添加额外的字段
+        // Add additional fields
         body.extend_from_slice(&[0x10, 0x01, 0x18, 0x01, 0x20, 0x01]);
         
         let response = self.client
@@ -1300,7 +1300,7 @@ impl WindsurfService {
                         return Ok(serde_json::json!({
                             "success": false,
                             "status_code": status_code,
-                            "error": "响应中未找到Stripe链接",
+                            "error": "Stripe link not found in response",
                             "timestamp": chrono::Utc::now().to_rfc3339(),
                         }));
                     }
@@ -1309,30 +1309,30 @@ impl WindsurfService {
                     return Ok(serde_json::json!({
                         "success": false,
                         "status_code": status_code,
-                        "error": format!("解析响应失败: {}", e),
+                        "error": format!("Failed to parse response: {}", e),
                         "timestamp": chrono::Utc::now().to_rfc3339(),
                     }));
                 }
             }
         } else {
             let error_msg = String::from_utf8_lossy(&response_body).to_string();
-            println!("[SubscribeToPlan] 错误响应: status={}, body={}", status_code, error_msg);
+            println!("[SubscribeToPlan] Error response: status={}, body={}", status_code, error_msg);
 
-            // 解析错误信息，提供更友好的提示
+            // Parse error information, provide more friendly hints
             let friendly_error = if status_code == 400 {
                 if error_msg.contains("invalid_argument") {
-                    "请求参数错误，可能是价格ID无效或账号不支持此操作".to_string()
+                    "Request parameter error, possibly invalid price ID or account does not support this operation".to_string()
                 } else if error_msg.contains("turnstile") || error_msg.contains("Turnstile") {
-                    "Turnstile 验证失败，请重新验证".to_string()
+                    "Turnstile verification failed, please verify again".to_string()
                 } else {
-                    format!("请求格式错误: {}", error_msg)
+                    format!("Request format error: {}", error_msg)
                 }
             } else if status_code == 401 || status_code == 403 {
-                "认证失败，请先刷新Token后重试".to_string()
+                "Authentication failed, please refresh Token first and retry".to_string()
             } else if status_code == 404 {
-                "API接口不存在".to_string()
+                "API interface does not exist".to_string()
             } else {
-                format!("获取支付链接失败: {}", error_msg)
+                format!("Failed to get payment link: {}", error_msg)
             };
 
             Ok(serde_json::json!({
@@ -2815,7 +2815,7 @@ impl WindsurfService {
                 Err(e) => {
                     Ok(serde_json::json!({
                         "success": false,
-                        "error": format!("解析响应失败: {}", e),
+                        "error": format!("Failed to parse response: {}", e),
                         "timestamp": chrono::Utc::now().to_rfc3339(),
                     }))
                 }
@@ -2824,22 +2824,22 @@ impl WindsurfService {
             Ok(serde_json::json!({
                 "success": false,
                 "status_code": status_code,
-                "error": "获取自动充值设置失败",
+                "error": "Failed to get auto top-up settings",
                 "timestamp": chrono::Utc::now().to_rfc3339(),
             }))
         }
     }
 
-    /// 更新成员的 Windsurf 访问权限 (UpdateCodeiumAccess API)
-    /// disable_access: true = 禁用访问, false = 启用访问
+    /// Update member's Windsurf access permission (UpdateCodeiumAccess API)
+    /// disable_access: true = disable access, false = enable access
     pub async fn update_codeium_access(&self, ctx: &AuthContext, api_key: &str, disable_access: bool) -> AppResult<serde_json::Value> {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/UpdateCodeiumAccess", WINDSURF_BASE_URL);
         
-        // 构建请求体：auth_token(1) + api_key(2) + disable_codeium_access(3)
+        // Build request body: auth_token(1) + api_key(2) + disable_codeium_access(3)
         let mut body = self.encode_string_field(1, token);
         body.extend(self.encode_string_field(2, api_key));
-        // bool 字段编码：field_num << 3 | 0, 然后是值（0或1）
+        // bool field encoding: field_num << 3 | 0, then the value (0 or 1)
         body.push((3 << 3) | 0); // field 3, wire type 0 (varint)
         body.push(if disable_access { 1 } else { 0 });
         
