@@ -10,7 +10,7 @@ export interface VirtualCard {
 
 export interface BillingAddress {
   street_address: string;
-  street_address_line2: string;  // 地址第二行
+  street_address_line2: string;  // Address#二row
   city: string;
   state: string;
   postal_code: string;
@@ -18,21 +18,21 @@ export interface BillingAddress {
 }
 
 /**
- * 生成虚拟信用卡信息
+ * generate虚拟Credit CardInfo
  */
 export async function generateVirtualCard(): Promise<VirtualCard> {
   return await invoke<VirtualCard>('generate_virtual_card');
 }
 
 /**
- * 验证卡号是否符合Luhn算法
+ * VerifyCard Numberwhether符合Luhnalgorithm
  */
 export async function validateCardNumber(cardNumber: string): Promise<boolean> {
   return await invoke<boolean>('validate_card_number', { cardNumber });
 }
 
 /**
- * 获取试用支付链接（增强版）
+ * fetchtrialpaymentlink（enhanceversion）
  */
 export async function getTrialPaymentLink(
   accountName: string,
@@ -59,7 +59,7 @@ export async function getTrialPaymentLink(
 }
 
 /**
- * 打开支付窗口
+ * openpaymentwindow
  */
 export async function openPaymentWindow(
   url: string,
@@ -72,7 +72,7 @@ export async function openPaymentWindow(
 }
 
 /**
- * 自动填写支付表单
+ * autofill inpaymentform
  */
 export async function autoFillPaymentForm(
   windowLabel: string,
@@ -85,7 +85,7 @@ export async function autoFillPaymentForm(
 }
 
 /**
- * 注入卡信息到指定窗口
+ * injectcardInfotospecifywindow
  */
 export async function injectCardInfo(
   windowLabel: string,

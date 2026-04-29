@@ -1,8 +1,8 @@
 import { invoke } from '@tauri-apps/api/core';
-import type { Account, Settings, OperationLog, UpdateSeatsResult, BillingInfo, BatchResult, GlobalTag, SortField, SortDirection, SortConfig, DevinLoginResult, WindsurfOrg, CheckUserLoginMethodResult, LoginMethodSniffResult, EmailStartResponse, ConnectionsResponse, DevinPasswordLoginResponse } from '@/types';
+import type { Account, Settings, OperationLog, UpdateSeatsResult, BillingInfo, BatchResult, GlobalTag, SortField, SortDirection, SortConfig, DevinLoginResult, WindsurfOrg, CheckUserLoginMethodResult, LoginMethodSniffResult, EmailstartResponse, ConnectionsResponse, DevinPasswordLoginResponse } from '@/types';
 import type { AnalyticsData } from '@/types/analytics';
 
-// 账号管理API
+// Account ManagementAPI
 export const accountApi = {
   async addAccount(data: {
     email: string;
@@ -47,7 +47,7 @@ export const accountApi = {
   }
 };
 
-// API操作
+// APIOperation
 export const apiService = {
   async loginAccount(id: string): Promise<{ 
     success: boolean; 
@@ -110,11 +110,11 @@ export const apiService = {
   },
 
   /**
-   * 更新订阅计划
-   * @param id 账号ID
-   * @param planType 计划类型
-   * @param paymentPeriod 付款周期（1=月付, 2=年付，默认1）
-   * @param preview 预览模式（true=仅预览不实际执行，默认false）
+   * UpdateSubscriptionplan
+   * @param id AccountID
+   * @param planType plan type
+   * @param paymentPeriod Payment Cycle（1=Monthly, 2=Annually，default1）
+   * @param preview previewMode（true=only previewnotactualexecute，defaultfalse）
    */
   async updatePlan(id: string, planType: string, paymentPeriod: number = 1, preview: boolean = false): Promise<{
     success: boolean;
@@ -145,10 +145,10 @@ export const apiService = {
   },
 
   /**
-   * 取消订阅
-   * @param id 账号ID
-   * @param reason 取消原因
-   * @returns 包含操作结果的响应
+   * Cancel Subscription
+   * @param id AccountID
+   * @param reason Cancelreason
+   * @returns containsOperationresultresponse
    */
   async cancelSubscription(id: string, reason: string): Promise<{
     success: boolean;
@@ -161,9 +161,9 @@ export const apiService = {
   },
 
   /**
-   * 恢复订阅
-   * @param id 账号ID
-   * @returns 包含操作结果的响应
+   * Restore Subscription
+   * @param id AccountID
+   * @returns containsOperationresultresponse
    */
   async resumeSubscription(id: string): Promise<{
     success: boolean;
@@ -183,10 +183,10 @@ export const apiService = {
   },
 
   /**
-   * 获取套餐状态（积分/配额信息）
-   * 比 getCurrentUser 更轻量，专用于刷新积分状态
-   * @param id 账号ID
-   * @returns 包含套餐状态和积分信息的响应
+   * fetchPlanStatus（Credits/QuotaInfo）
+   * 比 getCurrentUser morelightweight，专used forRefreshCreditsStatus
+   * @param id AccountID
+   * @returns containsPlanStatus and CreditsInforesponse
    */
   async getPlanStatus(id: string): Promise<{
     success: boolean;
@@ -213,14 +213,14 @@ export const apiService = {
   },
 
   /**
-   * 获取试用绑卡链接
-   * @param id 账号ID
-   * @param teamsTier 团队等级: 1=Teams, 2=Pro, 3=Enterprise
-   * @param paymentPeriod 支付周期: 1=月付, 2=年付
-   * @param teamName 团队名称 (仅 Teams/Enterprise 需要)
-   * @param seatCount 席位数量 (仅 Teams/Enterprise 需要)
-   * @param turnstileToken Turnstile 验证令牌 (startTrial=true 时所有计划均必需)
-   * @returns 包含Stripe Checkout链接的响应
+   * fetchtrialbind cardlink
+   * @param id AccountID
+   * @param teamsTier Teametc.level: 1=Teams, 2=Pro, 3=Enterprise
+   * @param paymentPeriod Payment Period: 1=Monthly, 2=Annually
+   * @param teamName Team Name (only  Teams/Enterprise need)
+   * @param seatCount SeatCount (only  Teams/Enterprise need)
+   * @param turnstileToken Turnstile VerifyToken (startTrial=true whenallplanall必need)
+   * @returns containsStripe Checkoutlinkresponse
    */
   async getTrialPaymentLink(
     id: string, 
@@ -242,11 +242,11 @@ export const apiService = {
     return await invoke('get_trial_payment_link', { id, teamsTier, paymentPeriod, startTrial, teamName, seatCount, turnstileToken });
   },
 
-  // === Protobuf解析API（返回解析后的结构化数据） ===
+  // === ProtobufparseAPI（Backparseafterstructuredata） ===
   
   /**
-   * 获取当前用户信息（自动解析Protobuf）
-   * 返回解析后的用户数据结构
+   * fetchCurrentUserInfo（auto parseProtobuf）
+   * BackparseafterUserdatastructure
    */
   async getCurrentUserParsed(id: string): Promise<{
     success: boolean;
@@ -291,15 +291,15 @@ export const apiService = {
   },
 
   /**
-   * 获取账单信息（自动解析Protobuf）
-   * TODO: 实现Protobuf解析
+   * fetchaccountsingleInfo（auto parseProtobuf）
+   * TODO: implementProtobufparse
    */
   async getBillingParsed(id: string): Promise<any> {
     return await invoke('get_billing_parsed', { id });
   },
 
   /**
-   * 批量获取用户信息（自动解析Protobuf）
+   * batchfetchUserInfo（auto parseProtobuf）
    */
   async batchGetUsersParsed(ids: string[]): Promise<{
     success: boolean;
@@ -316,9 +316,9 @@ export const apiService = {
   },
 
   /**
-   * 一键切换账号到Windsurf
-   * @param id 账号ID
-   * @returns 切换结果
+   * one键Switch AccounttoWindsurf
+   * @param id AccountID
+   * @returns Switchresult
    */
   async switchAccount(id: string): Promise<{ 
     success: boolean; 
@@ -333,8 +333,8 @@ export const apiService = {
   },
   
   /**
-   * 重置机器ID
-   * @returns 重置结果
+   * ResetmachineID
+   * @returns Resetresult
    */
   async resetMachineId(): Promise<{
     success: boolean;
@@ -346,7 +346,7 @@ export const apiService = {
   },
 };
 
-// 设置管理API
+// SettingsManagementAPI
 export const settingsApi = {
   async getSettings(): Promise<Settings> {
     return await invoke('get_settings');
@@ -396,17 +396,17 @@ export const settingsApi = {
     team_id?: string;
     version?: string;
     is_active: boolean;
-    /** 活跃客户端类型："windsurf" | "windsurf-next" */
+    /** ActiveClienttype："windsurf" | "windsurf-next" */
     client_type: string;
-    /** 客户端展示名："Windsurf" | "Windsurf - Next" */
+    /** Clientshowname："Windsurf" | "Windsurf - Next" */
     client_display_name: string;
-    /** 活跃客户端进程是否正在运行 */
+    /** ActiveClient进程whethercurrentlyrun */
     is_running: boolean;
   }> {
     return await invoke('get_current_windsurf_info');
   },
 
-  // 标签管理
+  // Tag Management
   async getTags(): Promise<GlobalTag[]> {
     return await invoke('get_tags');
   },
@@ -474,7 +474,7 @@ export const settingsApi = {
     return await invoke('update_team_config', { id, config });
   },
 
-  // 排序管理
+  // sortManagement
   async getSortedAccounts(sortField: SortField, sortDirection: SortDirection): Promise<Account[]> {
     return await invoke('get_sorted_accounts', { sortField, sortDirection });
   },
@@ -495,48 +495,48 @@ export const settingsApi = {
 // Analytics API
 export const analyticsApi = {
   /**
-   * 获取账户的使用分析数据（最近30天）
-   * @param id 账户ID
-   * @returns 分析数据
+   * fetchAccountuseAnalysisdata（mostnear30days）
+   * @param id AccountID
+   * @returns Analysisdata
    */
   async getAccountAnalytics(id: string): Promise<AnalyticsData> {
     return await invoke('get_account_analytics', { id });
   }
 };
 
-// Devin Session 认证 API
+// Devin Session auth API
 export const devinApi = {
   /**
-   * 登录流派智能嗅探（方案 B 统一入口）
+   * Loginprovider typesmartdetection（solution B unify入口）
    *
-   * 后端并发调：
-   * - Firebase 侧 `CheckUserLoginMethod`　（user_exists / is_migrated / has_password 等）
-   * - Devin 侧 `/_devin-auth/connections`　（method / sso_connections 等）
+   * backendconcurrentcall：
+   * - Firebase  side `CheckUserLoginMethod`　（user_exists / is_migrated / has_password etc.）
+   * - Devin  side `/_devin-auth/connections`　（method / sso_connections etc.）
    *
-   * 返回 `recommended` 字段标注建议的登录流派，前端据此自动分派。
+   * Back `recommended` field标notebuild议Loginprovider type，beforeside据thisautodispatch。
    */
   async sniffLoginMethod(email: string): Promise<LoginMethodSniffResult> {
     return await invoke('sniff_login_method', { email });
   },
 
   /**
-   * 单独调用 Firebase 侧 `CheckUserLoginMethod`（调试/明细展示）
+   * single独call Firebase  side `CheckUserLoginMethod`（calltry/明细show）
    *
-   * 日常智能登录请直接使用 `sniffLoginMethod`。
+   * dailysmartLoginpleasedirectlyuse `sniffLoginMethod`。
    */
   async checkUserLoginMethod(email: string): Promise<CheckUserLoginMethodResult> {
     return await invoke('devin_check_user_login_method', { email });
   },
 
   /**
-   * 查询指定邮箱可用的登录方式（可选，用于 UI 预判断）
+   * queryspecifyEmailcanuseLogin Method（Optional，used for UI 预judge）
    */
   async checkConnections(email: string): Promise<any> {
     return await invoke('devin_check_connections', { email });
   },
 
   /**
-   * 仅账密登录（底层接口），返回 auth1_token
+   * only credentialsLogin（low-level API），Back auth1_token
    */
   async passwordLogin(email: string, password: string): Promise<{
     auth1_token: string;
@@ -547,7 +547,7 @@ export const devinApi = {
   },
 
   /**
-   * 使用 auth1_token 换取 session_token（底层接口）
+   * use auth1_token exchange for session_token（low-level API）
    */
   async windsurfPostAuth(auth1Token: string, orgId?: string): Promise<{
     session_token: string;
@@ -560,10 +560,10 @@ export const devinApi = {
   },
 
   /**
-   * 完整流程：账密登录 + 建账号（主流程）
+   * completeflow：credentialsLogin + buildAccount（primaryflow）
    *
-   * 当账号属于多个组织时，返回 `requires_org_selection=true` + orgs 列表，
-   * UI 需要让用户选择 org 后调用 `addAccountWithOrg`
+   * whenAccountbelongs tomultiplegroupwhen org，Back `requires_org_selection=true` + orgs List，
+   * UI needletUserselect org aftercall `addAccountWithOrg`
    */
   async addAccountByLogin(params: {
     email: string;
@@ -584,10 +584,10 @@ export const devinApi = {
   },
 
   /**
-   * 多组织场景下的二次选择：在已有 auth1_token 的基础上，指定 org_id 完成账号创建
+   * in multi-org scenariosecondaryselect：inalready has auth1_token basicon，specify org_id DoneAccountcreate
    *
-   * `password` 可选：账密流首次选 org 失败后二次调用时传入用户原始密码，让账号卡能回显；
-   * 纯凭证迁入 / 邮箱无密登录场景可省略。
+   * `password` Optional：credentials流firsttimeselect org failedaftersecondarycallwhenpass inUseroriginalPassword，letAccountcardcanbackshow；
+   * 纯credentialimport into / Emailno密Loginscenariocan be omitted。
    */
   async addAccountWithOrg(params: {
     email: string;
@@ -610,7 +610,7 @@ export const devinApi = {
   },
 
   /**
-   * 使用已存储的 auth1_token 刷新 session_token
+   * usealready store auth1_token Refresh session_token
    */
   async refreshSession(id: string): Promise<{
     success: boolean;
@@ -622,12 +622,12 @@ export const devinApi = {
   },
 
   /**
-   * 通过已有的 `devin-session-token$...` 前缀 session_token 直接导入 Devin 账号
+   * viaalready has `devin-session-token$...` prefix session_token directlyImport Devin Account
    *
-   * 适用场景：用户从浏览器 localStorage / cookie 拷出有效 session_token 的迁入路径。
-   * 仅需 `sessionToken`，后端调 GetCurrentUser 反查 email / api_key / 配额等信息。
-   * Devin 扩展字段（account_id / auth1_token / primary_org_id）留空——日常 API 仍可工作，
-   * 仅 `refreshSession` 会失败（到期需用户重新获取 session_token）。
+   * suitableusescenario：Userfrombrowser localStorage / cookie 拷outvalid session_token import intopath。
+   * only need `sessionToken`，backendcall GetCurrentUser reverse lookup email / api_key / Quotaetc.Info。
+   * Devin 扩展field（account_id / auth1_token / primary_org_id）leave empty——daily API stillcanwork，
+   * only  `refreshSession` willfailed（toperiodneedUserre-fetch session_token）。
    */
   async addAccountBySessionToken(params: {
     sessionToken: string;
@@ -644,17 +644,17 @@ export const devinApi = {
   },
 
   /**
-   * 通过已有的 Devin `auth1_token`（格式 `auth1_<52字符>`）直接导入账号
+   * viaalready has Devin `auth1_token`（format `auth1_<52character>`）directlyImportAccount
    *
-   * 适用场景：用户从浏览器 localStorage 的 `devin_auth1_token` 键拷出的迁入路径。
-   * 与 `addAccountBySessionToken` 对称，但多保留 auth1_token，让后续 `refreshSession` 能正常工作。
+   * suitableusescenario：Userfrombrowser localStorage  `devin_auth1_token` 键拷outimport intopath。
+   * and `addAccountBySessionToken` forcall，butmultiplekeep auth1_token，let subsequent `refreshSession` canNormalwork。
    *
-   * 后端内部：`windsurf_post_auth(auth1_token, org_id)` → `GetCurrentUser` 反查 email → 落库。
+   * backendinternal：`windsurf_post_auth(auth1_token, org_id)` → `GetCurrentUser` reverse lookup email → persist to DB。
    *
-   * 多组织处理：
-   * - `autoSelectPrimaryOrg` 省略或 false：返回 `requires_org_selection=true` + email/auth1_token/orgs，
-   *   前端需调 `addAccountWithOrg` 完成二次选 org
-   * - `autoSelectPrimaryOrg: true`（批量导入场景）：自动用 primary org 落库
+   * multiplegrouporghandle：
+   * - `autoSelectPrimaryOrg` 省略 or  false：Back `requires_org_selection=true` + email/auth1_token/orgs，
+   *   beforesideneed to call `addAccountWithOrg` Donesecondaryselect org
+   * - `autoSelectPrimaryOrg: true`（Batch Importscenario）：autouse primary org persist to DB
    */
   async addAccountByAuth1Token(params: {
     auth1Token: string;
@@ -674,34 +674,34 @@ export const devinApi = {
     });
   },
 
-  // ========== 邮箱验证码（无密码登录） ==========
+  // ========== Email Verification Code（noPasswordLogin） ==========
 
   /**
-   * 发送邮箱验证码（底层接口）
+   * sendEmail Verification Code（low-level API）
    *
-   * - `mode`：`"signup"` 或 `"login"`（无密码邮件登录），默认 `"login"`
-   * - `product`：默认 `"Windsurf"`；服务端对 `/email/start` 强制 literal 校验，
-   *   仅接受 `"Devin"` / `"Windsurf"`（首字母大写），传小写会返回 422。
+   * - `mode`：`"signup"`  or  `"login"`（noPasswordemailLogin），default `"login"`
+   * - `product`：default `"Windsurf"`；serverfor `/email/start` force literal validate，
+   *   only accept `"Devin"` / `"Windsurf"`（firstcharacter母largewrite），passsmallwritewillBack 422。
    *
-   * 服务端向邮箱发送 6 位验证码，并返回 `email_verification_token`，
-   * 供后续 `addAccountByEmailLogin` 回传使用。
+   * server toEmailsend 6 -digit verification code， and Back `email_verification_token`，
+   * for subsequent `addAccountByEmailLogin` callbackuse。
    */
-  async emailStart(
+  async emailstart(
     email: string,
     mode: 'signup' | 'login' = 'login',
     product: 'Windsurf' | 'Devin' = 'Windsurf'
-  ): Promise<EmailStartResponse> {
+  ): Promise<EmailstartResponse> {
     return await invoke('devin_email_start', { email, mode, product });
   },
 
   /**
-   * 完整流程：邮箱验证码注册新账号 + 建账号
+   * completeflow：Email Verification CodeRegister New Account + buildAccount
    *
-   * 前置：调用方已通过 `emailStart(email, "signup")` 拿到 `email_verification_token`，
-   * 并引导用户读取邮件中的 6 位验证码。
+   * prerequisite: callerApproved `emailstart(email, "signup")` got `email_verification_token`，
+   * and guideUserread from email the 6 -digit verification code。
    *
-   * 服务端 `mode=signup` 完成注册并返回新账号的 auth1_token，
-   * 多组织场景下返回 `requires_org_selection=true` + orgs，UI 需调 `addAccountWithOrg` 二次完成。
+   * server `mode=signup` Complete Registration and BacknewAccount auth1_token，
+   * in multi-org scenarioBack `requires_org_selection=true` + orgs，UI need to call `addAccountWithOrg` secondaryDone。
    */
   async addAccountByRegister(params: {
     email: string;
@@ -718,14 +718,14 @@ export const devinApi = {
   },
 
   /**
-   * 完整流程：无密码邮件验证码登录 + 建账号
+   * completeflow：noPasswordemailVerification CodeLogin + buildAccount
    *
-   * 用于从 SSO 迁移且无密码、或忘记密码的已存在 Devin 账号。
-   * 前置：调用方已通过 `emailStart(email, "login")` 拿到 `email_verification_token`，
-   * 并引导用户读取邮件中的 6 位验证码。
+   * used from SSO migrateandnoPassword、 or forgetPasswordAlready exists Devin Account。
+   * prerequisite: callerApproved `emailstart(email, "login")` got `email_verification_token`，
+   * and guideUserread from email the 6 -digit verification code。
    *
-   * 服务端 `mode=login` 时**不会创建新账号**，仅返回已有账号的 auth1_token。
-   * 多组织场景下返回 `requires_org_selection=true` + orgs，UI 需调 `addAccountWithOrg` 二次完成。
+   * server `mode=login` when**notwillcreatenewAccount**，only Backalready hasAccount auth1_token。
+   * in multi-org scenarioBack `requires_org_selection=true` + orgs，UI need to call `addAccountWithOrg` secondaryDone。
    */
   async addAccountByEmailLogin(params: {
     email: string;
@@ -739,46 +739,46 @@ export const devinApi = {
     return await invoke('add_account_by_devin_email_login', params);
   },
 
-  // ========== Devin 原生站点（app.devin.ai）注册通道 ==========
+  // ========== Devin native站point（app.devin.ai）Registerthrough道 ==========
   //
-  // 与上面 Windsurf 侧 `_devin-auth` 通道的关键区别：
-  // - 端口：`https://app.devin.ai/api/auth1/*`（Devin 官方后端直连）
-  // - `email/start` 请求体不携带 `product` 字段
-  // - `email/complete` 请求体不携带 `password` / `name` 字段（纯邮箱验证码建号）
-  // - 注册出的账号 JWT 中 `product == "Devin"`，主归属 Devin 产品侧
-  // - 后端 `addAccountByNativeRegister` 在注册成功后自动调 WindsurfPostAuth 桥接到 Windsurf，
-  //   落库账号既可用 Devin 产品功能（auth1_token），也可用 Windsurf 产品 API（session_token）
+  // andonside Windsurf  side `_devin-auth` through道keyareaother：
+  // - port：`https://app.devin.ai/api/auth1/*`（Devin officialbackenddirect连）
+  // - `email/start` pleaserequire bodynotcarry `product` field
+  // - `email/complete` pleaserequire bodynotcarry `password` / `name` field（纯Email Verification Codecreate account）
+  // - RegisteroutAccount JWT in `product == "Devin"`，primarybelong Devin product side
+  // - backend `addAccountByNativeRegister` inRegistersuccessfulthen autocall WindsurfPostAuth bridgeto Windsurf，
+  //   persist to DBAccountbothcanuse Devin productFeature（auth1_token），alsocanuse Windsurf product API（session_token）
 
   /**
-   * 查询 Devin 原生侧（app.devin.ai）邮箱可用的连接方式（可选预检）
+   * query Devin native side（app.devin.ai）Emailcanuseconnectmethod（Optional预检）
    *
-   * 响应的 `connections` 数组会额外包含 `windsurf-bridge` 条目，
-   * 响应的 `auth_method.method` 字段指示邮箱是否已注册（`"not_found"` = 未注册）。
+   * response `connections` countgroupwillextracontains `windsurf-bridge` itemsitem，
+   * response `auth_method.method` field指示Emailwhetheralready Register（`"not_found"` = notRegister）。
    */
   async nativeCheckConnections(email: string): Promise<ConnectionsResponse> {
     return await invoke('devin_app_check_connections', { email });
   },
 
   /**
-   * 向 Devin 原生侧发送邮箱验证码（底层接口）
+   * toward Devin native sidesendEmail Verification Code（low-level API）
    *
-   * @param email 目标邮箱
-   * @param mode  `"signup"` 注册新账号；`"login"` 已有 Devin 账号的无密码邮件登录。默认 `"signup"`
+   * @param email Target Email
+   * @param mode  `"signup"` Register New Account；`"login"` already has Devin AccountnoPasswordemailLogin。default `"signup"`
    *
-   * 返回 `EmailStartResponse`，供后续 `addAccountByNativeRegister` 回传 `email_verification_token`。
+   * Back `EmailstartResponse`，for subsequent `addAccountByNativeRegister` callback `email_verification_token`。
    */
-  async nativeEmailStart(
+  async nativeEmailstart(
     email: string,
     mode: 'signup' | 'login' = 'signup'
-  ): Promise<EmailStartResponse> {
+  ): Promise<EmailstartResponse> {
     return await invoke('devin_app_email_start', { email, mode });
   },
 
   /**
-   * 提交验证码完成 Devin 原生侧邮件流程（底层接口）
+   * SubmitVerification CodeDone Devin native sideemailflow（low-level API）
    *
-   * 仅在需要纯粹调用 `/api/auth1/email/complete`（不落库、不桥接）时使用；
-   * 日常注册请直接用 `addAccountByNativeRegister` 一键完成。
+   * only inneed纯粹call `/api/auth1/email/complete`（notpersist to DB、notbridge）whenuse；
+   * dailyRegisterpleasedirectlyuse `addAccountByNativeRegister` one键Done。
    */
   async nativeEmailComplete(params: {
     emailVerificationToken: string;
@@ -789,17 +789,17 @@ export const devinApi = {
   },
 
   /**
-   * 完整流程：Devin 原生注册 → 自动桥接 Windsurf → 落库为新账号
+   * completeflow：Devin Native Registration → Auto Bridge Windsurf → persist to DBasnewAccount
    *
-   * 前置：调用方已通过 `nativeEmailStart(email, "signup")` 拿到 `email_verification_token`，
-   * 并引导用户读取邮件中的 6 位验证码。
+   * prerequisite: callerApproved `nativeEmailstart(email, "signup")` got `email_verification_token`，
+   * and guideUserread from email the 6 -digit verification code。
    *
-   * 与 `addAccountByRegister`（Windsurf 侧注册）的差异：
-   * - 不需要 `password` 与 `name` 入参（Devin 原生注册是"纯邮箱验证码"建号）
-   * - 账号落库时 `password` 字段留空，用户可后续在 Devin 产品侧自行设置密码
-   * - JWT 归属为 Devin，后续 Devin 产品功能（auth1_token）可直接使用
+   * and `addAccountByRegister`（Windsurf  sideRegister）差异：
+   * - does not need `password` and `name` 入参（Devin Native Registrationis"纯Email Verification Code"create account）
+   * - Accountpersist to DBwhen `password` fieldleave empty，Usercansubsequentin Devin product side自rowSettingsPassword
+   * - JWT belongas Devin，subsequent Devin productFeature（auth1_token）candirectlyuse
    *
-   * 多组织场景下返回 `requires_org_selection=true` + orgs，UI 需调 `addAccountWithOrg` 二次完成（与 Windsurf 侧一致）。
+   * in multi-org scenarioBack `requires_org_selection=true` + orgs，UI need to call `addAccountWithOrg` secondaryDone（and Windsurf  sideconsistent）。
    */
   async addAccountByNativeRegister(params: {
     email: string;
@@ -813,19 +813,19 @@ export const devinApi = {
     return await invoke('add_account_by_devin_native_register', params);
   },
 
-  // ==================== Firebase ↔ Devin 账号互转 ====================
+  // ==================== Firebase ↔ Devin Accountmutual convert ====================
 
   /**
-   * 把 Firebase 账号转换为 Devin 登录方式
+   * put Firebase Accountconvert to Devin Login Method
    *
-   * 场景：官方将老 Firebase 账号迁移到 Devin 体系（密码未变），本地帐号卡仍是
-   * Firebase 配置。调用后复用账号已存的明文密码走 Devin 登录流程。
+   * scenario：officialwillold Firebase Accountmigrateto Devin system（Passwordnotchange），local帐cardstillis
+   * Firebase config。callaftercomplexuseAccountstored plaintextPassworduse Devin Loginflow。
    *
-   * 返回：
-   * - success=true：已切换到 Devin 体系
-   * - success=false, already_converted=true：账号已是 Devin 体系
-   * - success=false, requires_org_selection=true：多组织需选择，由调用方
-   *   弹出组织选择后再次调本方法并传入 orgId
+   * Back：
+   * - success=true：already Switchto Devin system
+   * - success=false, already_converted=true：Accountalready is Devin system
+   * - success=false, requires_org_selection=true：multiplegrouporgneedselect，bycallside
+   *   popupgrouporgselectafteragaintimecallthismethod and pass in orgId
    */
   async convertAccountToDevin(params: {
     id: string;
@@ -846,14 +846,14 @@ export const devinApi = {
   },
 
   /**
-   * 把 Devin 账号转换为 Firebase 登录方式
+   * put Devin Accountconvert to Firebase Login Method
    *
-   * 场景：官方回调某些帐号到 Firebase 体系、或用户误转后需要还原。
-   * 调用后复用账号已存的明文密码走 Firebase signInWithPassword。
+   * scenario：officialbackcallcertainsome帐to Firebase system、 or User误转afterneedalsooriginal。
+   * callaftercomplexuseAccountstored plaintextPassworduse Firebase signInWithPassword。
    *
-   * 返回：
-   * - success=true：已切换到 Firebase 体系
-   * - success=false, already_converted=true：账号已是 Firebase 体系
+   * Back：
+   * - success=true：already Switchto Firebase system
+   * - success=false, already_converted=true：Accountalready is Firebase system
    */
   async convertAccountToFirebase(params: {
     id: string;
@@ -868,11 +868,11 @@ export const devinApi = {
   },
 };
 
-// 系统维护 API
+// system维护 API
 export const systemApi = {
   /**
-   * 重置HTTP客户端（用于从网络故障中恢复）
-   * 当遇到连续的API请求失败时，可以调用此方法重置HTTP连接池
+   * Reset HTTP Client（used fromnetwork故障inrestore）
+   * whenmeettoconsecutiveAPIpleaserequirefailedwhen，cantocallthismethodResetHTTPConnection Pool
    */
   async resetHttpClient(): Promise<{ success: boolean; message: string }> {
     return await invoke('reset_http_client');

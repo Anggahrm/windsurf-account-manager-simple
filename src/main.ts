@@ -8,17 +8,17 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs';
 
 const app = createApp(App);
 
-// 注册Element Plus
+// RegisterElement Plus
 app.use(ElementPlus, {
   locale: zhCn,
 });
 
-// 注册所有图标
+// Registerallicon
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
 
-// 注册Pinia
+// RegisterPinia
 app.use(pinia);
 
 app.mount("#app");

@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { check, type Update, type DownloadEvent } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 
-/** 24 小时内不重复静默检查（手动检查不受限） */
+/** 24 hoursinsidenot重complex静默check（manuallychecknot受限） */
 const SILENT_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000;
 const STORAGE_KEY_LAST_CHECK = 'updater:last_silent_check_at';
 const STORAGE_KEY_SKIPPED_VERSION = 'updater:skipped_version';
@@ -24,7 +24,7 @@ export const useUpdaterStore = defineStore('updater', () => {
   const contentLength = ref<number>(0);
   const downloaded = ref<number>(0);
 
-  /** 最近一次 check 拿到的 Update 句柄，用于后续 downloadAndInstall */
+  /** mostnearonce check got Update handle，used forsubsequent downloadAndInstall */
   let pendingUpdate: Update | null = null;
 
   const hasUpdate = computed(() => phase.value === 'available' || phase.value === 'downloading' || phase.value === 'installing' || phase.value === 'ready');
@@ -40,9 +40,9 @@ export const useUpdaterStore = defineStore('updater', () => {
   }
 
   /**
-   * 检查更新。
-   * @param silent true 表示启动时的静默检查，会遵循 24h 防抖 + 跳过版本；false 为用户手动触发，强制执行。
-   * @returns 是否发现可用更新
+   * Check for Updates。
+   * @param silent true representlaunchwhen静默check，will遵循 24h debounce + Skip Version；false asUsermanuallytrigger，forceexecute。
+   * @returns whethersendnowcanuseUpdate
    */
   async function checkUpdate(silent = false): Promise<boolean> {
     if (isBusy.value) return hasUpdate.value;
@@ -98,10 +98,10 @@ export const useUpdaterStore = defineStore('updater', () => {
     }
   }
 
-  /** 下载并安装最近一次 check 到的 Update，完成后由调用方决定何时 relaunch */
+  /** Download and installmostnearonce check to Update，Doneafterbycallsidedecide何when relaunch */
   async function downloadAndInstall(): Promise<void> {
     if (!pendingUpdate) {
-      throw new Error('没有待更新的版本，请先检查更新');
+      throw new Error('nohaswaitUpdateVersion，please firstCheck for Updates');
     }
     if (isBusy.value && phase.value !== 'available') return;
 
@@ -112,7 +112,7 @@ export const useUpdaterStore = defineStore('updater', () => {
     try {
       await pendingUpdate.downloadAndInstall((event: DownloadEvent) => {
         switch (event.event) {
-          case 'Started':
+          case 'started':
             contentLength.value = event.data.contentLength ?? 0;
             downloaded.value = 0;
             break;
@@ -136,7 +136,7 @@ export const useUpdaterStore = defineStore('updater', () => {
     await relaunch();
   }
 
-  /** 跳过当前版本：静默检查时不再弹出此版本，直到更新版本出现或用户手动检查 */
+  /** skipCurrentVersion：静默checkwhenno longerpopupthisVersion，directtomoreNew Versionappear or Usermanuallycheck */
   function skipCurrentVersion() {
     if (meta.value?.version) {
       localStorage.setItem(STORAGE_KEY_SKIPPED_VERSION, meta.value.version);

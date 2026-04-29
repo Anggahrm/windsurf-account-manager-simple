@@ -6,8 +6,8 @@
     @click="handleCardClick"
   >
     <div class="card-header">
-      <!-- 拖拽手柄 - simple 版本已禁用
-      <div class="drag-handle" title="拖拽排序">
+      <!-- drag handle - simple VersionDisabled
+      <div class="drag-handle" title="Drag to reorder">
         <el-icon><Rank /></el-icon>
       </div>
       -->
@@ -17,7 +17,7 @@
         class="select-checkbox"
       />
       <div class="account-info">
-        <div class="email" :title="'点击复制: ' + account.email" @click.stop="copyEmail">{{ displayEmail }}</div>
+        <div class="email" :title="'Click to copy: ' + account.email" @click.stop="copyEmail">{{ displayEmail }}</div>
         <el-tag 
           v-if="account.nickname"
           type="warning"
@@ -29,7 +29,7 @@
         </el-tag>
         <el-tooltip
           v-if="account.auth_provider === 'devin'"
-          content="通过 Devin Session 认证（新体系）"
+          content="Authenticated via Devin Session (new system)"
           placement="top"
         >
           <el-tag
@@ -49,7 +49,7 @@
     </div>
 
     <div class="card-body">
-      <!-- 配额和套餐信息 -->
+      <!-- Quota and PlanInfo -->
       <div class="quota-section" v-if="hasQuotaData">
         <div class="quota-header">
           <div class="quota-header-left">
@@ -61,7 +61,7 @@
               {{ account.plan_name }}
             </el-tag>
           </div>
-          <!-- CREDITS 模式：显示积分数值 -->
+          <!-- CREDITS Mode：displayCreditscountvalue -->
           <div class="quota-header-right" v-if="!isQuotaMode">
             <span class="quota-used">{{ formatQuota(account.used_quota) }}</span>
             <span class="quota-separator">/</span>
@@ -69,10 +69,10 @@
           </div>
         </div>
 
-        <!-- QUOTA 模式：日配额和周配额百分比 -->
+        <!-- QUOTA Mode：Daily Quota and Weekly Quotapercentage -->
         <template v-if="isQuotaMode">
           <div class="quota-percent-row">
-            <span class="quota-percent-label">日配额</span>
+            <span class="quota-percent-label">Daily Quota</span>
             <el-progress
               :percentage="account.daily_quota_remaining_percent ?? 0"
               :stroke-width="8"
@@ -86,7 +86,7 @@
             </span>
           </div>
           <div class="quota-percent-row">
-            <span class="quota-percent-label">周配额</span>
+            <span class="quota-percent-label">Weekly Quota</span>
             <el-progress
               :percentage="account.weekly_quota_remaining_percent ?? 0"
               :stroke-width="8"
@@ -101,7 +101,7 @@
           </div>
         </template>
 
-        <!-- CREDITS 模式：积分进度条 -->
+        <!-- CREDITS Mode：Creditsprogressitems -->
         <template v-else>
           <div class="quota-progress">
             <el-progress
@@ -114,10 +114,10 @@
           </div>
         </template>
         
-        <!-- 订阅到期时间（整合在配额区块内） -->
+        <!-- Subscription ExpiresTime（integrated inQuotablockinside） -->
         <div class="quota-expiry" v-if="account.subscription_expires_at">
           <el-icon class="expiry-icon"><Clock /></el-icon>
-          <span class="expiry-label">到期时间:</span>
+          <span class="expiry-label">Expiry Date:</span>
           <span class="expiry-date">{{ formattedExpiryDate }}</span>
           <span v-if="daysUntilExpiry !== null" :class="['expiry-badge', expiryClass]">
             {{ expiryText }}
@@ -137,9 +137,9 @@
         </el-tag>
       </div>
       
-      <!-- 信息标签组 -->
+      <!-- InfoTagsgroup -->
       <div class="info-tags">
-        <el-tooltip v-if="account.group" content="分组" placement="top">
+        <el-tooltip v-if="account.group" content="Group" placement="top">
           <el-tag 
             size="small"
             class="info-tag group-tag"
@@ -149,7 +149,7 @@
           </el-tag>
         </el-tooltip>
 
-        <el-tooltip v-if="account.created_at" content="创建时间" placement="top">
+        <el-tooltip v-if="account.created_at" content="Created At" placement="top">
           <el-tag 
             size="small"
             class="info-tag create-tag"
@@ -173,9 +173,9 @@
     </div>
 
     <div class="card-actions">
-      <!-- 第一排按钮（6个） -->
+      <!-- #first row buttons（6） -->
       <div class="action-buttons">
-        <el-tooltip content="批量重置团队积分" placement="top">
+        <el-tooltip content="Batch Reset Team Credits" placement="top">
           <el-button
             size="small"
             :icon="Refresh"
@@ -187,7 +187,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="查询账单" placement="top">
+        <el-tooltip content="Query Billing" placement="top">
           <el-button 
             size="small" 
             :icon="Document"
@@ -197,7 +197,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="自动充值" placement="top">
+        <el-tooltip content="Auto Recharge" placement="top">
           <el-button
             size="small"
             :icon="Money"
@@ -208,7 +208,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="积分记录" placement="top">
+        <el-tooltip content="Credit History" placement="top">
           <el-button 
             size="small" 
             :icon="TrendCharts"
@@ -228,7 +228,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="账号信息" placement="top">
+        <el-tooltip content="Account Info" placement="top">
           <el-button 
             size="small" 
             :icon="User"
@@ -237,7 +237,7 @@
           />
         </el-tooltip>
 
-        <!-- 转换登录方式（Firebase ↔ Devin）：按当前 auth_provider 动态切换 tooltip 与动作 -->
+        <!-- convertLogin Method（Firebase ↔ Devin）：byCurrent auth_provider dynamicSwitch tooltip and action -->
         <el-tooltip :content="convertActionLabel" placement="top">
           <el-button
             size="small"
@@ -250,7 +250,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="删除用户(Windsurf)" placement="top">
+        <el-tooltip content="DeleteUser(Windsurf)" placement="top">
           <el-button
             size="small"
             :icon="UserFilled"
@@ -262,7 +262,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="删除" placement="top">
+        <el-tooltip content="Delete" placement="top">
           <el-button
             size="small"
             :icon="Delete"
@@ -274,9 +274,9 @@
         </el-tooltip>
       </div>
       
-      <!-- 第二排按钮（5个） -->
+      <!-- #second row buttons（5） -->
       <div class="action-buttons">
-        <el-tooltip content="编辑" placement="top">
+        <el-tooltip content="Edit" placement="top">
           <el-button 
             size="small" 
             :icon="Edit"
@@ -285,7 +285,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="重新登录" placement="top">
+        <el-tooltip content="re-Login" placement="top">
           <el-button 
             size="small" 
             :icon="Key"
@@ -294,7 +294,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="使用分析" placement="top">
+        <el-tooltip content="useAnalysis" placement="top">
           <el-button
             size="small"
             :icon="DataAnalysis"
@@ -303,7 +303,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="团队设置" placement="top">
+        <el-tooltip content="Team Settings" placement="top">
           <el-button
             size="small"
             :icon="Setting"
@@ -312,7 +312,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="团队管理" placement="top">
+        <el-tooltip content="Team Management" placement="top">
           <el-button
             size="small"
             :icon="UserFilled"
@@ -323,7 +323,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="更换订阅" placement="top">
+        <el-tooltip content="changeSubscription" placement="top">
           <el-button
             size="small"
             :icon="Sell"
@@ -333,7 +333,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="获取试用链接" placement="top">
+        <el-tooltip content="fetchtriallink" placement="top">
           <el-button
             size="small"
             :icon="Link"
@@ -343,7 +343,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="检查Pro试用资格" placement="top">
+        <el-tooltip content="checkProTrial Eligibility" placement="top">
           <el-button
             size="small"
             :icon="Trophy"
@@ -355,7 +355,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="一键切号" placement="top">
+        <el-tooltip content="quick switch" placement="top">
           <el-button
             size="small"
             :icon="Switch"
@@ -370,44 +370,44 @@
     </div>
   </div>
 
-  <!-- 积分记录对话框 -->
+  <!-- Credit HistoryDialog -->
   <CreditHistoryDialog
     v-model="showCreditHistoryDialog"
     :account-id="account.id"
   />
 
-  <!-- 座位更新结果对话框 -->
+  <!-- seatUpdateresultDialog -->
   <UpdateSeatsResultDialog
     v-model="showSeatsResultDialog"
     :result-data="seatsResultData"
   />
 
-  <!-- 使用分析对话框 -->
+  <!-- useAnalysisDialog -->
   <AnalyticsDialog
     v-model="showAnalyticsDialog"
     :account-id="account.id"
     :account-email="account.email"
   />
 
-  <!-- 团队设置对话框 -->
+  <!-- Team SettingsDialog -->
   <TeamSettingsDialog
     v-model="showTeamSettingsDialog"
     :account-id="account.id"
   />
 
-  <!-- 团队管理对话框 -->
+  <!-- Team ManagementDialog -->
   <TeamManagementDialog
     v-model="showTeamManagementDialog"
     :account-id="account.id"
   />
 
-  <!-- 自动充值设置对话框 -->
+  <!-- Auto RechargeSettingsDialog -->
   <AutoRefillDialog
     v-model="showAutoRefillDialog"
     :account-id="account.id"
   />
 
-  <!-- 更换订阅对话框 -->
+  <!-- changeSubscriptionDialog -->
   <UpdatePlanDialog
     v-model="showUpdatePlanDialog"
     :account-id="account.id"
@@ -415,7 +415,7 @@
     @success="handleUpdatePlanSuccess"
   />
 
-  <!-- Turnstile 验证对话框 -->
+  <!-- Turnstile VerifyDialog -->
   <TurnstileDialog
     :visible="showTurnstileDialog"
     @update:visible="showTurnstileDialog = $event"
@@ -423,11 +423,11 @@
     @cancel="showTurnstileDialog = false"
   />
 
-  <!-- 切号进度弹窗（独立居中 Dialog） -->
-  <!-- 运行中禁止通过遮罩 / Esc 关闭，强制用户看到全流程；成功/失败时允许关闭 -->
+  <!-- switch progressdialog（standalone in Dialog） -->
+  <!-- running disabledvia遮罩 / Esc disabled，force user to watch full flow；when success/failedallowdisabled -->
   <el-dialog
     v-model="switchProgress.visible"
-    :title="`切换到 ${switchProgress.accountName}`"
+    :title="`Switchto ${switchProgress.accountName}`"
     width="460px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
@@ -438,7 +438,7 @@
     @close="closeSwitchProgress"
   >
     <div class="switch-progress-body">
-      <!-- 横向进度条：error → exception(红)，100% 且 success → success(绿)，其它 → 默认 -->
+      <!-- horizontal progress items：error → exception(red)，100% and success → success(green)，other → default -->
       <el-progress
         :percentage="switchProgress.percent"
         :status="switchProgress.phase === 'error'
@@ -448,14 +448,14 @@
         striped
         :striped-flow="switchProgress.phase === 'running'"
       />
-      <!-- 当前阶段描述 -->
+      <!-- current stage description -->
       <div
         class="switch-progress-label"
         :class="{ 'is-error': switchProgress.phase === 'error' }"
       >
-        {{ switchProgress.label || '等待后端开始...' }}
+        {{ switchProgress.label || 'waitbackendstart...' }}
       </div>
-      <!-- 7 步 checklist -->
+      <!-- 7 step checklist -->
       <div class="switch-progress-steps">
         <div
           v-for="(step, idx) in SWITCH_STEP_DEFS"
@@ -480,13 +480,13 @@
       </div>
     </div>
     <template #footer>
-      <!-- running 期间不给任何按钮，强制用户等待后端；非 running 显示关闭 -->
+      <!-- no buttons during running，force user wait backend；non-running display disabled -->
       <el-button
         v-if="switchProgress.phase !== 'running'"
         :type="switchProgress.phase === 'error' ? 'danger' : 'primary'"
         @click="closeSwitchProgress"
       >
-        关闭
+        disabled
       </el-button>
     </template>
   </el-dialog>
@@ -552,12 +552,12 @@ const accountsStore = useAccountsStore();
 const uiStore = useUIStore();
 const settingsStore = useSettingsStore();
 
-// 是否为当前激活账号
+// whether it isCurrentactivateAccount
 const isCurrent = computed(() => {
   return props.currentEmail && props.account.email === props.currentEmail;
 });
 
-// 显示的邮箱（根据隐私模式）
+// displayEmail（based onprivacyMode）
 const displayEmail = computed(() => {
   if (settingsStore.settings?.privacyMode) {
     return maskEmail(props.account.email);
@@ -565,22 +565,22 @@ const displayEmail = computed(() => {
   return props.account.email;
 });
 
-// 获取标签颜色（优先使用全局标签颜色）
+// fetchTag Color（prefer usingglobalTag Color）
 function getTagColor(tagName: string): string | null {
-  // 优先使用全局标签的颜色
+  // prefer usingglobalTags color
   const globalTag = settingsStore.tags.find(t => t.name === tagName);
   if (globalTag?.color) {
     return globalTag.color;
   }
-  // 回退到账号保存的颜色
+  // fallback to account saved color
   if (!props.account.tagColors) return null;
   const tagWithColor = props.account.tagColors.find(t => t.name === tagName);
   return tagWithColor?.color || null;
 }
 
-// 解析颜色为RGB值
+// parsecolorasRGBvalue
 function parseColor(color: string): { r: number; g: number; b: number; a: number } | null {
-  // 解析RGBA格式
+  // parseRGBAformat
   const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
   if (rgbaMatch) {
     return {
@@ -591,7 +591,7 @@ function parseColor(color: string): { r: number; g: number; b: number; a: number
     };
   }
   
-  // 解析HEX格式
+  // parseHEXformat
   if (color.startsWith('#')) {
     const hex = color.slice(1);
     if (hex.length === 6) {
@@ -614,11 +614,11 @@ function parseColor(color: string): { r: number; g: number; b: number; a: number
   return null;
 }
 
-// 获取标签样式
+// fetchTagsstyle
 function getTagStyle(tagName: string): Record<string, string> {
   const color = getTagColor(tagName);
   
-  // 如果没有找到颜色，返回默认样式（而不是空对象）
+  // if no color found，Backdefaultstyle（instead of being empty）
   if (!color) {
     return {
       backgroundColor: 'rgba(64, 158, 255, 0.1)',
@@ -631,9 +631,9 @@ function getTagStyle(tagName: string): Record<string, string> {
   const parsed = parseColor(color);
   if (parsed) {
     const { r, g, b, a } = parsed;
-    // 背景色使用低透明度
+    // background uses low transparency
     const bgAlpha = Math.min(a * 0.2, 0.3);
-    // 边框使用稍高透明度
+    // border uses slightly higher transparency
     const borderAlpha = Math.min(a * 0.5, 0.6);
     return {
       backgroundColor: `rgba(${r}, ${g}, ${b}, ${bgAlpha})`,
@@ -643,7 +643,7 @@ function getTagStyle(tagName: string): Record<string, string> {
     };
   }
   
-  // 如果颜色解析失败，尝试直接使用颜色值
+  // if color parse failed，try directly use color value
   return {
     backgroundColor: color,
     borderColor: color,
@@ -651,15 +651,15 @@ function getTagStyle(tagName: string): Record<string, string> {
   };
 }
 
-// 是否有带颜色的标签
+// whether has colored tags
 const hasColoredTag = computed(() => {
-  // 检查账号的任意标签是否有颜色（全局或账号级别）
+  // checkAccountany tag whether has color（global or Accountlevel）
   return props.account.tags.some(tagName => getTagColor(tagName) !== null);
 });
 
-// 获取第一个带颜色标签的颜色作为卡片边框色
+// fetch#onewithcolorTags coloras card border color
 const primaryTagColor = computed(() => {
-  // 遍历账号的标签，找到第一个有颜色的
+  // iterate account tags，find#onehascolor
   for (const tagName of props.account.tags) {
     const color = getTagColor(tagName);
     if (color) return color;
@@ -667,7 +667,7 @@ const primaryTagColor = computed(() => {
   return null;
 });
 
-// 卡片边框样式
+// card border style
 const cardBorderStyle = computed(() => {
   const color = primaryTagColor.value;
   if (!color) return {};
@@ -675,9 +675,9 @@ const cardBorderStyle = computed(() => {
   const parsed = parseColor(color);
   if (parsed) {
     const { r, g, b, a } = parsed;
-    // 边框透明度
+    // border transparency
     const borderAlpha = Math.min(a * 0.6, 0.8);
-    // 发光效果透明度
+    // glow effect transparency
     const glowAlpha = Math.min(a * 0.2, 0.3);
     return {
       '--tag-border-color': `rgba(${r}, ${g}, ${b}, ${borderAlpha})`,
@@ -697,9 +697,9 @@ const isCheckingProTrial = ref(false);
 const deletingUser = ref(false);
 const isSwitching = ref(false);
 
-// ==================== 切号进度弹窗状态 ====================
-// 与后端 switch_account_commands.rs 的 SwitchProgressPayload 对齐
-// phase: 'running' | 'success' | 'error' | 'idle'（idle 仅前端用，代表弹窗未激活）
+// ==================== switch progressdialogStatus ====================
+// with backend switch_account_commands.rs  SwitchProgressPayload align
+// phase: 'running' | 'success' | 'error' | 'idle'（idle only beforesideuse，code表dialogInactive）
 type SwitchProgressPhase = 'idle' | 'running' | 'success' | 'error';
 
 interface SwitchProgressEventPayload {
@@ -718,8 +718,8 @@ interface SwitchProgressState {
   accountName: string;
 }
 
-// 显式泛型声明，避免 TS 在后续赋值 phase='running' 后做 literal narrowing
-// 使得 `switchProgress.phase !== 'error'` 被错判为永远为 true 的比较。
+// explicit generic declaration，avoid TS subsequent assignment phase='running' then do literal narrowing
+// make get `switchProgress.phase !== 'error'` was wrongly judged as always true compare。
 const switchProgress = reactive<SwitchProgressState>({
   visible: false,
   step: '',
@@ -729,25 +729,25 @@ const switchProgress = reactive<SwitchProgressState>({
   accountName: '',
 });
 
-// 步骤定义：顺序与后端 emit 的 step key 保持一致
-// 前端按 key 查找当前步骤在序列中的位置来渲染 checklist 状态
+// step definition：sequence with backend emit  step key maintain consistent
+// frontend by key find current step position to render checklist Status
 const SWITCH_STEP_DEFS: ReadonlyArray<{ key: string; label: string }> = [
-  { key: 'preparing', label: '准备账号信息' },
-  { key: 'fetch_access', label: '获取 access_token' },
-  { key: 'fetch_auth', label: '获取 one-time auth_token' },
-  { key: 'auto_patch', label: '检查无感换号补丁' },
-  { key: 'reset_mid', label: '重置机器 ID' },
-  { key: 'callback', label: '触发客户端登录' },
-  { key: 'finalize', label: '保存账号状态' },
+  { key: 'preparing', label: 'prepare account info' },
+  { key: 'fetch_access', label: 'fetch access_token' },
+  { key: 'fetch_auth', label: 'fetch one-time auth_token' },
+  { key: 'auto_patch', label: 'checkSeamless Switchpatch' },
+  { key: 'reset_mid', label: 'Resetmachine ID' },
+  { key: 'callback', label: 'triggerClientLogin' },
+  { key: 'finalize', label: 'SaveAccountStatus' },
 ];
 
-// 当前步骤索引（-1 表示尚未开始 / 未命中已知 step）
+// current step index（-1 representnot started yet / unknown step）
 const currentStepIndex = computed(() => {
   if (switchProgress.step === 'done') return SWITCH_STEP_DEFS.length;
   return SWITCH_STEP_DEFS.findIndex(s => s.key === switchProgress.step);
 });
 
-// 每一步在 UI 上的状态：已完成 ✓ / 当前 spinner / 失败 ✗ / 待办灰
+// every step in UI status：Completed ✓ / Current spinner / failed ✗ / pending gray
 function getStepStatus(idx: number): 'done' | 'running' | 'error' | 'pending' {
   const cur = currentStepIndex.value;
   if (cur === -1) return 'pending';
@@ -760,10 +760,10 @@ function getStepStatus(idx: number): 'done' | 'running' | 'error' | 'pending' {
   return 'pending';
 }
 
-// Tauri 事件监听句柄；每次点击切号时新建，弹窗关闭或卸载时释放
+// Tauri event listener handle；create new every time when clicking switch，release when dialog closed or unmounted
 let switchProgressUnlisten: UnlistenFn | null = null;
 
-// 卸载组件时必须释放 listener，避免"路由切换 → 组件销毁 → 事件继续触发"导致内存泄漏
+// 卸loadcomponentwhenmustrelease放 listener，avoid "route switch → component destroy → event continue trigger" causing memory leak
 onBeforeUnmount(async () => {
   if (switchProgressUnlisten) {
     switchProgressUnlisten();
@@ -771,7 +771,7 @@ onBeforeUnmount(async () => {
   }
 });
 
-// 手动关闭弹窗（仅在非 running 阶段允许）
+// manually close dialog（only allow in non-running stage）
 function closeSwitchProgress() {
   if (switchProgress.phase === 'running') return;
   switchProgress.visible = false;
@@ -796,16 +796,16 @@ const showTurnstileDialog = ref(false);
 const pendingTurnstileToken = ref('');
 const seatsResultData = ref<any>(null);
 
-// 判断是否为付费计划（非 Free）
+// check if it is paid plan（non- Free）
 const isPaidPlan = computed(() => {
   const planName = props.account.plan_name?.toLowerCase();
   return planName && planName !== 'free';
 });
 
 const statusClass = computed(() => {
-  // 只有付费计划且 subscription_active 为 false 时才显示未激活
+  // only when paid plan and subscription_active as false only thendisplayInactive
   if (isPaidPlan.value && props.account.subscription_active === false) return 'status-subscription-inactive';
-  // 检查账户禁用状态
+  // check account disabled status
   if (props.account.is_disabled) return 'status-disabled';
   if (props.account.status === 'active') return 'status-active';
   if (props.account.status === 'inactive') return 'status-inactive';
@@ -813,19 +813,19 @@ const statusClass = computed(() => {
 });
 
 const statusText = computed(() => {
-  // 只有付费计划且 subscription_active 为 false 时才显示未激活
-  if (isPaidPlan.value && props.account.subscription_active === false) return '未激活';
-  // 检查账户禁用状态
-  if (props.account.is_disabled) return '已禁用';
-  if (props.account.status === 'active') return '正常';
-  if (props.account.status === 'inactive') return '离线';
-  return '错误';
+  // only when paid plan and subscription_active as false only thendisplayInactive
+  if (isPaidPlan.value && props.account.subscription_active === false) return 'Inactive';
+  // check account disabled status
+  if (props.account.is_disabled) return 'Disabled';
+  if (props.account.status === 'active') return 'Normal';
+  if (props.account.status === 'inactive') return 'Offline';
+  return 'Error';
 });
 
-// 是否为配额百分比模式 (billing_strategy === 2 即 QUOTA)
+// whether it isQuotapercentageMode (billing_strategy === 2 i.e. QUOTA)
 const isQuotaMode = computed(() => props.account.billing_strategy === 2);
 
-// 是否有配额数据可展示（QUOTA 模式或 CREDITS 模式）
+// whetherhasQuotadatacanshow（QUOTA Mode or  CREDITS Mode）
 const hasQuotaData = computed(() => {
   if (isQuotaMode.value) {
     return props.account.daily_quota_remaining_percent !== undefined 
@@ -834,21 +834,21 @@ const hasQuotaData = computed(() => {
   return !!props.account.total_quota;
 });
 
-// 配额百分比（仅 CREDITS 模式使用，表示已用占比）
+// Quotapercentage（only  CREDITS Modeuse，representUsedproportion）
 const quotaPercentage = computed(() => {
   if (!props.account.total_quota || !props.account.used_quota) return 0;
   return Math.min(Math.round((props.account.used_quota / props.account.total_quota) * 100), 100);
 });
 
-// 配额颜色（仅 CREDITS 模式使用）
+// Quotacolor（only  CREDITS Modeuse）
 const quotaColor = computed(() => {
   const percentage = quotaPercentage.value;
-  if (percentage < 50) return '#10b981';  // 绿色
-  if (percentage < 80) return '#f59e0b';  // 橙色
-  return '#ef4444';  // 红色
+  if (percentage < 50) return '#10b981';  // green
+  if (percentage < 80) return '#f59e0b';  // orange
+  return '#ef4444';  // red
 });
 
-// 日配额剩余百分比的颜色（QUOTA 模式）
+// Daily Quota Remainingpercentage color（QUOTA Mode）
 const dailyQuotaColor = computed(() => {
   const remaining = props.account.daily_quota_remaining_percent ?? 0;
   if (remaining > 50) return '#10b981';
@@ -856,7 +856,7 @@ const dailyQuotaColor = computed(() => {
   return '#ef4444';
 });
 
-// 周配额剩余百分比的颜色（QUOTA 模式）
+// Weekly Quota Remainingpercentage color（QUOTA Mode）
 const weeklyQuotaColor = computed(() => {
   const remaining = props.account.weekly_quota_remaining_percent ?? 0;
   if (remaining > 50) return '#10b981';
@@ -864,28 +864,28 @@ const weeklyQuotaColor = computed(() => {
   return '#ef4444';
 });
 
-// 格式化配额重置时间
+// formatQuotaResetTime
 function formatResetTime(unixTimestamp: number | undefined): string {
   if (!unixTimestamp || unixTimestamp <= 0) return '';
   return dayjs.unix(unixTimestamp).format('MM-DD HH:mm');
 }
 
-// 刷新按钮提示文本
+// RefreshbuttonNoticetext
 const refreshButtonTooltip = computed(() => {
   if (!props.account.token_expires_at) {
-    return '刷新Token';
+    return 'RefreshToken';
   }
   const isExpired = dayjs(props.account.token_expires_at).isBefore(dayjs());
-  return isExpired ? '刷新Token（已过期）' : '刷新账号信息（Token有效）';
+  return isExpired ? 'RefreshToken（Expired）' : 'RefreshAccount Info（Tokenvalid）';
 });
 
-// 订阅到期日期格式化
+// Subscription ExpiresDateformat
 const formattedExpiryDate = computed(() => {
   if (!props.account.subscription_expires_at) return '';
   return dayjs(props.account.subscription_expires_at).format('YYYY-MM-DD HH:mm');
 });
 
-// 计算距离到期的天数
+// calculate距离toperioddayscount
 const daysUntilExpiry = computed(() => {
   if (!props.account.subscription_expires_at) return null;
   const now = dayjs();
@@ -893,18 +893,18 @@ const daysUntilExpiry = computed(() => {
   return expiry.diff(now, 'day');
 });
 
-// 到期文本
+// toperiodtext
 const expiryText = computed(() => {
   const days = daysUntilExpiry.value;
   if (days === null) return '';
-  if (days < 0) return '已过期';
-  if (days === 0) return '今天到期';
-  if (days === 1) return '明天到期';
-  if (days <= 7) return `${days}天后到期`;
-  return `剩余${days}天`;
+  if (days < 0) return 'Expired';
+  if (days === 0) return 'Expires today';
+  if (days === 1) return 'Expires tomorrow';
+  if (days <= 7) return `${days}daysaftertoperiod`;
+  return `Remaining${days}days`;
 });
 
-// 到期样式类
+// toperiodstyleclass
 const expiryClass = computed(() => {
   const days = daysUntilExpiry.value;
   if (days === null) return '';
@@ -913,7 +913,7 @@ const expiryClass = computed(() => {
   return 'normal';
 });
 
-// Token过期类型
+// Token Expirestype
 const tokenExpiryType = computed(() => {
   if (!props.account.token_expires_at) return 'info';
   const expiry = dayjs(props.account.token_expires_at);
@@ -922,34 +922,34 @@ const tokenExpiryType = computed(() => {
   const hoursUntilExpiry = expiry.diff(now, 'hours');
   
   if (minutesUntilExpiry < 0) return 'danger';
-  if (minutesUntilExpiry < 60) return 'warning';  // 小于1小时显示警告
-  if (hoursUntilExpiry <= 24) return 'warning';   // 小于24小时显示警告
+  if (minutesUntilExpiry < 60) return 'warning';  // less than1hoursdisplayWarning
+  if (hoursUntilExpiry <= 24) return 'warning';   // less than24hoursdisplayWarning
   return 'success';
 });
 
-// Token过期提示
+// Token ExpiresNotice
 const tokenExpiryTooltip = computed(() => {
-  if (!props.account.token_expires_at) return '无Token';
+  if (!props.account.token_expires_at) return 'noToken';
   const expiry = dayjs(props.account.token_expires_at);
   const now = dayjs();
   const minutesUntilExpiry = expiry.diff(now, 'minutes');
   const hoursUntilExpiry = expiry.diff(now, 'hours');
   const daysUntilExpiry = expiry.diff(now, 'days');
   
-  if (minutesUntilExpiry < 0) return '已过期';
-  if (minutesUntilExpiry === 0) return '即将过期（不足1分钟）';
-  if (minutesUntilExpiry < 5) return `即将过期（${minutesUntilExpiry}分钟后）`;
-  if (minutesUntilExpiry < 60) return `将在${minutesUntilExpiry}分钟后过期`;
-  if (hoursUntilExpiry < 24) return `将在${hoursUntilExpiry}小时后过期`;
-  if (daysUntilExpiry <= 7) return `${daysUntilExpiry}天后过期`;
-  return `有效（${daysUntilExpiry}天）`;
+  if (minutesUntilExpiry < 0) return 'Expired';
+  if (minutesUntilExpiry === 0) return 'Expiring soon（notenough1minutes）';
+  if (minutesUntilExpiry < 5) return `Expiring soon（${minutesUntilExpiry}minutesafter）`;
+  if (minutesUntilExpiry < 60) return `will be${minutesUntilExpiry}minutesafterExpired`;
+  if (hoursUntilExpiry < 24) return `will be${hoursUntilExpiry}hoursafterExpired`;
+  if (daysUntilExpiry <= 7) return `${daysUntilExpiry}daysafterExpired`;
+  return `valid（${daysUntilExpiry}days）`;
 });
 
 function formatDate(date: string) {
   return dayjs(date).format('MM-DD HH:mm');
 }
 
-// 格式化配额（除以100并显示两位小数）
+// formatQuota（divide by100 and displaytwo decimal places）
 function formatQuota(num: number | undefined | null) {
   if (!num) return '0.00';
   return (num / 100).toFixed(2);
@@ -959,15 +959,15 @@ function handleSelect(value: boolean) {
   emit('select', value);
 }
 
-// 点击卡片空白区域触发选择
+// clickcardblankareatriggerselect
 function handleCardClick(event: MouseEvent) {
   const target = event.target as HTMLElement;
   
-  // 检查是否点击了交互元素
+  // check ifclick交互element
   const isInteractive = target.closest('button, a, input, .el-checkbox, .el-button, .el-tag, .el-tooltip, .el-icon');
   
   if (!isInteractive) {
-    // 点击空白区域，切换选择状态
+    // clickblankarea，SwitchselectStatus
     emit('select', !props.isSelected);
   }
 }
@@ -975,9 +975,9 @@ function handleCardClick(event: MouseEvent) {
 async function copyEmail() {
   try {
     await navigator.clipboard.writeText(props.account.email);
-    ElMessage.success('邮箱已复制');
+    ElMessage.success('EmailCopied');
   } catch (error) {
-    ElMessage.error('复制失败');
+    ElMessage.error('Copy failed');
   }
 }
 
@@ -986,15 +986,15 @@ async function handleGetBilling() {
   try {
     const result = await apiService.getBilling(props.account.id);
     if (result.success) {
-      // 显示账单对话框而不是仅仅提示
+      // displayaccountsingleDialogbutnotisonly only Notice
       uiStore.openBillingDialog(props.account.id);
-      // 把账单数据传递给对话框（可以通过store或事件）
+      // putaccountsingledatapass递giveDialog（cantoviastore or event）
       billingData.value = result;
     } else {
-      ElMessage.error('账单查询失败');
+      ElMessage.error('accountsingleQuery failed');
     }
   } catch (error) {
-    ElMessage.error(`操作失败: ${error}`);
+    ElMessage.error(`Operation failed: ${error}`);
   } finally {
     isGettingBilling.value = false;
   }
@@ -1007,35 +1007,35 @@ async function handleShowCreditHistory() {
 async function handleRefreshToken() {
   isRefreshing.value = true;
   try {
-    // 注：Devin 账号与 Firebase 账号统一走 apiService.refreshToken()，后端已按
-    // auth_provider 自动分流（Devin 走 auth1_token 换新 session_token + enrich，
-    // Firebase 走 refresh_token/sign_in），并统一响应 use_lightweight_api 设置、
-    // 写 OperationLog。无需在前端额外区分。
+    // note：Devin Account and Firebase Accountunifyuse apiService.refreshToken()，backendalready by
+    // auth_provider autodistribute（Devin use auth1_token 换new session_token + enrich，
+    // Firebase use refresh_token/sign_in）， and unifyresponse use_lightweight_api Settings、
+    // write OperationLog。noneedinbeforesideextradistinguish。
 
-    // 检查Token是否过期
+    // checkTokenwhetherExpired
     const isTokenExpired = !props.account.token_expires_at || 
                           dayjs(props.account.token_expires_at).isBefore(dayjs());
     
     if (isTokenExpired) {
-      // Token已过期，执行刷新Token操作
+      // TokenExpired，executeRefreshTokenOperation
       const result = await apiService.refreshToken(props.account.id);
       if (result.success) {
-        // 显示更详细的成功消息
-        const message = result.message || 'Token刷新成功';
-        if (result.old_expires_at && result.old_expires_at !== '未知') {
+        // displaymoredetailedsuccessfulmessage
+        const message = result.message || 'TokenRefreshsuccessful';
+        if (result.old_expires_at && result.old_expires_at !== 'Unknown') {
           ElMessage.success({
-            message: `${message}\n旧过期时间: ${new Date(result.old_expires_at).toLocaleString()}\n新过期时间: ${result.expires_at ? new Date(result.expires_at).toLocaleString() : '未知'}`,
+            message: `${message}\noldExpiredTime: ${new Date(result.old_expires_at).toLocaleString()}\nnewExpiredTime: ${result.expires_at ? new Date(result.expires_at).toLocaleString() : 'Unknown'}`,
             duration: 3000,
             showClose: true
           });
         } else {
           ElMessage.success(message);
         }
-        // Token刷新成功后，重新获取账号信息（包括新的token）
+        // TokenRefreshsuccessfulafter，re-fetchAccount Info（includenewtoken）
         try {
           const updatedAccount = await accountApi.getAccount(props.account.id);
           
-          // 合并额外的信息
+          // mergeextraInfo
           if (result.token) {
             updatedAccount.token = result.token;
           }
@@ -1058,12 +1058,12 @@ async function handleRefreshToken() {
             updatedAccount.is_disabled = result.is_disabled;
           }
           
-          // 直接更新store中的账号数据，确保立即同步
+          // directlyUpdatestoreinAccountdata，ensureimmediatelysync
           await accountsStore.updateAccount(updatedAccount);
           emit('update', updatedAccount);
         } catch (error) {
-          console.error('获取账号信息失败:', error);
-          // 如果无法获取最新账号信息，使用现有数据更新
+          console.error('Failed to get account info:', error);
+          // ifnowayfetchmostnewAccount Info，usenowhasdataUpdate
           const updatedAccount = { ...props.account, status: 'active' as const };
           if (result.token) {
             updatedAccount.token = result.token;
@@ -1078,40 +1078,40 @@ async function handleRefreshToken() {
           emit('update', updatedAccount);
         }
       } else {
-        ElMessage.error('Token刷新失败');
+        ElMessage.error('TokenRefresh failed');
       }
     } else {
-      // Token仍然有效，只刷新账号信息
+      // Tokenstill然valid，onlyRefreshAccount Info
       const result = await apiService.getCurrentUser(props.account.id);
       if (result.success && result.user_info) {
         ElMessage.success({
-          message: `账号信息已更新\nToken有效期至: ${new Date(props.account.token_expires_at!).toLocaleString()}`,
+          message: `Account Infoalready Update\nTokenExpiry至: ${new Date(props.account.token_expires_at!).toLocaleString()}`,
           duration: 2500,
           showClose: true
         });
         
-        // 更新账号信息
+        // Update account info
         const updatedAccount = { ...props.account, status: 'active' as const };
         
-        // 更新用户基本信息（包含api_key和禁用状态）
+        // UpdateUserBasic Info（containsapi_key and DisableStatus）
         if (result.user_info.user?.api_key) {
           updatedAccount.windsurf_api_key = result.user_info.user.api_key;
         }
-        // 更新账户禁用状态
+        // UpdateAccountDisableStatus
         if (result.user_info.user?.disable_codeium !== undefined) {
           updatedAccount.is_disabled = result.user_info.user.disable_codeium;
         }
         
-        // 更新套餐信息
+        // UpdatePlanInfo
         if (result.user_info.plan?.plan_name) {
           updatedAccount.plan_name = result.user_info.plan.plan_name;
         }
-        // 从 plan 中读取 billing_strategy
+        // from plan inread billing_strategy
         if (result.user_info.plan?.billing_strategy !== undefined) {
           updatedAccount.billing_strategy = result.user_info.plan.billing_strategy;
         }
         
-        // 合并 plan_status 中的新配额字段（避免覆盖后端已保存的数据）
+        // merge plan_status innewQuotafield（avoidcoverbackendalready Savedata）
         if (result.plan_status) {
           if (result.plan_status.billing_strategy !== undefined) {
             updatedAccount.billing_strategy = result.plan_status.billing_strategy;
@@ -1133,7 +1133,7 @@ async function handleRefreshToken() {
           }
         }
         
-        // 更新配额信息
+        // UpdateQuotaInfo
         if (result.user_info.subscription) {
           if (result.user_info.subscription.used_quota !== undefined) {
             updatedAccount.used_quota = result.user_info.subscription.used_quota;
@@ -1146,31 +1146,31 @@ async function handleRefreshToken() {
             const expiresDate = dayjs.unix(expiresTimestamp);
             updatedAccount.subscription_expires_at = expiresDate.toISOString();
           }
-          // 更新订阅激活状态
+          // UpdateSubscriptionactivateStatus
           if (result.user_info.subscription.subscription_active !== undefined) {
             updatedAccount.subscription_active = result.user_info.subscription.subscription_active;
           }
         }
         
         updatedAccount.last_quota_update = dayjs().toISOString();
-        // 保存到后端数据库
+        // Savetobackenddatalibrary
         await accountsStore.updateAccount(updatedAccount);
         emit('update', updatedAccount);
       } else {
-        // 显示详细错误信息
+        // displaydetailedError Info
         const statusCode = result.status_code;
-        const errorMsg = result.error || '未知错误';
+        const errorMsg = result.error || 'Unknown error';
         if (statusCode === 401) {
-          // Token 实际已失效，尝试自动刷新
-          console.log('[AccountCard] Token 已失效 (401)，尝试自动刷新...');
+          // Token actualInvalid，tryAuto Refresh
+          console.log('[AccountCard] Token Invalid (401)，tryAuto Refresh...');
           const refreshResult = await apiService.refreshToken(props.account.id);
           if (refreshResult.success) {
             ElMessage.success({
-              message: 'Token已自动刷新，请重新操作',
+              message: 'Tokenalready Auto Refresh，pleasere-Operation',
               duration: 3000,
               showClose: true
             });
-            // 更新账号信息
+            // Update account info
             const updatedAccount = { ...props.account, status: 'active' as const };
             if (refreshResult.token) {
               updatedAccount.token = refreshResult.token;
@@ -1182,22 +1182,22 @@ async function handleRefreshToken() {
             emit('update', updatedAccount);
           } else {
             ElMessage.error({
-              message: `Token已失效且刷新失败\n可能需要重新登录`,
+              message: `TokenInvalidandRefresh failed\npossiblyneedre-Login`,
               duration: 5000,
               showClose: true
             });
-            // 更新账户状态为错误
+            // UpdateAccountStatusasError
             const errorAccount = { ...props.account, status: 'error' as const };
             await accountsStore.updateAccount(errorAccount);
             emit('update', errorAccount);
           }
         } else {
           ElMessage.error({
-            message: `获取账号信息失败 (${statusCode || '未知'})\n${errorMsg}`,
+            message: `Failed to get account info (${statusCode || 'Unknown'})\n${errorMsg}`,
             duration: 5000,
             showClose: true
           });
-          // 更新账户状态为错误
+          // UpdateAccountStatusasError
           const errorAccount = { ...props.account, status: 'error' as const };
           await accountsStore.updateAccount(errorAccount);
           emit('update', errorAccount);
@@ -1205,7 +1205,7 @@ async function handleRefreshToken() {
       }
     }
   } catch (error) {
-    ElMessage.error(`操作失败: ${error}`);
+    ElMessage.error(`Operation failed: ${error}`);
   } finally {
     isRefreshing.value = false;
   }
@@ -1215,13 +1215,13 @@ async function handleLogin() {
   try {
     const result = await apiService.loginAccount(props.account.id);
     if (result.success) {
-      ElMessage.success('登录成功');
+      ElMessage.success('Loginsuccessful');
       
-      // 重新从后端获取完整的账号数据（包括新的 token 和 refresh_token）
+      // re-frombackendfetchcompleteAccountdata（includenew token  and  refresh_token）
       try {
         const updatedAccount = await accountApi.getAccount(props.account.id);
         
-        // 合并返回的额外信息
+        // mergeBackextraInfo
         if (result.expires_at) {
           updatedAccount.token_expires_at = result.expires_at;
         }
@@ -1242,12 +1242,12 @@ async function handleLogin() {
         }
         updatedAccount.last_quota_update = dayjs().toISOString();
         
-        // 更新 store 中的账号数据
+        // Update store inAccountdata
         await accountsStore.updateAccount(updatedAccount);
         emit('update', updatedAccount);
       } catch (error) {
-        console.error('获取账号信息失败:', error);
-        // 如果获取失败，使用基本更新
+        console.error('Failed to get account info:', error);
+        // iffetchfailed，use基thisUpdate
         const updatedAccount = { 
           ...props.account, 
           status: 'active' as const,
@@ -1261,10 +1261,10 @@ async function handleLogin() {
         emit('update', updatedAccount);
       }
     } else {
-      ElMessage.error('登录失败');
+      ElMessage.error('Login failed');
     }
   } catch (error) {
-    ElMessage.error(`登录失败: ${error}`);
+    ElMessage.error(`Login failed: ${error}`);
   }
 }
 
@@ -1272,22 +1272,22 @@ function handleEdit() {
   uiStore.openEditAccountDialog(props.account.id);
 }
 
-// ==================== Firebase ↔ Devin 登录方式互转 ====================
+// ==================== Firebase ↔ Devin Login Methodmutual convert ====================
 
-/** 当前账号的转换按钮 tooltip 文案（按 auth_provider 动态） */
+/** CurrentAccountconvertbutton tooltip text（by auth_provider dynamic） */
 const convertActionLabel = computed(() => {
   return props.account.auth_provider === 'devin'
-    ? '转换为 Firebase 登录方式'
-    : '转换为 Devin 登录方式';
+    ? 'convert to Firebase Login Method'
+    : 'convert to Devin Login Method';
 });
 
 const isConvertingAuth = ref(false);
 
 /**
- * 从 orgs 列表弹框让用户选择一个组织，返回选中的 org_id；用户取消返回 null。
+ * from orgs ListpopupboxletUserselectonegrouporg，Backselected org_id；UserCancelBack null。
  *
- * 用于 Firebase→Devin 转换时企端返回多个 org 的二次交互。这里使用轻量的
- * ElMessageBox + h() 渲染 radio list，避免引入额外 dialog 组件。
+ * used for Firebase→Devin convertwhen企sideBackmultiple org secondary交互。这inuselightweight
+ * ElMessageBox + h() render radio list，avoidquote入extra dialog component。
  */
 async function selectOrgInteractively(
   orgs: Array<{ id: string; name: string }>,
@@ -1298,7 +1298,7 @@ async function selectOrgInteractively(
   const selected = ref<string>(orgs[0].id);
   try {
     await ElMessageBox({
-      title: '选择组织',
+      title: 'selectgrouporg',
       message: () =>
         h('div', { style: 'display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto;' },
           orgs.map((org) =>
@@ -1318,15 +1318,15 @@ async function selectOrgInteractively(
                   },
                 }),
                 h('div', { style: 'flex: 1; min-width: 0;' }, [
-                  h('div', { style: 'font-weight: 500;' }, org.name || '(未命名组织)'),
+                  h('div', { style: 'font-weight: 500;' }, org.name || '(notnamednamegrouporg)'),
                   h('div', { style: 'font-size: 12px; color: var(--el-text-color-secondary); word-break: break-all;' }, org.id),
                 ]),
               ],
             ),
           ),
         ),
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
       showCancelButton: true,
       customClass: 'convert-org-select-dialog',
     });
@@ -1337,13 +1337,13 @@ async function selectOrgInteractively(
 }
 
 /**
- * 转换当前账号的登录体系（Firebase ↔ Devin）
+ * convertCurrentAccountLoginsystem（Firebase ↔ Devin）
  *
- * 内部按当前 auth_provider 分派：
- * - Devin 账号 → convert_account_to_firebase
- * - Firebase 账号 → convert_account_to_devin，多组织时弹选择后再次调用并传 orgId
+ * internalbyCurrent auth_provider dispatch：
+ * - Devin Account → convert_account_to_firebase
+ * - Firebase Account → convert_account_to_devin，multiplegroupwhen orgpopupselectafteragaintimecall and pass orgId
  *
- * 失败时本地账号字段不改（后端已实现原子性）。
+ * failedwhenlocalAccountfieldnotchange（backendalready implementoriginalchildproperty）。
  */
 async function handleConvertAuthProvider() {
   const isDevin = props.account.auth_provider === 'devin';
@@ -1352,13 +1352,13 @@ async function handleConvertAuthProvider() {
 
   try {
     await ElMessageBox.confirm(
-      `即将将账号 ${props.account.nickname || props.account.email} 的登录方式从 【${sourceLabel}】 转换为 【${targetLabel}】。\n\n` +
-        `操作会复用账号已存的明文密码调用 ${targetLabel} 的官方登录接口，成功后自动切换账号字段。\n` +
-        `失败时帐号字段保持不变。\n\n确定继续吗？`,
-      `转换为 ${targetLabel} 登录方式`,
+      `i.e.willwillAccount ${props.account.nickname || props.account.email} Login Methodfrom 【${sourceLabel}】 convert to 【${targetLabel}】。\n\n` +
+        `OperationwillcomplexuseAccountstored plaintextPasswordcall ${targetLabel} officialLoginAPI，successfulthen autoSwitch Accountfield。\n` +
+        `failedwhen帐fieldmaintainnotchange。\n\nConfirmcontinue?？`,
+      `convert to ${targetLabel} Login Method`,
       {
-        confirmButtonText: `转换为 ${targetLabel}`,
-        cancelButtonText: '取消',
+        confirmButtonText: `convert to ${targetLabel}`,
+        cancelButtonText: 'Cancel',
         type: 'warning',
       },
     );
@@ -1371,24 +1371,24 @@ async function handleConvertAuthProvider() {
     if (isDevin) {
       const result = await devinApi.convertAccountToFirebase({ id: props.account.id });
       if (result.success) {
-        ElMessage.success(result.message || '已转换为 Firebase 登录体系');
+        ElMessage.success(result.message || 'already convert to Firebase Loginsystem');
         await accountsStore.loadAccounts();
       } else if (result.already_converted) {
-        ElMessage.info(result.message || '账号已是 Firebase 体系');
+        ElMessage.info(result.message || 'Accountalready is Firebase system');
       } else {
-        ElMessage.warning(result.message || '转换未完成');
+        ElMessage.warning(result.message || 'convertnotDone');
       }
       return;
     }
 
-    // Firebase → Devin：首次调用不传 orgId
+    // Firebase → Devin：firsttimecallnotpass orgId
     let result = await devinApi.convertAccountToDevin({ id: props.account.id });
 
-    // 多组织分支：弹选择后再次调用并传 orgId
+    // multiplegrouporgbranch：popupselectafteragaintimecall and pass orgId
     if (result.requires_org_selection && result.orgs && result.orgs.length > 0) {
       const chosenOrgId = await selectOrgInteractively(result.orgs);
       if (!chosenOrgId) {
-        ElMessage.info('已取消多组织选择');
+        ElMessage.info('Multi-organization selection cancelled');
         return;
       }
       result = await devinApi.convertAccountToDevin({
@@ -1398,32 +1398,32 @@ async function handleConvertAuthProvider() {
     }
 
     if (result.success) {
-      ElMessage.success(result.message || '已转换为 Devin 登录体系');
+      ElMessage.success(result.message || 'already convert to Devin Loginsystem');
       await accountsStore.loadAccounts();
     } else if (result.already_converted) {
-      ElMessage.info(result.message || '账号已是 Devin 体系');
+      ElMessage.info(result.message || 'Accountalready is Devin system');
     } else {
-      ElMessage.warning(result.message || '转换未完成');
+      ElMessage.warning(result.message || 'convertnotDone');
     }
   } catch (error: any) {
-    ElMessage.error(`转换登录方式失败：${error?.message || error || '未知错误'}`);
+    ElMessage.error(`convertLogin Methodfailed：${error?.message || error || 'Unknown error'}`);
   } finally {
     isConvertingAuth.value = false;
   }
 }
 
 function handleAccountInfo() {
-  // 直接打开账户信息对话框
+  // directlyopenAccountInfoDialog
   uiStore.openAccountInfoDialog(props.account.id);
 }
 
 function handleShowAnalytics() {
-  // 显示使用分析对话框
+  // displayuseAnalysisDialog
   showAnalyticsDialog.value = true;
 }
 
 function handleTeamSettings() {
-  // 显示团队设置对话框
+  // displayTeam SettingsDialog
   showTeamSettingsDialog.value = true;
 }
 
@@ -1432,22 +1432,22 @@ function handleTeamManagement() {
 }
 
 function handleAutoRefill() {
-  // 显示自动充值设置对话框
+  // displayAuto RechargeSettingsDialog
   showAutoRefillDialog.value = true;
 }
 
-// 批量重置团队成员积分
+// Batch ResetTeam MembersCredits
 async function handleBatchResetTeamCredits() {
   isResettingCredits.value = true;
   try {
-    // Step 1: 获取团队成员列表
+    // Step 1: fetchTeam MembersList
     const membersResult = await invoke<any>('get_team_members', {
       id: props.account.id,
       groupId: null
     });
     
     if (!membersResult.success) {
-      ElMessage.error(membersResult.error || '获取团队成员失败');
+      ElMessage.error(membersResult.error || 'fetchTeam Membersfailed');
       return;
     }
     
@@ -1461,7 +1461,7 @@ async function handleBatchResetTeamCredits() {
       userRoles = [userRoles];
     }
     
-    // 构建成员列表并排除自己
+    // buildMemberList and exclude self
     interface TeamMember {
       api_key: string;
       name: string;
@@ -1476,25 +1476,25 @@ async function handleBatchResetTeamCredits() {
       const email = user.string_3 || '';
       const teamStatus = user.int_8 || 0;
       
-      // 只添加已批准的成员，并排除自己（当前账号）
+      // onlyAddApprovedMember， and exclude self（CurrentAccount）
       if (teamStatus !== 1 && email.toLowerCase() !== currentEmail) {
         otherMembers.push({ api_key: apiKey, name, email });
       }
     }
     
     if (otherMembers.length === 0) {
-      ElMessage.warning('没有可重置的团队成员');
+      ElMessage.warning('no availableResetTeam Members');
       return;
     }
     
-    // 确认操作
+    // ConfirmOperation
     try {
       await ElMessageBox.confirm(
-        `确定要重置 ${otherMembers.length} 位团队成员的积分吗？\n此操作将移除并重新邀请这些成员。`,
-        '批量重置团队积分',
+        `Confirmneed toReset ${otherMembers.length} Team MembersCredits?？\nthisOperationwillremove and Re-invitetheseMember。`,
+        'Batch Reset Team Credits',
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
           type: 'warning'
         }
       );
@@ -1505,34 +1505,34 @@ async function handleBatchResetTeamCredits() {
     let successCount = 0;
     let failCount = 0;
     
-    // Step 2: 遍历所有其他成员执行重置
+    // Step 2: iterateallotherMemberexecuteReset
     for (const member of otherMembers) {
       try {
-        // 移除成员
+        // Remove Member
         const removeResult = await invoke<any>('remove_team_member', {
           id: props.account.id,
           memberApiKey: member.api_key
         });
         
         if (!removeResult.success) {
-          console.error(`移除成员 ${member.name} 失败:`, removeResult.error);
+          console.error(`Remove Member ${member.name} failed:`, removeResult.error);
           failCount++;
           continue;
         }
         
-        // 重新邀请
+        // Re-invite
         const inviteResult = await invoke<any>('invite_team_members', {
           id: props.account.id,
           users: [{ name: member.name, email: member.email }]
         });
         
         if (!inviteResult.success) {
-          console.error(`邀请成员 ${member.name} 失败:`, inviteResult.error);
+          console.error(`Invite Members ${member.name} failed:`, inviteResult.error);
           failCount++;
           continue;
         }
         
-        // 自动接受邀请（如果邮箱在管理器中）
+        // auto accept invitation（ifEmailinManagementmanagerin）
         try {
           const accounts = await invoke<any[]>('get_all_accounts');
           const matchedAccount = accounts.find((acc: any) => 
@@ -1546,162 +1546,162 @@ async function handleBatchResetTeamCredits() {
             });
           }
         } catch (e) {
-          console.log(`自动接受邀请失败 (${member.email}):`, e);
+          console.log(`auto accept invitationfailed (${member.email}):`, e);
         }
         
         successCount++;
       } catch (error) {
-        console.error(`处理成员 ${member.name} 时出错:`, error);
+        console.error(`handleMember ${member.name} error when:`, error);
         failCount++;
       }
     }
     
-    // 显示结果
+    // Show Results
     if (failCount === 0) {
-      ElMessage.success(`成功重置 ${successCount} 位团队成员的积分`);
+      ElMessage.success(`successfulReset ${successCount} Team MembersCredits`);
     } else {
-      ElMessage.warning(`重置完成：成功 ${successCount} 位，失败 ${failCount} 位`);
+      ElMessage.warning(`ResetDone：successful ${successCount} ，failed ${failCount} `);
     }
     
-    // 刷新账户信息
+    // RefreshAccountInfo
     accountsStore.refreshAccountToken(props.account);
   } catch (error: any) {
-    ElMessage.error('批量重置团队积分失败: ' + error.toString());
+    ElMessage.error('Batch Reset Team Creditsfailed: ' + error.toString());
   } finally {
     isResettingCredits.value = false;
   }
 }
 
-// 更换订阅
+// changeSubscription
 function handleUpdatePlan() {
   showUpdatePlanDialog.value = true;
 }
 
-// 更换订阅成功回调
+// changeSubscriptionsuccessfulbackcall
 function handleUpdatePlanSuccess() {
   accountsStore.refreshAccountToken(props.account);
 }
 
-// 获取试用绑卡链接 - 所有 trial 签约都需要 Turnstile 验证
+// fetchtrialbind cardlink - all trial sign约allneed Turnstile Verify
 //
-// Windsurf 后端 `SubscribeToPlan` 对 `start_trial=true` 的所有计划（Pro/Max/Teams/Devin…）
-// 都强制 captcha 校验（错误码 `failed_precondition` + `captcha required for trial signup`）。
-// 早期只有 Pro 走 trial、代码里按 tier 分流弹 Turnstile 是历史遗留，现统一成：
-// - `startTrial=true` → 必须先过 Turnstile 拿 token 再请求
-// - `startTrial=false`（直接付费签约）→ 后端不要求 captcha，直接发请求
+// Windsurf backend `SubscribeToPlan` for `start_trial=true` allplan（Pro/Max/Teams/Devin…）
+// allforce captcha validate（Errorcode `failed_precondition` + `captcha required for trial signup`）。
+// 早periodonly when Pro use trial、codecodeinby tier routing popup Turnstile ishistory遗留，nowunify成：
+// - `startTrial=true` → mustfirstpass Turnstile get token againpleaserequire
+// - `startTrial=false`（directlypaid subscription）→ backendnotneed torequire captcha，directlysendpleaserequire
 function handleGetTrialLink() {
   const startTrial = settingsStore.settings?.startTrial ?? true;
 
   if (startTrial) {
     showTurnstileDialog.value = true;
   } else {
-    // 直接付费签约，无需 captcha
+    // directlypaid subscription，noneed captcha
     handleTurnstileSuccess('');
   }
 }
 
-// Turnstile 验证成功后的处理
+// Turnstile Verifysuccessfulafterhandle
 async function handleTurnstileSuccess(turnstileToken: string) {
   pendingTurnstileToken.value = turnstileToken;
   showTurnstileDialog.value = false;
   
   isGettingTrialLink.value = true;
   try {
-    // 从设置中读取订阅参数
-    const teamsTier = settingsStore.settings?.subscriptionPlan ?? 2; // 默认 Pro
-    const paymentPeriod = settingsStore.settings?.paymentPeriod ?? 1; // 默认月付
-    // 团队/企业类计划需要团队名称，个人计划不设置
+    // fromSettingsinreadSubscription参count
+    const teamsTier = settingsStore.settings?.subscriptionPlan ?? 2; // default Pro
+    const paymentPeriod = settingsStore.settings?.paymentPeriod ?? 1; // defaultMonthly
+    // Team/EnterpriseclassplanneedTeam Name，personplannotSettings
     const teamTiers = [1, 3, 4, 5, 7, 10, 11, 12, 14, 15];
     const teamName = teamTiers.includes(teamsTier) ? (settingsStore.settings?.teamName || undefined) : undefined;
     const seatCount = settingsStore.settings?.seatCount ?? 1;
     const startTrial = settingsStore.settings?.startTrial ?? true;
     
-    // 检查是否启用了自动打开支付页面
+    // check ifEnableautoopenpaymentPage
     const autoOpen = settingsStore.settings?.autoOpenPaymentLinkInWebview || false;
     const autoFill = settingsStore.settings?.autoFillPaymentForm || false;
     const autoSubmit = settingsStore.settings?.autoSubmitPaymentForm || false;
     
-    // 如果启用了自动打开，使用增强的API
+    // ifEnableautoopen，useenhanceAPI
     if (autoOpen) {
-      // 从store中获取最新的账号数据，确保token是最新的
+      // fromstoreinfetchmostnewAccountdata，ensuretokenismostnew
       const latestAccount = accountsStore.accounts.find(a => a.id === props.account.id);
       const account = latestAccount || props.account;
       
       if (!account.token) {
-        ElMessage.warning('请先刷新Token后再试');
+        ElMessage.warning('please firstRefreshTokenthen try again');
         isGettingTrialLink.value = false;
         return;
       }
       
-      // 使用增强的支付API
+      // useenhancepaymentAPI
       const { getTrialPaymentLink, autoFillPaymentForm } = await import('@/utils/cardGenerator');
       
       const result = await getTrialPaymentLink(
         account.nickname || account.email,
         account.token,
-        true, // 自动打开窗口
+        true, // autoopenwindow
         teamsTier,
         paymentPeriod,
         startTrial,
         teamName,
-        teamTiers.includes(teamsTier) ? seatCount : undefined, // 团队/企业类计划需要席位
-        turnstileToken || undefined // trial 签约时所有计划均需 Turnstile token
+        teamTiers.includes(teamsTier) ? seatCount : undefined, // Team/EnterpriseclassplanneedSeat
+        turnstileToken || undefined // trial sign约whenallplanallneed Turnstile token
       );
       
       if (result.success && result.window_opened) {
-        ElMessage.success('支付窗口已在Chrome无痕模式下打开');
+        ElMessage.success('paymentwindowalready inChromeIncognito Modeunderopen');
         
-        // 如果启用了自动填写表单
+        // ifEnableauto fill form
         if (autoFill && result.virtual_card && result.window_label) {
-          // 立即注入填写脚本（只等待1秒让窗口加载）
+          // immediatelyinjectfill inscript（onlywait1secondsletwindowLoading）
           setTimeout(async () => {
             try {
-              console.log('开始自动填写表单，窗口标签:', result.window_label);
+              console.log('startauto fill form，windowTags:', result.window_label);
               
-              // 通过Tauri命令注入表单填写代码
+              // viaTauricommandinjectformfill incodecode
               await autoFillPaymentForm(result.window_label, result.virtual_card);
               
-              ElMessage.success('正在自动填写虚拟卡信息...');
+              ElMessage.success('currentlyautofill inVirtual CardInfo...');
               
-              // 如果启用了自动提交，注入自动提交脚本
+              // ifEnableautoSubmit，injectautoSubmitscript
               if (autoSubmit) {
-                console.log('准备自动提交表单...');
+                console.log('prepareautoSubmitform...');
                 await invoke('inject_auto_submit_script', { 
                   windowLabel: result.window_label 
                 });
-                ElMessage.warning('已启用自动提交，请注意观察支付流程');
+                ElMessage.warning('EnabledautoSubmit，pleasenote观察paymentflow');
               }
               
-              // 根据设置决定是否显示虚拟卡信息
+              // based onSettingsdecidewhetherdisplayVirtual CardInfo
               const showCardInfo = settingsStore.settings?.showVirtualCardInfo || false;
               if (showCardInfo) {
                 ElMessageBox.alert(
                   `<div style="text-align: left; font-family: monospace;">
-                    <p><strong>卡号:</strong> ${result.virtual_card.card_number}</p>
-                    <p><strong>有效期:</strong> ${result.virtual_card.expiry_date}</p>
+                    <p><strong>Card Number:</strong> ${result.virtual_card.card_number}</p>
+                    <p><strong>Expiry:</strong> ${result.virtual_card.expiry_date}</p>
                     <p><strong>CVC:</strong> ${result.virtual_card.cvv}</p>
-                    <p><strong>姓名:</strong> ${result.virtual_card.cardholder_name}</p>
-                    <p><strong>地址:</strong> ${result.virtual_card.billing_address.street_address}</p>
-                    <p><strong>城市:</strong> ${result.virtual_card.billing_address.city}, ${result.virtual_card.billing_address.state} ${result.virtual_card.billing_address.postal_code}</p>
+                    <p><strong>Name:</strong> ${result.virtual_card.cardholder_name}</p>
+                    <p><strong>Address:</strong> ${result.virtual_card.billing_address.street_address}</p>
+                    <p><strong>City:</strong> ${result.virtual_card.billing_address.city}, ${result.virtual_card.billing_address.state} ${result.virtual_card.billing_address.postal_code}</p>
                   </div>`,
-                  '虚拟卡信息（仅用于测试）',
+                  'Virtual CardInfo（only used fortest）',
                   {
                     dangerouslyUseHTMLString: true,
-                    confirmButtonText: '确定',
+                    confirmButtonText: 'Confirm',
                     type: 'warning',
                   }
                 );
               }
             } catch (fillError) {
-              console.error('自动填写表单失败:', fillError);
+              console.error('auto fill formfailed:', fillError);
             }
-          }, 1000); // 固定1秒延迟，不再使用pageDelay
+          }, 1000); // fixed1secondsdelay，no longerusepageDelay
         }
       } else {
-        ElMessage.error(result.error || '打开支付窗口失败');
+        ElMessage.error(result.error || 'openpaymentwindowfailed');
       }
     } else {
-      // 使用原有的API
+      // useoriginalhasAPI
       const result = await apiService.getTrialPaymentLink(
         props.account.id, 
         teamsTier,
@@ -1713,117 +1713,117 @@ async function handleTurnstileSuccess(turnstileToken: string) {
       );
 
       if (result.success && result.stripe_url) {
-        // 复制链接到剪贴板
+        // Copylinktoclipboard
         try {
           await navigator.clipboard.writeText(result.stripe_url);
-          ElMessage.success('Stripe支付链接已复制到剪贴板');
+          ElMessage.success('StripepaymentlinkCopied to clipboard');
 
-          // 获取设置
+          // fetchSettings
           const autoOpen = settingsStore.settings?.autoOpenBrowser ?? true;
           const browserMode = settingsStore.settings?.browserMode ?? 'incognito';
           const isIncognito = browserMode === 'incognito';
-          const modeText = isIncognito ? '无痕模式' : '普通模式';
+          const modeText = isIncognito ? 'Incognito Mode' : 'Normal Mode';
           const openCommand = isIncognito ? 'open_external_link_incognito' : 'open_external_link';
 
           if (autoOpen) {
-            // 自动打开浏览器
+            // autoopenbrowser
             try {
               await invoke(openCommand, { url: result.stripe_url });
-              ElMessage.success(`已在浏览器${modeText}中打开`);
+              ElMessage.success(`Opened in browser${modeText} opened in`);
             } catch (err) {
-              ElMessage.error('打开浏览器失败，请手动打开链接');
-              console.error('打开链接失败:', err);
+              ElMessage.error('Failed to open browser, please open the link manually');
+              console.error('Failed to open link:', err);
             }
           } else {
-            // 询问是否在浏览器中打开
+            // askwhetherinbrowser opened in
             ElMessageBox.confirm(
-              `链接已复制到剪贴板，是否在浏览器${modeText}中打开？`,
-              '打开链接',
+              `linkCopied to clipboard，whetherinbrowser${modeText} opened in？`,
+              'openlink',
               {
-                confirmButtonText: '打开',
-                cancelButtonText: '取消',
+                confirmButtonText: 'open',
+                cancelButtonText: 'Cancel',
                 type: 'info',
               }
             ).then(async () => {
               try {
                 await invoke(openCommand, { url: result.stripe_url });
-                ElMessage.success(`已在浏览器${modeText}中打开`);
+                ElMessage.success(`Opened in browser${modeText} opened in`);
               } catch (err) {
-                ElMessage.error('打开浏览器失败，请手动打开链接');
-                console.error('打开链接失败:', err);
+                ElMessage.error('Failed to open browser, please open the link manually');
+                console.error('Failed to open link:', err);
               }
             }).catch(() => {
-              // 用户取消，不做任何操作
+              // UserCancel，notdoanyOperation
             });
           }
         } catch (clipboardError) {
-          // 如果复制失败，直接显示链接
+          // ifCopy failed，directlydisplaylink
           const browserMode = settingsStore.settings?.browserMode ?? 'incognito';
           const isIncognito = browserMode === 'incognito';
-          const modeText = isIncognito ? '无痕模式' : '普通模式';
+          const modeText = isIncognito ? 'Incognito Mode' : 'Normal Mode';
           const openCommand = isIncognito ? 'open_external_link_incognito' : 'open_external_link';
           
           ElMessageBox.alert(
             `<div style="word-break: break-all;">${result.stripe_url}</div>`,
-            'Stripe支付链接',
+            'Stripepaymentlink',
             {
               dangerouslyUseHTMLString: true,
-              confirmButtonText: `在${modeText}中打开`,
+              confirmButtonText: `in${modeText} opened in`,
             }
           ).then(async () => {
             try {
               await invoke(openCommand, { url: result.stripe_url });
-              ElMessage.success(`已在浏览器${modeText}中打开`);
+              ElMessage.success(`Opened in browser${modeText} opened in`);
             } catch (err) {
-              ElMessage.error('打开浏览器失败，请手动打开链接');
-              console.error('打开链接失败:', err);
+              ElMessage.error('Failed to open browser, please open the link manually');
+              console.error('Failed to open link:', err);
             }
           });
         }
       } else {
-        ElMessage.error(result.error || '获取支付链接失败');
+        ElMessage.error(result.error || 'fetchpaymentlinkfailed');
       }
     }
   } catch (error) {
-    ElMessage.error(`获取支付链接失败: ${error}`);
+    ElMessage.error(`fetchpaymentlinkfailed: ${error}`);
   } finally {
     isGettingTrialLink.value = false;
   }
 }
 
-// 检查Pro试用资格
+// checkProTrial Eligibility
 //
-// 注意：Windsurf 后端对过期但 JWT 结构合法的 Firebase ID Token 仍可能返回 200 + 合格响应
-// （疑似仅解 payload 取 uid 未校验 exp/签名）。因此调用前必须通过 get_account_valid_token
-// 强制刷新 token，确保传给后端的始终是有效 token；refresh 失败则直接报错，不再使用本地
-// 可能过期的 account.token，避免误报"有试用资格"。
+// note：Windsurf backendforExpiredbut JWT structure合way Firebase ID Token stillpossiblyBack 200 + qualifiedresponse
+// （suspectedonly solve payload get uid notvalidate exp/signname）。becausethiscallbeforemustvia get_account_valid_token
+// forceRefresh token，ensurepassgivebackendalwaysisvalid token；refresh failedthendirectlyerror report，no longeruselocal
+// possiblyExpired account.token，avoidfalse positive"hasTrial Eligibility"。
 async function handleCheckProTrial() {
   if (!props.account.token) {
-    ElMessage.warning('账号未登录，请先刷新Token');
+    ElMessage.warning('AccountnotLogin，please firstRefreshToken');
     return;
   }
 
   isCheckingProTrial.value = true;
   try {
-    // Step 1: 强制拿到经过 ensure_valid_token 刷新后的有效 token
+    // Step 1: forcegotthroughpass ensure_valid_token Refreshaftervalid token
     const tokenResult = await invoke('get_account_valid_token', { id: props.account.id }) as any;
     if (!tokenResult?.success || !tokenResult?.token) {
-      ElMessage.error('Token 已失效且无法刷新，请重新登录账号后再试');
+      ElMessage.error('Token InvalidandnowayRefresh，pleasere-LoginAccountthen try again');
       return;
     }
 
-    // Step 2: 用新 token 请求后端
+    // Step 2: usenew token pleaserequirebackend
     const result = await invoke('check_pro_trial_eligibility', {
       authToken: tokenResult.token
     }) as any;
 
     if (result.success) {
       if (result.is_eligible) {
-        // 添加试用资格标签
-        const tagName = '试用资格';
+        // AddTrial EligibilityTags
+        const tagName = 'Trial Eligibility';
         const tagColor = '#E6A23C';
 
-        // 检查是否已有该标签
+        // check ifalready hastheTags
         const hasTag = props.account.tags.includes(tagName);
 
         if (!hasTag) {
@@ -1833,23 +1833,23 @@ async function handleCheckProTrial() {
             removeTags: []
           });
 
-          // 确保全局标签存在
+          // ensureglobalTagssavein
           try {
             await invoke('add_tag', { name: tagName, color: tagColor });
           } catch {
-            // 标签可能已存在
+            // TagspossiblyAlready exists
           }
 
-          // 更新账号信息触发刷新
+          // Update account infotriggerRefresh
           const updatedAccount = { ...props.account, tags: [...props.account.tags, tagName] };
           emit('update', updatedAccount);
-          ElMessage.success(result.message || '您有资格免费试用Pro！已添加标签');
+          ElMessage.success(result.message || 'youhasqualificationFreetrialPro！already Add Tag');
         } else {
-          ElMessage.success(result.message || '您有资格免费试用Pro！（标签已存在）');
+          ElMessage.success(result.message || 'youhasqualificationFreetrialPro！（TagsAlready exists）');
         }
       } else {
-        // 后端确认无资格：若账号上残留历史"试用资格"标签，主动清理保持数据一致
-        const tagName = '试用资格';
+        // backendConfirmnoqualification：ifAccountonresidualhistory"Trial Eligibility"Tags，primary动cleanupmaintaindataconsistent
+        const tagName = 'Trial Eligibility';
         if (props.account.tags.includes(tagName)) {
           try {
             await invoke('batch_update_account_tags', {
@@ -1862,21 +1862,21 @@ async function handleCheckProTrial() {
               tags: props.account.tags.filter((t) => t !== tagName),
             };
             emit('update', updatedAccount);
-            ElMessage.info(`${result.message || '您暂无Pro试用资格'}，已移除"${tagName}"标签`);
+            ElMessage.info(`${result.message || 'You have noProTrial Eligibility'}，Removed"${tagName}"Tags`);
           } catch (e) {
-            console.error('[handleCheckProTrial] 移除标签失败:', e);
-            ElMessage.warning(`${result.message || '您暂无Pro试用资格'}，但移除历史标签失败: ${e}`);
+            console.error('[handleCheckProTrial] removeTagsfailed:', e);
+            ElMessage.warning(`${result.message || 'You have noProTrial Eligibility'}，butremovehistoryTagsfailed: ${e}`);
           }
         } else {
-          ElMessage.info(result.message || '您暂无Pro试用资格');
+          ElMessage.info(result.message || 'You have noProTrial Eligibility');
         }
       }
     } else {
-      ElMessage.error(`检查失败: ${result.error || '未知错误'}`);
+      ElMessage.error(`Check failed: ${result.error || 'Unknown error'}`);
     }
   } catch (error: any) {
     console.error('[handleCheckProTrial] Exception:', error);
-    ElMessage.error(`检查失败: ${error}`);
+    ElMessage.error(`Check failed: ${error}`);
   } finally {
     isCheckingProTrial.value = false;
   }
@@ -1885,20 +1885,20 @@ async function handleCheckProTrial() {
 async function handleDelete() {
   try {
     await ElMessageBox.confirm(
-      `确定要删除账号 ${props.account.nickname} (${props.account.email}) 吗？`,
-      '删除确认',
+      `Confirmneed toDeleteAccount ${props.account.nickname} (${props.account.email}) ?？`,
+      'DeleteConfirm',
       {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
         type: 'warning',
       }
     );
     
     await accountsStore.deleteAccount(props.account.id);
-    ElMessage.success('账号删除成功');
+    ElMessage.success('AccountDeletesuccessful');
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`删除失败: ${error}`);
+      ElMessage.error(`Delete failed: ${error}`);
     }
   }
 }
@@ -1906,11 +1906,11 @@ async function handleDelete() {
 async function handleDeleteWindsurfUser() {
   try {
     await ElMessageBox.confirm(
-      `确定要删除 Windsurf 用户 ${props.account.email} 吗？\n\n⚠️ 此操作将从 Windsurf 服务器上删除该用户账号！`,
-      '删除 Windsurf 用户',
+      `Confirmneed toDelete Windsurf User ${props.account.email} ?？\n\n⚠️ thisOperationwillfrom Windsurf ServeronDeletetheUserAccount！`,
+      'Delete Windsurf User',
       {
-        confirmButtonText: '确定删除',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Confirm Delete',
+        cancelButtonText: 'Cancel',
         type: 'error',
       }
     );
@@ -1919,13 +1919,13 @@ async function handleDeleteWindsurfUser() {
     const result = await invoke('delete_windsurf_user', { id: props.account.id }) as any;
     
     if (result.success) {
-      ElMessage.success('Windsurf 用户已删除');
+      ElMessage.success('Windsurf UserDeleted');
     } else {
-      ElMessage.error(result.error || '删除失败');
+      ElMessage.error(result.error || 'Delete failed');
     }
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`删除失败: ${error}`);
+      ElMessage.error(`Delete failed: ${error}`);
     }
   } finally {
     deletingUser.value = false;
@@ -1937,37 +1937,37 @@ async function handleSwitchAccount() {
   const displayName = props.account.nickname || props.account.email;
   
   const confirmMessage = isSeamless
-    ? `确定要无感切换到账号 ${displayName} 吗？\n\n此操作将：\n• 自动登录并重置机器ID\n• 无需重启客户端\n• 保持当前工作状态`
-    : `确定要切换到账号 ${displayName} 吗？\n\n此操作将：\n• 自动检测客户端路径并启用无感换号\n• 自动登录并重置机器ID`;
+    ? `Confirmneed tonosenseSwitchtoAccount ${displayName} ?？\n\nthisOperationwill：\n• autoLogin and ResetmachineID\n• noneedrestartClient\n• maintainCurrentworkStatus`
+    : `Confirmneed toSwitchtoAccount ${displayName} ?？\n\nthisOperationwill：\n• autodetectClientpath and EnableSeamless Switch\n• autoLogin and ResetmachineID`;
 
-  // 先处理确认：用户取消直接返回，不触碰进度状态
+  // firsthandleConfirm：UserCanceldirectlyBack，nottouchprogressStatus
   try {
     await ElMessageBox.confirm(
       confirmMessage,
-      isSeamless ? '无感切号' : '切换账号确认',
+      isSeamless ? 'nosenseswitch' : 'Switch AccountConfirm',
       {
-        confirmButtonText: '确定切换',
-        cancelButtonText: '取消',
+        confirmButtonText: 'ConfirmSwitch',
+        cancelButtonText: 'Cancel',
         type: 'info',
       }
     );
   } catch {
-    return; // 用户取消
+    return; // UserCancel
   }
 
-  // 初始化进度弹窗状态（running 态，percent=0 等待后端第一次 emit）
+  // initializeprogressdialogStatus（running state，percent=0 waitbackend#once emit）
   switchProgress.visible = true;
   switchProgress.accountName = displayName;
   switchProgress.step = '';
-  switchProgress.label = '等待后端开始...';
+  switchProgress.label = 'waitbackendstart...';
   switchProgress.percent = 0;
   switchProgress.phase = 'running';
 
-  // 注册 Tauri event listener —— 必须在 invoke 之前，否则会错过后端首个 5% "preparing" 事件
+  // Register Tauri event listener —— must be in invoke ofbefore，nothenwill错passbackendfirst 5% "preparing" event
   //
-  // 防御性释放旧 listener：防止上一次切号异常退出时遗留下来的 handler 再次触发。
-  // 注：后端 emit 是全局广播，所有正在监听的 AccountCard 都会收到同一事件；
-  // 但因为我们只在点击切号的瞬间注册、完成后立即注销，正常使用不会出现双监听。
+  // defensepropertyrelease放old listener：preventononceswitchexceptionExitwhen遗留under来 handler againtimetrigger。
+  // note：backend emit isglobalbroadcast，allcurrentlylisten AccountCard allwill收tosameoneevent；
+  // butbecauseIsonlyinclickswitchinstantRegister、Doneafterimmediatelynotecancel，Normalusenotwillappeardoublelisten。
   if (switchProgressUnlisten) {
     switchProgressUnlisten();
     switchProgressUnlisten = null;
@@ -1985,18 +1985,18 @@ async function handleSwitchAccount() {
     const result = await apiService.switchAccount(props.account.id);
 
     if (result.success) {
-      // 兜底同步最终态：若事件晚于 invoke 返回未抵达，手动置为 success
-      // 类型断言绕开 TS 对 Vue reactive 属性的 literal narrowing（赋值后 TS 错认为 phase 永远为 'running'）
+      // fallbacksyncmostendstate：ifeventlater than invoke Backnotarrive，manuallysetas success
+      // typeassert bypass TS for Vue reactive attribute literal narrowing（assignvalueafter TS misidentifyas phase always 'running'）
       const currentPhase = switchProgress.phase as SwitchProgressPhase;
       if (currentPhase !== 'error') {
         switchProgress.percent = 100;
         switchProgress.phase = 'success';
         switchProgress.step = 'done';
-        switchProgress.label = result.message || '切换完成';
+        switchProgress.label = result.message || 'SwitchDone';
       }
 
       ElMessage.success({
-        message: result.message || '已成功切换账号',
+        message: result.message || 'already successfulSwitch Account',
         duration: 5000,
         showClose: true
       });
@@ -2004,7 +2004,7 @@ async function handleSwitchAccount() {
       if (result.auto_enabled_seamless) {
         await settingsStore.loadSettings();
         ElMessage.info({
-          message: '已自动启用无感换号，后续切号将更加流畅',
+          message: 'already autoEnableSeamless Switch，subsequentswitchwillmoremore smooth',
           duration: 5000,
           showClose: true
         });
@@ -2013,14 +2013,14 @@ async function handleSwitchAccount() {
       if (!result.seamless_patch_active) {
         if (result.machine_id_reset === false) {
           ElMessage.warning({
-            message: '提示：机器ID未重置（可能需要管理员权限），但账号切换已成功',
+            message: 'Notice：machineIDnotReset（possiblyneedManagementPermission），butAccountSwitchalready successful',
             duration: 6000,
             showClose: true
           });
         }
         if (result.auth_token) {
           ElMessage.info({
-            message: '如果客户端未自动登录，请确保客户端已打开',
+            message: 'ifClientnotautoLogin，pleaseensureClientalready open',
             duration: 5000,
             showClose: true
           });
@@ -2034,27 +2034,27 @@ async function handleSwitchAccount() {
       };
       emit('update', updatedAccount);
 
-      // 成功后延迟自动关闭进度弹窗，给用户一个可感知的"完成"反馈
+      // successfulafterdelayautodisabledprogressdialog，giveUseronecansense知"Done"feedback
       setTimeout(() => {
         if (switchProgress.phase === 'success') {
           closeSwitchProgress();
         }
       }, 1200);
     } else {
-      // 业务失败（success=false）：保持弹窗打开、切到 error 态，让用户看到失败点后手动关闭
+      // businessfailed（success=false）：maintaindialogopen、switch to error state，letUserwatchfailedpointaftermanuallydisabled
       const currentPhase = switchProgress.phase as SwitchProgressPhase;
       if (currentPhase !== 'error') {
         switchProgress.phase = 'error';
-        switchProgress.label = result.error || '切换账号失败';
+        switchProgress.label = result.error || 'Switch account failed';
       }
-      ElMessage.error(result.error || '切换账号失败');
+      ElMessage.error(result.error || 'Switch account failed');
     }
   } catch (error) {
-    // invoke 级别异常（很少见），同样反馈到弹窗上
+    // invoke levelexception（rarelysee），samesamplefeedbacktodialogon
     if (error !== 'cancel') {
       switchProgress.phase = 'error';
-      switchProgress.label = `切换账号失败: ${error}`;
-      ElMessage.error(`切换账号失败: ${error}`);
+      switchProgress.label = `Switch account failed: ${error}`;
+      ElMessage.error(`Switch account failed: ${error}`);
     }
   } finally {
     isSwitching.value = false;
@@ -2092,7 +2092,7 @@ async function handleSwitchAccount() {
   pointer-events: none;
 }
 
-/* 悬浮状态 - 优雅上浮 */
+/* hoverStatus - optimalelegantonfloat */
 .account-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -2104,7 +2104,7 @@ async function handleSwitchAccount() {
   box-shadow: inset 0 0 0 1px rgba(100, 116, 139, 0.15);
 }
 
-/* 选中状态 - 科技蓝 (Selected) */
+/* selectedStatus - tech blue (Selected) */
 .account-card.selected {
   border-color: transparent;
   background: linear-gradient(135deg, #f0f7ff 0%, #e0effe 100%);
@@ -2120,7 +2120,7 @@ async function handleSwitchAccount() {
   opacity: 1;
 }
 
-/* 当前激活账号 - 琥珀金 (Using) */
+/* CurrentactivateAccount - amber gold (Using) */
 .account-card.current {
   background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
   box-shadow: 
@@ -2141,7 +2141,7 @@ async function handleSwitchAccount() {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* 已禁用账户 - 红色警告 */
+/* DisabledAccount - redWarning */
 .account-card.is-disabled {
   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   box-shadow: 
@@ -2160,7 +2160,7 @@ async function handleSwitchAccount() {
   box-shadow: 0 8px 24px rgba(239, 68, 68, 0.2);
 }
 
-/* 订阅未激活 - 灰色样式 */
+/* Subscription inactive - graystyle */
 .account-card.subscription-inactive {
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   box-shadow: 
@@ -2181,7 +2181,7 @@ async function handleSwitchAccount() {
   filter: grayscale(20%);
 }
 
-/* 拖拽手柄样式 */
+/* drag handlestyle */
 .drag-handle {
   display: flex;
   align-items: center;
@@ -2374,7 +2374,7 @@ async function handleSwitchAccount() {
   margin-top: 4px;
 }
 
-/* 配额部分样式 */
+/* QuotaPartialstyle */
 .quota-section {
   background: linear-gradient(135deg, #f6f8fb 0%, #f0f3f8 100%);
   border-radius: 8px;
@@ -2470,39 +2470,39 @@ async function handleSwitchAccount() {
   display: inline-flex !important;
 }
 
-/* 套餐颜色层级：Free < Trial < Pro < Teams < Enterprise */
+/* Plancolorhierarchy：Free < Trial < Pro < Teams < Enterprise */
 
-/* Free套餐 - 银灰色，简约 */
+/* FreePlan - silvergray，simple */
 .plan-tag.plan-free {
   background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Trial套餐 - 琥珀金，醒目 */
+/* TrialPlan - amber gold，awakeitem */
 .plan-tag.plan-trial {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Pro套餐 - 科技蓝，专业 */
+/* ProPlan - tech blue，Pro */
 .plan-tag.plan-pro {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Teams套餐 - 翡翠绿，活力 */
+/* TeamsPlan - jadegreen，vibrant */
 .plan-tag.plan-teams {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Enterprise套餐 - 幻彩紫，尊贵 */
+/* EnterprisePlan - phantom purple, noble */
 .plan-tag.plan-enterprise {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%) !important;
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Enterprise流光动画 */
+/* Enterpriseflowing lightanimation */
 .plan-tag.plan-enterprise::after {
   content: '';
   position: absolute;
@@ -2526,7 +2526,7 @@ async function handleSwitchAccount() {
   100% { transform: translateX(100%) rotate(30deg); }
 }
 
-/* 默认颜色（其他套餐） */
+/* defaultcolor（otherPlan） */
 .plan-tag:not(.plan-free):not(.plan-trial):not(.plan-pro):not(.plan-teams):not(.plan-enterprise) {
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
 }
@@ -2574,7 +2574,7 @@ async function handleSwitchAccount() {
   background-image: linear-gradient(90deg, var(--color-start) 0%, var(--color-end) 100%);
 }
 
-/* 为不同百分比设置不同的渐变色 */
+/* asnotsamepercentageSettingsnotsame渐change色 */
 .quota-progress :deep(.el-progress-bar__inner[style*="#10b981"]) {
   --color-start: #10b981;
   --color-end: #34d399;
@@ -2598,7 +2598,7 @@ async function handleSwitchAccount() {
   color: #475569;
 }
 
-/* QUOTA 模式：日/周配额百分比行样式 */
+/* QUOTA Mode：day/Weekly Quotapercentagerowstyle */
 .quota-percent-row {
   display: flex;
   align-items: center;
@@ -2644,7 +2644,7 @@ async function handleSwitchAccount() {
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* 配额区块内的订阅到期时间样式 */
+/* QuotablockinsideSubscription ExpiresTimestyle */
 .quota-expiry {
   display: flex;
   align-items: center;
@@ -2715,7 +2715,7 @@ async function handleSwitchAccount() {
   margin-bottom: 2px;
 }
 
-/* 自定义颜色标签 */
+/* customcolorTags */
 .custom-tag {
   border-radius: 4px !important;
   font-weight: 500 !important;
@@ -2731,7 +2731,7 @@ async function handleSwitchAccount() {
   filter: brightness(1.1);
 }
 
-/* 带颜色标签的卡片边框效果 */
+/* withcolorTagscardborder效果 */
 .account-card.has-tag-color {
   border-width: 2px;
   border-style: solid;
@@ -2745,7 +2745,7 @@ async function handleSwitchAccount() {
   opacity: 0.5;
 }
 
-/* 信息标签组 */
+/* InfoTagsgroup */
 .info-tags {
   display: flex;
   justify-content: space-evenly;
@@ -2790,21 +2790,21 @@ async function handleSwitchAccount() {
   overflow: hidden;
 }
 
-/* 分组标签 - 浅蓝色 */
+/* GroupTags - light blue */
 .group-tag {
   background: rgba(59, 130, 246, 0.1) !important;
   color: #64748b !important;
   border: 1px solid rgba(59, 130, 246, 0.15) !important;
 }
 
-/* 创建时间标签 - 浅紫色 */
+/* Created AtTags - light purple */
 .create-tag {
   background: rgba(168, 85, 247, 0.1) !important;
   color: #64748b !important;
   border: 1px solid rgba(168, 85, 247, 0.15) !important;
 }
 
-/* Token标签根据过期时间变色 */
+/* TokenTagsbased onExpiredTimechange色 */
 .token-tag {
   border: none !important;
 }
@@ -2866,7 +2866,7 @@ async function handleSwitchAccount() {
   justify-content: center;
 }
 
-/* 调整图标大小 */
+/* callwholeiconsize */
 .action-buttons .el-button .el-icon {
   font-size: 13px;
   line-height: 1;
@@ -2875,7 +2875,7 @@ async function handleSwitchAccount() {
   justify-content: center;
 }
 
-/* 暗色主题支持 */
+/* Dark Themesupport */
 :root.dark .account-card {
   background: #1e1e1e;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -2895,7 +2895,7 @@ async function handleSwitchAccount() {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* 暗色主题 - 选中状态 (Selected - Tech Blue) */
+/* Dark Theme - selectedStatus (Selected - Tech Blue) */
 :root.dark .account-card.selected {
   border-color: transparent;
   background: linear-gradient(135deg, #1e293b 0%, #172554 100%);
@@ -2911,7 +2911,7 @@ async function handleSwitchAccount() {
   opacity: 1;
 }
 
-/* 暗色主题 - 当前账号 (Current - Amber Gold) */
+/* Dark Theme - CurrentAccount (Current - Amber Gold) */
 :root.dark .account-card.current {
   background: linear-gradient(135deg, #2a2515 0%, #453a10 100%);
   box-shadow: 
@@ -2932,7 +2932,7 @@ async function handleSwitchAccount() {
   filter: brightness(1.1);
 }
 
-/* 暗色主题 - 已禁用账户 (Disabled - Warning Red) */
+/* Dark Theme - DisabledAccount (Disabled - Warning Red) */
 :root.dark .account-card.is-disabled {
   background: linear-gradient(135deg, #2a1515 0%, #451a1a 100%);
   box-shadow: 
@@ -2952,7 +2952,7 @@ async function handleSwitchAccount() {
   filter: brightness(1.1);
 }
 
-/* 暗色主题 - 订阅未激活 (灰色) */
+/* Dark Theme - Subscription inactive (gray) */
 :root.dark .account-card.subscription-inactive {
   background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
   box-shadow: 
@@ -3040,7 +3040,7 @@ async function handleSwitchAccount() {
   box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.25);
 }
 
-/* 暗色主题下的配额样式 */
+/* Dark Theme'sQuotastyle */
 :root.dark .quota-section {
   background: linear-gradient(135deg, #2a2a2a 0%, #252525 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -3050,7 +3050,7 @@ async function handleSwitchAccount() {
   background: linear-gradient(135deg, #2f2f2f 0%, #2a2a2a 100%);
 }
 
-/* 暗色主题下的套餐标签 */
+/* Dark Theme'sPlanTags */
 :root.dark .plan-tag {
   box-shadow: 
     0 2px 6px rgba(0, 0, 0, 0.3),
@@ -3072,7 +3072,7 @@ async function handleSwitchAccount() {
   filter: brightness(1.1);
 }
 
-/* 暗色主题套餐颜色 */
+/* Dark ThemePlancolor */
 :root.dark .plan-tag.plan-free {
   background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -3139,7 +3139,7 @@ async function handleSwitchAccount() {
   color: #64748b;
 }
 
-/* 暗色主题下的订阅到期时间样式 */
+/* Dark Theme'sSubscription ExpiresTimestyle */
 :root.dark .quota-expiry {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
@@ -3156,7 +3156,7 @@ async function handleSwitchAccount() {
   color: #cbd5e1;
 }
 
-/* 深色模式下的功能按钮样式 */
+/* Dark Mode'sFeatureButton Style */
 :root.dark .card-actions {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
@@ -3205,7 +3205,7 @@ async function handleSwitchAccount() {
   background-color: rgba(248, 113, 113, 0.2);
 }
 
-/* 暗色主题下的信息标签 */
+/* Dark Theme'sInfoTags */
 :root.dark .info-tags {
   gap: 4px;
 }
@@ -3246,7 +3246,7 @@ async function handleSwitchAccount() {
   border: 1px solid rgba(107, 114, 128, 0.15) !important;
 }
 
-/* ==================== 切号进度弹窗 ==================== */
+/* ==================== switch progressdialog ==================== */
 .switch-progress-body {
   display: flex;
   flex-direction: column;
@@ -3318,7 +3318,7 @@ async function handleSwitchAccount() {
   color: #DCDFE6;
 }
 
-/* running 步骤图标的 spinner 动画 */
+/* running stepstepicon spinner animation */
 .switch-progress-step .step-icon.is-spin {
   animation: switch-progress-spin 1s linear infinite;
 }
@@ -3328,7 +3328,7 @@ async function handleSwitchAccount() {
   to { transform: rotate(360deg); }
 }
 
-/* 深色模式适配 */
+/* Dark Modeadapt */
 :root.dark .switch-progress-label {
   color: #cfd3dc;
 }

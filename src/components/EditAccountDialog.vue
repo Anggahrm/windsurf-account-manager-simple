@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="uiStore.showEditAccountDialog"
-    title="编辑账号"
+    title="Edit Account"
     width="500px"
     :close-on-click-modal="false"
   >
@@ -13,7 +13,7 @@
       label-width="100px"
       autocomplete="off"
     >
-      <el-form-item label="邮箱">
+      <el-form-item label="Email">
         <el-input
           v-model="formData.email"
           disabled
@@ -22,38 +22,38 @@
         />
       </el-form-item>
       
-      <el-form-item label="备注名称" prop="nickname">
+      <el-form-item label="RemarkName" prop="nickname">
         <el-input
           v-model="formData.nickname"
-          placeholder="请输入备注名称"
+          placeholder="Please enterRemarkName"
           :prefix-icon="User"
         />
       </el-form-item>
       
-      <el-form-item label="修改密码" prop="newPassword">
+      <el-form-item label="Change Password" prop="newPassword">
         <el-input 
           v-model="formData.newPassword" 
           type="password"
-          placeholder="留空则不修改密码"
+          placeholder="leave emptythennotChange Password"
           show-password
           autocomplete="new-password"
         />
       </el-form-item>
       
-      <el-form-item label="确认密码" prop="confirmPassword" v-if="formData.newPassword">
+      <el-form-item label="ConfirmPassword" prop="confirmPassword" v-if="formData.newPassword">
         <el-input 
           v-model="formData.confirmPassword" 
           type="password"
-          placeholder="请再次输入密码"
+          placeholder="pleaseagaintimeinputPassword"
           show-password
           autocomplete="new-password"
         />
       </el-form-item>
       
-      <el-form-item label="分组">
+      <el-form-item label="Group">
         <el-select
           v-model="formData.group"
-          placeholder="选择分组"
+          placeholder="Select Group"
           clearable
         >
           <el-option
@@ -65,13 +65,13 @@
         </el-select>
       </el-form-item>
       
-      <el-form-item label="标签">
+      <el-form-item label="Tags">
         <el-select
           v-model="formData.tags"
           multiple
           filterable
           allow-create
-          placeholder="输入或选择标签"
+          placeholder="input or selectTags"
           style="width: 100%"
           @change="handleTagsChange"
         >
@@ -92,7 +92,7 @@
         </el-select>
       </el-form-item>
       
-      <el-form-item label="标签颜色" v-if="formData.tags.length > 0">
+      <el-form-item label="Tag Color" v-if="formData.tags.length > 0">
         <TagColorPicker
           :tags="formData.tags"
           v-model:tagColors="formData.tagColors"
@@ -101,9 +101,9 @@
     </el-form>
     
     <template #footer>
-      <el-button @click="handleClose">取消</el-button>
+      <el-button @click="handleClose">Cancel</el-button>
       <el-button type="primary" @click="handleSubmit" :loading="loading">
-        保存
+        Save
       </el-button>
     </template>
   </el-dialog>
@@ -154,7 +154,7 @@ watch(currentAccount, (account) => {
 
 const validatePassword = (_rule: any, value: any, callback: any) => {
   if (value && formData.newPassword && value !== formData.newPassword) {
-    callback(new Error('两次输入密码不一致'));
+    callback(new Error('twotimeinputPasswordinconsistent'));
   } else {
     callback();
   }
@@ -162,11 +162,11 @@ const validatePassword = (_rule: any, value: any, callback: any) => {
 
 const rules: FormRules = {
   nickname: [
-    { required: true, message: '请输入备注名称', trigger: 'blur' },
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { required: true, message: 'Please enterRemarkName', trigger: 'blur' },
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ],
   newPassword: [
-    { min: 6, message: '密码长度至少6位', trigger: 'blur' }
+    { min: 6, message: 'Password must be at least6', trigger: 'blur' }
   ],
   confirmPassword: [
     { validator: validatePassword, trigger: 'blur' }
@@ -175,25 +175,25 @@ const rules: FormRules = {
 
 const availableTags = computed(() => {
   const tags = new Set<string>();
-  // 添加全局标签
+  // AddglobalTags
   settingsStore.tags.forEach(tag => tags.add(tag.name));
-  // 添加账号中已使用的标签
+  // Add AccountinUsedTags
   accountsStore.accounts.forEach(account => {
     account.tags.forEach(tag => tags.add(tag));
   });
   return Array.from(tags);
 });
 
-// 获取全局标签的颜色
+// fetchglobalTags color
 function getGlobalTagColor(tagName: string): string | undefined {
   const globalTag = settingsStore.tags.find(t => t.name === tagName);
   return globalTag?.color;
 }
 
-// 当标签列表变化时，自动应用全局标签的默认颜色
+// whenTagsListchangewhen，autoapplyglobalTagsdefaultcolor
 function handleTagsChange(newTags: string[]) {
   newTags.forEach(tagName => {
-    // 如果该标签还没有颜色配置，且存在全局标签颜色，则自动应用
+    // iftheTagsalsonohascolorconfig，andsaveinglobalTag Color，thenautoapply
     const hasColor = formData.tagColors.some(tc => tc.name === tagName);
     if (!hasColor) {
       const globalColor = getGlobalTagColor(tagName);
@@ -202,7 +202,7 @@ function handleTagsChange(newTags: string[]) {
       }
     }
   });
-  // 移除不存在的标签的颜色
+  // removenotsaveinTags color
   formData.tagColors = formData.tagColors.filter(tc => newTags.includes(tc.name));
 }
 
@@ -212,7 +212,7 @@ async function handleSubmit() {
   await formRef.value.validate(async (valid) => {
     if (!valid) return;
     
-    // 在回调中再次获取currentAccount以满足TypeScript的类型检查
+    // inbackcallinagaintimefetchcurrentAccountto满enoughTypeScripttypecheck
     const account = currentAccount.value;
     if (!account) return;
     
@@ -226,26 +226,26 @@ async function handleSubmit() {
         group: formData.group || undefined
       };
       
-      // 如果输入了新密码，添加密码字段（去除首尾空格）
+      // ifinputNew Password，AddPasswordfield（removefirst尾space）
       if (formData.newPassword) {
         const trimmedPassword = formData.newPassword.trim();
         if (!trimmedPassword) {
-          ElMessage.error('新密码不能为空或只包含空格');
+          ElMessage.error('New Passwordcannot be empty or onlycontainsspace');
           loading.value = false;
           return;
         }
         updatedAccount.password = trimmedPassword;
       } else {
-        // 不修改密码时，确保不发送password字段
+        // notChange Passwordwhen，ensurenotsendpasswordfield
         delete updatedAccount.password;
       }
       
       await accountsStore.updateAccount(updatedAccount);
       
-      ElMessage.success('账号更新成功');
+      ElMessage.success('AccountUpdatesuccessful');
       handleClose();
     } catch (error) {
-      ElMessage.error(`更新失败: ${error}`);
+      ElMessage.error(`Update failed: ${error}`);
     } finally {
       loading.value = false;
     }
@@ -259,7 +259,7 @@ function handleClose() {
 </script>
 
 <style scoped>
-/* 标签选项样式 */
+/* Tagsoptionstyle */
 .tag-option {
   display: flex;
   align-items: center;
@@ -274,7 +274,7 @@ function handleClose() {
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* 深色模式样式 */
+/* Dark Modestyle */
 :root.dark .el-form-item__label {
   color: #cfd3dc !important;
 }

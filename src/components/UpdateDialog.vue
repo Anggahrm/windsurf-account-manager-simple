@@ -13,36 +13,36 @@
     <div class="update-body">
       <div v-if="phase === 'checking'" class="state-block">
         <el-icon class="is-loading spin-icon" :size="32"><Loading /></el-icon>
-        <p>正在检查更新...</p>
+        <p>currentlyCheck for Updates...</p>
       </div>
 
       <template v-else-if="phase === 'available'">
         <div class="version-row">
           <div class="version-col">
-            <span class="version-label">当前版本</span>
+            <span class="version-label">CurrentVersion</span>
             <span class="version-value current">v{{ updaterStore.meta?.currentVersion }}</span>
           </div>
           <el-icon :size="20" class="arrow-icon"><Right /></el-icon>
           <div class="version-col">
-            <span class="version-label">新版本</span>
+            <span class="version-label">New Version</span>
             <span class="version-value latest">v{{ updaterStore.meta?.version }}</span>
           </div>
         </div>
 
         <div v-if="updaterStore.meta?.date" class="release-date">
-          发布时间：{{ formatDate(updaterStore.meta.date) }}
+          send布Time：{{ formatDate(updaterStore.meta.date) }}
         </div>
 
         <div class="release-notes">
-          <div class="notes-title">更新内容</div>
-          <pre class="notes-body">{{ updaterStore.meta?.body?.trim() || '（此版本未提供更新说明）' }}</pre>
+          <div class="notes-title">UpdateContent</div>
+          <pre class="notes-body">{{ updaterStore.meta?.body?.trim() || '（thisVersionnot提供Updatedescription）' }}</pre>
         </div>
       </template>
 
       <template v-else-if="phase === 'downloading' || phase === 'installing'">
         <div class="state-block">
           <p class="progress-title">
-            {{ phase === 'installing' ? '正在安装...' : '正在下载新版本...' }}
+            {{ phase === 'installing' ? 'currentlyinstall...' : 'currentlyDownloadNew Version...' }}
           </p>
           <el-progress
             :percentage="updaterStore.progressPercent"
@@ -59,27 +59,27 @@
       <template v-else-if="phase === 'ready'">
         <div class="state-block success">
           <el-icon :size="40" color="#67c23a"><CircleCheck /></el-icon>
-          <p class="ready-title">新版本 v{{ updaterStore.meta?.version }} 已准备就绪</p>
-          <p class="ready-desc">点击「立即重启」应用新版本，或关闭对话框稍后手动重启。</p>
+          <p class="ready-title">New Version v{{ updaterStore.meta?.version }} already prepareready</p>
+          <p class="ready-desc">click「immediatelyrestart」applyNew Version， or disabledDialoglatermanuallyrestart。</p>
         </div>
       </template>
 
       <template v-else-if="phase === 'up_to_date'">
         <div class="state-block success">
           <el-icon :size="40" color="#67c23a"><CircleCheck /></el-icon>
-          <p>已是最新版本 v{{ currentVersion }}</p>
+          <p>Already the latest version v{{ currentVersion }}</p>
         </div>
       </template>
 
       <template v-else-if="phase === 'error'">
         <div class="state-block error">
           <el-icon :size="40" color="#f56c6c"><CircleClose /></el-icon>
-          <p class="error-title">检查 / 下载更新失败</p>
+          <p class="error-title">check / DownloadUpdate failed</p>
           <pre class="error-detail">{{ updaterStore.error }}</pre>
           <p class="error-hint">
-            可以稍后重试，或前往
-            <a href="#" @click.prevent="openReleasesPage">Releases 页面</a>
-            手动下载。
+            cantolaterretry， or before往
+            <a href="#" @click.prevent="openReleasesPage">Releases Page</a>
+            manuallyDownload。
           </p>
         </div>
       </template>
@@ -88,26 +88,26 @@
     <template #footer>
       <div class="footer-actions">
         <template v-if="phase === 'available'">
-          <el-button @click="skipVersion">跳过此版本</el-button>
-          <el-button @click="handleClose">稍后</el-button>
-          <el-button type="primary" @click="startDownload">立即更新</el-button>
+          <el-button @click="skipVersion">skipthisVersion</el-button>
+          <el-button @click="handleClose">later</el-button>
+          <el-button type="primary" @click="startDownload">immediatelyUpdate</el-button>
         </template>
 
         <template v-else-if="phase === 'downloading' || phase === 'installing'">
-          <el-button disabled>{{ phase === 'installing' ? '安装中...' : '下载中...' }}</el-button>
+          <el-button disabled>{{ phase === 'installing' ? 'Installing...' : 'Downloading...' }}</el-button>
         </template>
 
         <template v-else-if="phase === 'ready'">
-          <el-button @click="handleClose">稍后重启</el-button>
-          <el-button type="primary" @click="restartNow">立即重启</el-button>
+          <el-button @click="handleClose">laterrestart</el-button>
+          <el-button type="primary" @click="restartNow">immediatelyrestart</el-button>
         </template>
 
         <template v-else-if="phase === 'up_to_date' || phase === 'error'">
-          <el-button type="primary" @click="handleClose">关闭</el-button>
+          <el-button type="primary" @click="handleClose">disabled</el-button>
         </template>
 
         <template v-else>
-          <el-button @click="handleClose">关闭</el-button>
+          <el-button @click="handleClose">disabled</el-button>
         </template>
       </div>
     </template>
@@ -143,20 +143,20 @@ const phase = computed(() => updaterStore.phase);
 const dialogTitle = computed(() => {
   switch (phase.value) {
     case 'checking':
-      return '检查更新';
+      return 'Check for Updates';
     case 'available':
-      return '发现新版本';
+      return 'sendnowNew Version';
     case 'downloading':
     case 'installing':
-      return '更新进行中';
+      return 'Updateproceedin';
     case 'ready':
-      return '更新已就绪';
+      return 'Updatealready ready';
     case 'up_to_date':
-      return '已是最新版本';
+      return 'Already the latest version';
     case 'error':
-      return '更新失败';
+      return 'Update failed';
     default:
-      return '更新';
+      return 'Update';
   }
 });
 
@@ -177,7 +177,7 @@ async function startDownload() {
   try {
     await updaterStore.downloadAndInstall();
   } catch (e: any) {
-    ElMessage.error(`更新失败: ${e?.message || e}`);
+    ElMessage.error(`Update failed: ${e?.message || e}`);
   }
 }
 
@@ -185,7 +185,7 @@ async function restartNow() {
   try {
     await updaterStore.restartApp();
   } catch (e: any) {
-    ElMessage.error(`重启失败: ${e?.message || e}`);
+    ElMessage.error(`restartfailed: ${e?.message || e}`);
   }
 }
 

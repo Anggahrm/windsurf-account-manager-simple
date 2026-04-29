@@ -1,13 +1,13 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="自动充值设置"
+    title="Auto RechargeSettings"
     width="520px"
     :close-on-click-modal="false"
     @open="loadSettings"
   >
     <div class="auto-refill-container">
-      <!-- 当前状态 -->
+      <!-- CurrentStatus -->
       <div class="status-section">
         <div class="status-header">
           <span class="status-title">Auto refill credits</span>
@@ -17,29 +17,29 @@
             :loading="saving"
             @click="toggleEnabled"
           >
-            {{ settings.enabled ? '禁用自动充值' : '启用自动充值' }}
+            {{ settings.enabled ? 'DisableAuto Recharge' : 'EnableAuto Recharge' }}
           </el-button>
         </div>
         <div class="status-description" v-if="settings.enabled">
-          <span class="highlight">${{ settings.topUpSpent }}</span> 已使用，月度预算
+          <span class="highlight">${{ settings.topUpSpent }}</span> Used，monthlybudget
           <span class="highlight">${{ settings.monthlyTopUpAmount }}</span>。
-          当余额低于 15 积分时，将自动充值
+          when余额低于 15 Creditswhen，willAuto Recharge
           <span class="highlight">${{ settings.topUpIncrement }}</span>。
         </div>
         <div class="status-description" v-else>
-          自动充值未启用。启用后，当积分余额低于 15 时将自动充值。
+          Auto RechargenotEnable。After enabling，whenCredits余额低于 15 willAuto Recharge。
         </div>
       </div>
 
-      <!-- 设置表单 -->
+      <!-- Settingsform -->
       <div class="settings-section" v-if="settings.enabled">
         <el-divider />
         
-        <!-- 月度预算 -->
+        <!-- monthlybudget -->
         <div class="setting-item">
           <div class="setting-label">
-            <span class="label-title">月度预算上限</span>
-            <span class="label-desc">设置每月自动充值的最大金额</span>
+            <span class="label-title">monthlybudgeton限</span>
+            <span class="label-desc">SettingseverymonthAuto RechargeMaxamount</span>
           </div>
           <div class="setting-options">
             <span class="currency">$</span>
@@ -59,11 +59,11 @@
           </div>
         </div>
 
-        <!-- 充值增量 -->
+        <!-- Recharge增量 -->
         <div class="setting-item">
           <div class="setting-label">
-            <span class="label-title">单次充值金额</span>
-            <span class="label-desc">每次自动充值的金额（$40 的倍数）</span>
+            <span class="label-title">singletimeRechargeamount</span>
+            <span class="label-desc">every timeAuto Rechargeamount（$40 multiple）</span>
           </div>
           <div class="setting-options">
             <span class="currency">$</span>
@@ -83,10 +83,10 @@
           </div>
         </div>
 
-        <!-- 使用情况 -->
+        <!-- usage info -->
         <el-divider />
         <div class="usage-section">
-          <div class="usage-title">本月自动充值使用情况</div>
+          <div class="usage-title">thismonthAuto Rechargeusage info</div>
           <div class="usage-bar">
             <el-progress
               :percentage="usagePercentage"
@@ -96,16 +96,16 @@
             />
           </div>
           <div class="usage-text">
-            ${{ settings.topUpSpent }} / ${{ settings.monthlyTopUpAmount }} 已使用
+            ${{ settings.topUpSpent }} / ${{ settings.monthlyTopUpAmount }} Used
           </div>
         </div>
       </div>
     </div>
 
     <template #footer>
-      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button @click="dialogVisible = false">Cancel</el-button>
       <el-button type="primary" :loading="saving" @click="saveSettings">
-        保存设置
+        Save Settings
       </el-button>
     </template>
   </el-dialog>
@@ -134,9 +134,9 @@ const saving = ref(false)
 
 const settings = ref({
   enabled: false,
-  monthlyTopUpAmount: 120, // 单位：美元
-  topUpIncrement: 40,      // 单位：美元
-  topUpSpent: 0            // 单位：美元
+  monthlyTopUpAmount: 120, // single：USD
+  topUpIncrement: 40,      // single：USD
+  topUpSpent: 0            // single：USD
 })
 
 const customMonthlyBudget = ref(120)
@@ -154,14 +154,14 @@ const usageColor = computed(() => {
 })
 
 function onCustomMonthlyChange(val: number) {
-  // 确保是 $40 的倍数
+  // ensureis $40 multiple
   const rounded = Math.round(val / 40) * 40
   customMonthlyBudget.value = rounded
   settings.value.monthlyTopUpAmount = rounded
 }
 
 function onCustomIncrementChange(val: number) {
-  // 确保是 $40 的倍数
+  // ensureis $40 multiple
   const rounded = Math.round(val / 40) * 40
   customIncrement.value = rounded
   settings.value.topUpIncrement = rounded
@@ -188,7 +188,7 @@ async function loadSettings() {
     }
   } catch (error: any) {
     console.error('Failed to load settings:', error)
-    ElMessage.error('加载设置失败: ' + error.toString())
+    ElMessage.error('LoadingSettingsfailed: ' + error.toString())
   } finally {
     loading.value = false
   }
@@ -197,7 +197,7 @@ async function loadSettings() {
 async function toggleEnabled() {
   settings.value.enabled = !settings.value.enabled
   if (settings.value.enabled) {
-    // 启用时使用默认值
+    // Enablewhenusedefault value
     if (settings.value.monthlyTopUpAmount === 0) {
       settings.value.monthlyTopUpAmount = 120
     }
@@ -223,13 +223,13 @@ async function saveSettings() {
     console.log('[AutoRefill] Settings saved:', result)
     
     if (result.success) {
-      ElMessage.success(result.message || '设置已保存')
+      ElMessage.success(result.message || 'Settingsalready Save')
     } else {
-      ElMessage.error(result.error || '保存设置失败')
+      ElMessage.error(result.error || 'Save Settingsfailed')
     }
   } catch (error: any) {
     console.error('Failed to save settings:', error)
-    ElMessage.error('保存设置失败: ' + error.toString())
+    ElMessage.error('Save Settingsfailed: ' + error.toString())
   } finally {
     saving.value = false
   }

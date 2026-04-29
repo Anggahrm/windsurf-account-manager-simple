@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="团队积分记录"
+    title="TeamCredit History"
     width="80%"
     @close="handleClose"
     append-to-body
@@ -9,42 +9,42 @@
   >
     <div v-if="loading" class="loading-container">
       <el-icon class="is-loading" size="32"><Loading /></el-icon>
-      <p>正在获取积分记录...</p>
+      <p>fetchingCredit History...</p>
     </div>
 
     <div v-else-if="creditEntries">
-      <!-- 统计信息 -->
+      <!-- Statistics -->
       <el-row :gutter="20" style="margin-bottom: 20px;" v-if="creditEntries.success">
         <el-col :span="6">
-          <el-statistic title="总记录数" :value="creditEntries.total_entries || 0" />
+          <el-statistic title="Totalrecordcount" :value="creditEntries.total_entries || 0" />
         </el-col>
         <el-col :span="6">
           <el-statistic 
-            title="总积分数" 
+            title="Total Credits" 
             :value="totalCredits" 
             :precision="2"
-            suffix="积分"
+            suffix="Credits"
           />
         </el-col>
         <el-col :span="6">
           <el-statistic 
-            title="推荐积分" 
+            title="recommendCredits" 
             :value="referralCredits" 
             :precision="2"
-            suffix="积分"
+            suffix="Credits"
           />
         </el-col>
         <el-col :span="6">
           <el-statistic 
-            title="购买积分" 
+            title="Purchase Credits" 
             :value="purchaseCredits" 
             :precision="2"
-            suffix="积分"
+            suffix="Credits"
           />
         </el-col>
       </el-row>
 
-      <!-- 积分记录表格 -->
+      <!-- Credit Historytable -->
       <el-table 
         :data="creditEntries.entries" 
         v-if="creditEntries.success"
@@ -54,7 +54,7 @@
         @sort-change="handleSortChange"
       >
         <el-table-column 
-          label="授予日期" 
+          label="grantDate" 
           prop="grant_date"
           width="180"
           sortable="custom"
@@ -68,7 +68,7 @@
         </el-table-column>
 
         <el-table-column 
-          label="积分数量" 
+          label="CreditsCount" 
           prop="num_credits"
           width="120"
           align="right"
@@ -82,7 +82,7 @@
         </el-table-column>
 
         <el-table-column 
-          label="积分类型" 
+          label="Creditstype" 
           prop="type"
           width="100"
         >
@@ -94,7 +94,7 @@
         </el-table-column>
 
         <el-table-column 
-          label="获取原因" 
+          label="fetchreason" 
           prop="reason"
           min-width="200"
         >
@@ -102,50 +102,50 @@
             <div v-if="row.reason">
               <el-tag v-if="row.reason.type === 'referrer'" type="success" size="small">
                 <el-icon><UserFilled /></el-icon>
-                推荐奖励
+                recommend奖励
               </el-tag>
               <el-tag v-else-if="row.reason.type === 'purchase'" type="warning" size="small">
                 <el-icon><ShoppingCart /></el-icon>
-                购买积分
+                Purchase Credits
               </el-tag>
               <el-tag v-else-if="row.reason.type === 'avery'" type="info" size="small">
                 <el-icon><Present /></el-icon>
-                系统赠送
+                system赠送
               </el-tag>
               <el-tag v-else size="small">
                 {{ row.reason.type }}
               </el-tag>
               
-              <!-- 推荐人详情 -->
+              <!-- ReferrerDetails -->
               <div v-if="row.reason.referrer_email" style="margin-top: 5px;">
                 <el-text size="small" type="info">
-                  推荐人: {{ row.reason.referrer_email }}
+                  Referrer: {{ row.reason.referrer_email }}
                 </el-text>
               </div>
               <div v-if="row.reason.referred_email" style="margin-top: 5px;">
                 <el-text size="small" type="info">
-                  被推荐人: {{ row.reason.referred_email }}
+                  Referree: {{ row.reason.referred_email }}
                 </el-text>
               </div>
               
-              <!-- Avery详情 -->
+              <!-- AveryDetails -->
               <div v-if="row.reason.avery_email" style="margin-top: 5px;">
                 <el-text size="small" type="info">
-                  来源: {{ row.reason.avery_email }}
+                  source: {{ row.reason.avery_email }}
                 </el-text>
               </div>
               <div v-if="row.reason.target_email" style="margin-top: 5px;">
                 <el-text size="small" type="info">
-                  目标用户: {{ row.reason.target_email }}
+                  targetUser: {{ row.reason.target_email }}
                 </el-text>
               </div>
             </div>
-            <el-text v-else type="info">未知</el-text>
+            <el-text v-else type="info">Unknown</el-text>
           </template>
         </el-table-column>
 
         <el-table-column 
-          label="推荐ID" 
+          label="recommendID" 
           prop="referral_id"
           width="100"
         >
@@ -158,7 +158,7 @@
         </el-table-column>
 
         <el-table-column 
-          label="团队ID" 
+          label="TeamID" 
           prop="team_id"
           width="280"
           :show-overflow-tooltip="true"
@@ -173,21 +173,21 @@
         </el-table-column>
       </el-table>
 
-      <!-- 错误信息 -->
+      <!-- Error Info -->
       <el-alert
         v-if="!creditEntries.success"
-        :title="creditEntries.error || '获取积分记录失败'"
+        :title="creditEntries.error || 'fetchCredit Historyfailed'"
         type="error"
         :closable="false"
         show-icon
       />
 
-      <!-- 原始响应（用于调试） -->
+      <!-- originalresponse（used forcalltry） -->
       <el-collapse v-if="creditEntries?.raw_response" style="margin-top: 20px;">
-        <el-collapse-item title="查看原始响应">
+        <el-collapse-item title="Vieworiginalresponse">
           <div v-if="creditEntries.raw_response.startsWith('data:application/proto;base64,')">
             <el-button @click="decodeAndShowResponse" type="primary" size="small" style="margin-bottom: 10px;">
-              解码Base64响应
+              decodeBase64response
             </el-button>
             <pre class="raw-data" style="max-height: 200px; overflow-y: auto;">{{ creditEntries.raw_response }}</pre>
           </div>
@@ -195,28 +195,28 @@
         </el-collapse-item>
       </el-collapse>
 
-      <!-- 原始数据（调试模式） -->
+      <!-- originaldata（calltryMode） -->
       <el-collapse v-if="creditEntries?.raw_data" style="margin-top: 20px;">
-        <el-collapse-item title="查看解析数据">
+        <el-collapse-item title="Viewparsedata">
           <pre class="raw-data">{{ JSON.stringify(creditEntries.raw_data, null, 2) }}</pre>
         </el-collapse-item>
       </el-collapse>
     </div>
 
     <div v-else>
-      <el-empty description="暂无积分记录" />
+      <el-empty description="NoneCredit History" />
     </div>
 
     <template #footer>
-      <el-button @click="handleRefresh" :icon="Refresh">刷新</el-button>
-      <el-button @click="handleClose">关闭</el-button>
+      <el-button @click="handleRefresh" :icon="Refresh">Refresh</el-button>
+      <el-button @click="handleClose">disabled</el-button>
       <el-button 
         type="primary" 
         @click="handleExport" 
         :icon="Download"
         v-if="creditEntries?.entries?.length > 0"
       >
-        导出记录
+        Exportrecord
       </el-button>
     </template>
   </el-dialog>
@@ -261,7 +261,7 @@ watch(visible, (val) => {
   emit('update:modelValue', val);
 });
 
-// 计算总积分（除以100）
+// calculateTotalCredits（divide by100）
 const totalCredits = computed(() => {
   if (!creditEntries.value?.entries) return 0;
   const total = creditEntries.value.entries.reduce((sum: number, entry: any) => {
@@ -270,7 +270,7 @@ const totalCredits = computed(() => {
   return total / 100;
 });
 
-// 计算推荐积分（除以100）
+// calculaterecommendCredits（divide by100）
 const referralCredits = computed(() => {
   if (!creditEntries.value?.entries) return 0;
   const total = creditEntries.value.entries
@@ -279,7 +279,7 @@ const referralCredits = computed(() => {
   return total / 100;
 });
 
-// 计算购买积分（除以100）
+// calculatePurchase Credits（divide by100）
 const purchaseCredits = computed(() => {
   if (!creditEntries.value?.entries) return 0;
   const total = creditEntries.value.entries
@@ -297,7 +297,7 @@ async function loadCreditEntries() {
     
     creditEntries.value = result;
     
-    // 对记录按日期排序（最新的在前）
+    // forrecordbyDatesort（mostnewinbefore）
     if (creditEntries.value?.entries) {
       creditEntries.value.entries.sort((a: any, b: any) => {
         const dateA = a.grant_date_timestamp || 0;
@@ -306,7 +306,7 @@ async function loadCreditEntries() {
       });
     }
   } catch (error) {
-    ElMessage.error(`获取积分记录失败: ${error}`);
+    ElMessage.error(`fetchCredit Historyfailed: ${error}`);
     creditEntries.value = {
       success: false,
       error: String(error)
@@ -357,7 +357,7 @@ function formatTimestamp(timestamp: number) {
 
 function formatNumber(num: number) {
   if (!num) return '0';
-  // 积分值需要除以100
+  // Creditsvalueneeddivide by100
   const realValue = num / 100;
   return realValue.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -379,29 +379,29 @@ function getCreditTypeColor(type: string) {
 function decodeAndShowResponse() {
   if (creditEntries.value?.raw_response) {
     try {
-      // 去除前缀 "data:application/proto;base64,"
+      // removeprefix "data:application/proto;base64,"
       const base64Data = creditEntries.value.raw_response.substring(30);
       const decodedBytes = atob(base64Data);
       
-      // 转换为十六进制显示
+      // convert to十六进制display
       let hex = '';
       for (let i = 0; i < decodedBytes.length; i++) {
         const byte = decodedBytes.charCodeAt(i);
-        hex += byte.toString(16).padStart(2, '0') + ' ';
+        hex += byte.toString(16).padstart(2, '0') + ' ';
         if ((i + 1) % 16 === 0) {
           hex += '\n';
         }
       }
       
       ElMessage.info({
-        message: `解码后的字节数: ${decodedBytes.length}`,
+        message: `decodeafterbytecount: ${decodedBytes.length}`,
         duration: 5000
       });
       
       console.log('[CreditHistory] Decoded hex:', hex);
       console.log('[CreditHistory] Decoded bytes length:', decodedBytes.length);
     } catch (error) {
-      ElMessage.error('解码失败: ' + error);
+      ElMessage.error('decodefailed: ' + error);
     }
   }
 }
@@ -410,13 +410,13 @@ async function handleExport() {
   if (!creditEntries.value?.entries) return;
   
   try {
-    // 生成CSV内容
-    const headers = ['授予日期', '积分数量', '积分类型', '获取原因', '相关用户1', '相关用户2', '推荐ID', '团队ID'];
+    // generateCSVContent
+    const headers = ['grantDate', 'CreditsCount', 'Creditstype', 'fetchreason', 'relatedUser1', 'relatedUser2', 'recommendID', 'TeamID'];
     const rows = creditEntries.value.entries.map((entry: any) => {
       let user1 = '';
       let user2 = '';
       
-      // 根据原因类型设置用户信息
+      // based onreasontypeSettingsUserInfo
       if (entry.reason?.type === 'referrer') {
         user1 = entry.reason?.referrer_email || '';
         user2 = entry.reason?.referred_email || '';
@@ -429,7 +429,7 @@ async function handleExport() {
         entry.grant_date || formatTimestamp(entry.grant_date_timestamp),
         (entry.num_credits / 100).toFixed(2) || '0.00',
         entry.type || 'UNKNOWN',
-        entry.reason?.type || '未知',
+        entry.reason?.type || 'Unknown',
         user1,
         user2,
         entry.referral_id || '',
@@ -437,13 +437,13 @@ async function handleExport() {
       ];
     });
     
-    // 创建CSV内容
+    // createCSVContent
     const csvContent = [
       headers.join(','),
       ...rows.map((row: any[]) => row.map((cell: any) => `"${cell}"`).join(','))
     ].join('\n');
     
-    // 创建下载
+    // createDownload
     const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -452,9 +452,9 @@ async function handleExport() {
     link.click();
     window.URL.revokeObjectURL(url);
     
-    ElMessage.success('导出成功');
+    ElMessage.success('Exportsuccessful');
   } catch (error) {
-    ElMessage.error('导出失败: ' + error);
+    ElMessage.error('Exportfailed: ' + error);
   }
 }
 </script>
@@ -494,7 +494,7 @@ async function handleExport() {
   color: #909399;
 }
 
-/* 暗色主题支持 */
+/* Dark Themesupport */
 :root.dark .raw-data {
   background: #2a2a2a;
   color: #e4e4e7;

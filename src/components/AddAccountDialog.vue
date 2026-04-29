@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="uiStore.showAddAccountDialog"
-    title="添加账号"
+    title="Add Account"
     width="500px"
     :close-on-click-modal="false"
   >
@@ -12,10 +12,10 @@
       label-width="100px"
       autocomplete="off"
     >
-      <!-- 添加方式切换：紧凑卡片网格（2 列，单行布局，窄屏自动单列）
-           desc 说明载在原生 title 属性，鼠标悬停显示。 -->
-      <el-form-item label="添加方式">
-        <div class="mode-grid" role="radiogroup" aria-label="添加方式">
+      <!-- AddmethodSwitch：compactcardgrid（2 column，singlerowlayout，窄screenautosinglecolumn）
+           desc descriptionloadinnative title attribute，mouse hoverdisplay。 -->
+      <el-form-item label="Addmethod">
+        <div class="mode-grid" role="radiogroup" aria-label="Addmethod">
           <div
             v-for="opt in modeOptions"
             :key="opt.value"
@@ -49,7 +49,7 @@
         </div>
       </el-form-item>
 
-      <!-- 智能识别模式：仅输入邮箱+密码，自动识别 Firebase / Devin 流派 -->
+      <!-- Smart DetectionMode：only Enter email+Password，autoidentify Firebase / Devin provider type -->
       <template v-if="addMode === 'smart'">
         <el-alert
           type="success"
@@ -59,23 +59,23 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              输入邮箱密码，系统自动识别 <strong>Firebase</strong> / <strong>Devin Auth1</strong> 账号并分派到正确的登录协议
+              inputEmail/Password，systemautoidentify <strong>Firebase</strong> / <strong>Devin Auth1</strong> Account and dispatchtocorrectLoginprotocol
             </span>
           </template>
         </el-alert>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="Email" prop="email">
           <el-input
             v-model="formData.email"
-            placeholder="请输入邮箱"
+            placeholder="Please enter email"
             :prefix-icon="Message"
             autocomplete="off"
           />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="Password" prop="password">
           <el-input
             v-model="formData.password"
             type="password"
-            placeholder="请输入密码"
+            placeholder="Please enter password"
             :prefix-icon="Lock"
             show-password
             autocomplete="new-password"
@@ -83,22 +83,22 @@
         </el-form-item>
       </template>
 
-      <!-- 邮箱密码模式（旧 Firebase 体系） -->
+      <!-- Email/PasswordMode（old Firebase system） -->
       <template v-else-if="addMode === 'password'">
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="Email" prop="email">
           <el-input
             v-model="formData.email"
-            placeholder="请输入邮箱"
+            placeholder="Please enter email"
             :prefix-icon="Message"
             autocomplete="off"
           />
         </el-form-item>
         
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="Password" prop="password">
           <el-input
             v-model="formData.password"
             type="password"
-            placeholder="请输入密码"
+            placeholder="Please enter password"
             :prefix-icon="Lock"
             show-password
             autocomplete="new-password"
@@ -106,19 +106,19 @@
         </el-form-item>
       </template>
 
-      <!-- Refresh Token 模式 -->
+      <!-- Refresh Token Mode -->
       <template v-else-if="addMode === 'refresh_token'">
         <el-form-item label="Refresh Token" prop="refreshToken">
           <el-input
             v-model="formData.refreshToken"
             type="textarea"
             :rows="3"
-            placeholder="请输入 Refresh Token"
+            placeholder="Please enter Refresh Token"
           />
         </el-form-item>
       </template>
 
-      <!-- Devin Session Token 模式：直接粘贴 devin-session-token$... 迁入 -->
+      <!-- Devin Session Token Mode：directlyPaste devin-session-token$... import into -->
       <template v-else-if="addMode === 'devin_session'">
         <el-alert
           type="warning"
@@ -128,9 +128,9 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              粘贴完整 <code>devin-session-token$...</code> 的 session_token，
-              系统自动调 GetCurrentUser 反查 email / 配额 / api_key 并落库。
-              适用于已在浏览器登录后从 localStorage / cookie 拷贝 token 的迁入场景。
+              Pastecomplete <code>devin-session-token$...</code>  session_token，
+              systemautocall GetCurrentUser reverse lookup email / Quota / api_key and persist to DB。
+              suitableused forOpened in browserLoginafterfrom localStorage / cookie copy token import intoscenario。
             </span>
           </template>
         </el-alert>
@@ -139,12 +139,12 @@
             v-model="formData.sessionToken"
             type="textarea"
             :rows="3"
-            placeholder="请粘贴完整的 devin-session-token$... 令牌"
+            placeholder="Please pastecomplete devin-session-token$... Token"
           />
         </el-form-item>
       </template>
 
-      <!-- Devin Auth1 Token 模式：直接粘贴 auth1_xxx 迁入（与 Session Token 对称，但多保留 auth1_token 使刷新可用） -->
+      <!-- Devin Auth1 Token Mode：directlyPaste auth1_xxx import into（and Session Token forcall，butmultiplekeep auth1_token useRefreshcanuse） -->
       <template v-else-if="addMode === 'devin_auth1'">
         <el-alert
           type="warning"
@@ -154,9 +154,9 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              粘贴完整 <code>auth1_&lt;52 字符&gt;</code> 的 auth1_token（浏览器 localStorage 键名
-              <code>devin_auth1_token</code>），系统自动换取 session_token → 反查 email / 配额并落库。
-              <strong>相比 Session Token 多保留 auth1_token，后续可用「刷新」命令自动续期</strong>。
+              Pastecomplete <code>auth1_&lt;52 character&gt;</code>  auth1_token（browser localStorage key name
+              <code>devin_auth1_token</code>），systemautoexchange for session_token → reverse lookup email / Quotaand persist to DB。
+              <strong>compared to Session Token multiplekeep auth1_token，subsequentcanuse「Refresh」commandautorenew</strong>。
             </span>
           </template>
         </el-alert>
@@ -165,14 +165,14 @@
             v-model="formData.auth1Token"
             type="textarea"
             :rows="3"
-            placeholder="请粘贴完整的 auth1_xxxxxxxx... 令牌"
+            placeholder="Please pastecomplete auth1_xxxxxxxx... Token"
           />
         </el-form-item>
       </template>
 
-      <!-- Devin 邮箱验证码统一卡：两步流程；Step 0 选择 source / flow，Step 1 按 source+flow 渲染字段 -->
+      <!-- Devin Email Verification Codeunifycard：twostepflow；Step 0 select source / flow，Step 1 by source+flow renderfield -->
       <template v-else-if="addMode === 'devin_email_code'">
-        <!-- 顶部说明：按 source + flow 动态文案 -->
+        <!-- topdescription：by source + flow dynamictext -->
         <el-alert
           v-if="devinEmailCodeSource === 'devin_native'"
           type="success"
@@ -182,9 +182,9 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              <strong>Devin 原生注册</strong>：通过 <code>app.devin.ai/api/auth1/*</code> 端口建号，
-              账号主归属 <strong>Devin</strong>（JWT product=Devin），注册后自动桥接 Windsurf。
-              <strong>只需邮箱 + 验证码两步</strong>，不需要设置密码/姓名。
+              <strong>Devin Native Registration</strong>：via <code>app.devin.ai/api/auth1/*</code> portcreate account，
+              Account Primary Attribution <strong>Devin</strong>（JWT product=Devin），RegisterafterAuto Bridge Windsurf。
+              <strong>onlyneedEmail + Verification Codetwostep</strong>，does not needSettingsPassword/Name。
             </span>
           </template>
         </el-alert>
@@ -197,8 +197,8 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              <strong>Windsurf 侧注册</strong>：通过 <code>windsurf.com/_devin-auth/*</code> 端口创建新账号，
-              需设置密码和姓名。<strong>此流程会创建新账号并落库</strong>。
+              <strong>Windsurf  sideRegister</strong>：via <code>windsurf.com/_devin-auth/*</code> portcreatenewAccount，
+              needSettingsPassword and Name。<strong>thisflowwillcreatenewAccountand persist to DB</strong>。
             </span>
           </template>
         </el-alert>
@@ -211,23 +211,23 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              <strong>Windsurf 侧无密码登录</strong>：适用已存在 Devin 账号但无密码的场景
-              （SSO 迁移 / 忘记密码 / Google・GitHub 登录过的账号），通过邮箱验证码登录并添加。
-              <strong>此流程不会创建新账号</strong>。
+              <strong>Windsurf  sidenoPasswordLogin</strong>：suitableuseAlready exists Devin AccountbutnoPasswordscenario
+              （SSO migrate / forgetPassword / Google・GitHub LoginpassAccount），viaEmail Verification CodeLogin and Add。
+              <strong>thisflownotwillcreatenewAccount</strong>。
             </span>
           </template>
         </el-alert>
 
         <el-steps :active="devinEmailCodeStep" finish-status="success" simple style="margin-bottom: 20px;">
-          <el-step title="选择来源 / 发送验证码" />
-          <el-step :title="devinEmailCodeSource === 'windsurf_side' && devinEmailCodeFlow === 'signup' ? '完成注册' : (devinEmailCodeSource === 'devin_native' ? '完成注册' : '输入验证码')" />
+          <el-step title="selectsource / Send Verification Code" />
+          <el-step :title="devinEmailCodeSource === 'windsurf_side' && devinEmailCodeFlow === 'signup' ? 'Complete Registration' : (devinEmailCodeSource === 'devin_native' ? 'Complete Registration' : 'inputVerification Code')" />
         </el-steps>
 
-        <!-- Step 0：选择 source + 可选 flow + 输入邮箱 -->
+        <!-- Step 0：select source + Optional flow + Enter email -->
         <template v-if="devinEmailCodeStep === 0">
-          <!-- 注册来源：mode-card 网格，与主「添加方式」卡片风格对齐 -->
-          <el-form-item label="注册来源">
-            <div class="mode-grid" role="radiogroup" aria-label="注册来源">
+          <!-- Registration Source：mode-card grid，andprimary「Addmethod」cardstylealign -->
+          <el-form-item label="Registration Source">
+            <div class="mode-grid" role="radiogroup" aria-label="Registration Source">
               <div
                 v-for="opt in sourceOptions"
                 :key="opt.value"
@@ -261,9 +261,9 @@
             </div>
           </el-form-item>
 
-          <!-- 子流程：仅 Windsurf 侧需要区分 login / signup；Devin 原生只有 signup -->
-          <el-form-item v-if="devinEmailCodeSource === 'windsurf_side'" label="子流程">
-            <div class="mode-grid" role="radiogroup" aria-label="子流程">
+          <!-- subprocess：only  Windsurf  sideneeddistinguish login / signup；Devin nativeonly when signup -->
+          <el-form-item v-if="devinEmailCodeSource === 'windsurf_side'" label="subprocess">
+            <div class="mode-grid" role="radiogroup" aria-label="subprocess">
               <div
                 v-for="opt in flowOptions"
                 :key="opt.value"
@@ -297,17 +297,17 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item label="Email" prop="email">
             <el-input
               v-model="formData.email"
-              :placeholder="devinEmailCodeSource === 'devin_native' ? '请输入用于注册的新邮箱' : '请输入 Devin 账号邮箱'"
+              :placeholder="devinEmailCodeSource === 'devin_native' ? 'Please enterused forRegisternewEmail' : 'Please enter Devin Account Email'"
               :prefix-icon="Message"
               autocomplete="off"
             />
           </el-form-item>
         </template>
 
-        <!-- Step 1：输入验证码（按 source + flow 决定是否额外要密码/姓名） -->
+        <!-- Step 1：inputVerification Code（by source + flow decidewhetherextraneed toPassword/Name） -->
         <template v-else>
           <el-alert
             v-if="devinEmailCodeSource === 'windsurf_side' && devinEmailCodeFlow === 'signup'"
@@ -318,42 +318,42 @@
           >
             <template #title>
               <span style="font-size: 12px;">
-                <strong>注册新账号</strong>：验证码已发送至 {{ formData.email }}，
-                请填入验证码并设置密码/姓名完成注册
+                <strong>Register New Account</strong>：Verification code sent to {{ formData.email }}，
+                pleasefill inVerification Code and SettingsPassword/NameComplete Registration
               </span>
             </template>
           </el-alert>
           <el-alert v-else type="success" :closable="false" show-icon style="margin-bottom: 16px;">
-            验证码已发送至：{{ formData.email }}
+            Verification code sent to：{{ formData.email }}
           </el-alert>
 
-          <el-form-item label="邮箱">
+          <el-form-item label="Email">
             <el-input :model-value="formData.email" disabled />
           </el-form-item>
-          <el-form-item label="验证码" prop="devinEmailCodeOtp">
+          <el-form-item label="Verification Code" prop="devinEmailCodeOtp">
             <el-input
               v-model="formData.devinEmailCodeOtp"
-              placeholder="请输入邮箱中的 6 位验证码"
+              placeholder="Please enter emailin 6 -digit verification code"
               maxlength="10"
             />
           </el-form-item>
 
-          <!-- 仅 source=windsurf_side + flow=signup 需要密码/姓名 -->
+          <!-- only  source=windsurf_side + flow=signup needPassword/Name -->
           <template v-if="devinEmailCodeSource === 'windsurf_side' && devinEmailCodeFlow === 'signup'">
-            <el-form-item label="新密码" prop="devinEmailCodePassword">
+            <el-form-item label="New Password" prop="devinEmailCodePassword">
               <el-input
                 v-model="formData.devinEmailCodePassword"
                 type="password"
-                placeholder="请设置新账号密码，至少 6 位"
+                placeholder="pleaseSettingsnewAccountPassword，at least 6 "
                 :prefix-icon="Lock"
                 show-password
                 autocomplete="new-password"
               />
             </el-form-item>
-            <el-form-item label="姓名" prop="devinEmailCodeName">
+            <el-form-item label="Name" prop="devinEmailCodeName">
               <el-input
                 v-model="formData.devinEmailCodeName"
-                placeholder="请输入账号显示名称（留空用邮箱前缀）"
+                placeholder="Please enterAccountdisplayName（leave emptyuseEmailprefix）"
                 :prefix-icon="User"
               />
             </el-form-item>
@@ -361,7 +361,7 @@
         </template>
       </template>
 
-      <!-- Devin 账密模式（新 Devin Session 体系） -->
+      <!-- Devin credentialsMode（new Devin Session system） -->
       <template v-else>
         <el-alert
           type="info"
@@ -371,26 +371,26 @@
         >
           <template #title>
             <span style="font-size: 12px;">
-              通过 Devin Session 新体系登录（<code>/_devin-auth/password/login</code> +
-              <code>WindsurfPostAuth</code>），无 Google API Key 限制、无需 Token 刷新
+              via Devin Session newsystemLogin（<code>/_devin-auth/password/login</code> +
+              <code>WindsurfPostAuth</code>），no Google API Key limit、noneed Token Refresh
             </span>
           </template>
         </el-alert>
 
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="Email" prop="email">
           <el-input
             v-model="formData.email"
-            placeholder="请输入 Devin 账号邮箱"
+            placeholder="Please enter Devin Account Email"
             :prefix-icon="Message"
             autocomplete="off"
           />
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="Password" prop="password">
           <el-input
             v-model="formData.password"
             type="password"
-            placeholder="请输入 Devin 账号密码"
+            placeholder="Please enter Devin AccountPassword"
             :prefix-icon="Lock"
             show-password
             autocomplete="new-password"
@@ -398,18 +398,18 @@
         </el-form-item>
       </template>
       
-      <el-form-item label="备注名称" prop="nickname">
+      <el-form-item label="RemarkName" prop="nickname">
         <el-input
           v-model="formData.nickname"
-          placeholder="留空则使用邮箱用户名"
+          placeholder="leave emptythenuseEmailUsername"
           :prefix-icon="User"
         />
       </el-form-item>
       
-      <el-form-item label="分组">
+      <el-form-item label="Group">
         <el-select
           v-model="formData.group"
-          placeholder="选择分组"
+          placeholder="Select Group"
           clearable
         >
           <el-option
@@ -421,13 +421,13 @@
         </el-select>
       </el-form-item>
       
-      <el-form-item label="标签">
+      <el-form-item label="Tags">
         <el-select
           v-model="formData.tags"
           multiple
           filterable
           allow-create
-          placeholder="输入或选择标签"
+          placeholder="input or selectTags"
           style="width: 100%"
         >
           <el-option
@@ -443,25 +443,25 @@
     </el-form>
     
     <template #footer>
-      <el-button @click="handleClose">取消</el-button>
+      <el-button @click="handleClose">Cancel</el-button>
 
-      <!-- Devin 邮箱验证码合并卡：按 step + source + flow 动态按钮文案 -->
+      <!-- Devin Email Verification Codemerge card：by step + source + flow dynamicbuttontext -->
       <template v-if="addMode === 'devin_email_code'">
         <el-button v-if="devinEmailCodeStep === 1" @click="devinEmailCodeStep = 0" :disabled="loading">
-          上一步
+          Previous
         </el-button>
         <el-button type="primary" @click="handleSubmit" :loading="loading">
           {{ devinEmailCodeStep === 0
-              ? '发送验证码'
+              ? 'Send Verification Code'
               : (devinEmailCodeSource === 'devin_native'
-                  ? '完成 Devin 原生注册'
-                  : (devinEmailCodeFlow === 'signup' ? '完成注册' : '完成添加')) }}
+                  ? 'Done Devin Native Registration'
+                  : (devinEmailCodeFlow === 'signup' ? 'Complete Registration' : 'DoneAdd')) }}
         </el-button>
       </template>
 
-      <!-- 其他模式：统一"确定"按钮 -->
+      <!-- otherMode：unify"Confirm"button -->
       <el-button v-else type="primary" @click="handleSubmit" :loading="loading">
-        确定
+        Confirm
       </el-button>
     </template>
   </el-dialog>
@@ -485,26 +485,26 @@ const formRef = ref<FormInstance>();
 const loading = ref(false);
 const addMode = ref<'smart' | 'password' | 'refresh_token' | 'devin' | 'devin_session' | 'devin_auth1' | 'devin_email_code'>('smart');
 
-// Devin 邮箱验证码合并卡（mode === 'devin_email_code' 专属）的状态：
-//   - step 0：选择 source / flow + 输入邮箱 + 发送验证码
-//   - step 1：输入验证码（按 source+flow 可能额外填密码/姓名）
+// Devin Email Verification Codemerge card（mode === 'devin_email_code' exclusive）Status：
+//   - step 0：select source / flow + Enter email + Send Verification Code
+//   - step 1：inputVerification Code（by source+flow possiblyextra填Password/Name）
 //
-// source：一级子单选
-//   - 'devin_native'【原来的 devin_native_signup 卡合并而来】
-//     端口走 app.devin.ai/api/auth1/*，账号主归属 Devin（JWT product=Devin）+ 自动桥接 Windsurf
-//     只有 signup 子流程，不需密码/姓名
+// source：onelevelchildsingleselect
+//   - 'devin_native'【original devin_native_signup cardmergebut来】
+//     portuse app.devin.ai/api/auth1/*，Account Primary Attribution Devin（JWT product=Devin）+ Auto Bridge Windsurf
+//     only when signup subprocess，notneedPassword/Name
 //   - 'windsurf_side'
-//     端口走 windsurf.com/_devin-auth/*，账号主归属 Windsurf
-//     支持 flow=login / signup；signup 需密码+姓名
+//     portuse windsurf.com/_devin-auth/*，Account Primary Attribution Windsurf
+//     support flow=login / signup；signup needPassword+Name
 const devinEmailCodeSource = ref<'devin_native' | 'windsurf_side'>('devin_native');
-// step 0：输入邮箱 + 发送验证码；step 1：输入验证码 + 完成登录/注册
+// step 0：Enter email + Send Verification Code；step 1：inputVerification Code + DoneLogin/Register
 const devinEmailCodeStep = ref<0 | 1>(0);
-// /email/start 返回的 email_verification_token，用于后续 /email/complete
+// /email/start Back email_verification_token，used forsubsequent /email/complete
 const devinEmailCodeEmailToken = ref('');
-// flow：仅在 source==='windsurf_side' 时生效，当 source==='devin_native' 时满量视作 'signup'
-//   - 'login'：登录已有无密码账号（SSO 迁移 / 忘密 / Google・GitHub 登录过的账号）
-//   - 'signup'：注册新账号（额外要密码+姓名）
-//   - 从 smart 分派 not_found 快捷按钮进入时自动设为 'signup' + source=windsurf_side
+// flow：only in source==='windsurf_side' when生效，when source==='devin_native' whenfull capacityviewmake 'signup'
+//   - 'login'：Loginalready hasnoPasswordAccount（SSO migrate / forgot password / Google・GitHub LoginpassAccount）
+//   - 'signup'：Register New Account（extraneed toPassword+Name）
+//   - from smart dispatch not_found shortcutbuttonenterwhenautosetas 'signup' + source=windsurf_side
 const devinEmailCodeFlow = ref<'login' | 'signup'>('login');
 
 const formData = reactive({
@@ -517,66 +517,66 @@ const formData = reactive({
   devinEmailCodePassword: '',
   devinEmailCodeName: '',
   nickname: '',
-  group: '默认分组',
+  group: 'Default Group',
   tags: [] as string[]
 });
 
 /**
- * 添加方式选项的元数据
+ * Addmethodoptionelementdata
  *
- * 顺序按「推荐度 + 流派聚合」排列：
- * 1) smart 智能识别（推荐，置顶）
- * 2) Devin 系：账密 / 邮箱验证码 / session_token（新体系，日常主力）
- * 3) Firebase 系：邮箱密码 / Refresh Token（传统体系，兼容老账号）
+ * orderby「recommenddegree + provider typeaggregate」rowcolumn：
+ * 1) smart Smart Detection（recommend，set顶）
+ * 2) Devin 系：credentials / Email Verification Code / session_token（newsystem，dailyprimary力）
+ * 3) Firebase 系：Email/Password / Refresh Token（traditionalsystem，compatibleoldAccount）
  *
- * 每项承载卡片渲染所需的全部视觉数据（图标、标题、标签、一句话说明）。
- * 新增模式时只需在此数组里追加一条，模板网格自动同步渲染。
+ * everyitemcarrycardrender所needAllviewfeeldata（icon、title、Tags、onesentence话description）。
+ * add newModewhenonlyneedinthiscountgroupinappendoneitems，模板gridautosyncrender。
  */
 const modeOptions = [
   {
     value: 'smart',
-    title: '智能识别',
-    desc: '输入邮箱密码，自动选择最佳登录流派',
+    title: 'Smart Detection',
+    desc: 'inputEmail/Password，autoselectmostgoodLoginprovider type',
     icon: MagicStick,
-    tag: '推荐',
+    tag: 'recommend',
     tagType: 'primary' as const,
   },
   {
     value: 'devin',
-    title: 'Devin 账密',
-    desc: '用 Devin 账号密码直接登录',
+    title: 'Devin credentials',
+    desc: 'use Devin AccountPassworddirectlyLogin',
     icon: User,
-    tag: '新',
+    tag: 'new',
     tagType: 'success' as const,
   },
   {
     value: 'devin_email_code',
-    title: 'Devin 邮箱验证码',
-    desc: '原生（app.devin.ai）或 Windsurf 侧验证码登录/注册，进入后选择来源',
+    title: 'Devin Email Verification Code',
+    desc: 'native（app.devin.ai） or  Windsurf  sideVerification CodeLogin/Register，enterafterselectsource',
     icon: Message,
-    tag: '验证码',
+    tag: 'Verification Code',
     tagType: 'success' as const,
   },
   {
     value: 'devin_session',
     title: 'Devin Session Token',
-    desc: '粘贴 devin-session-token$... 直接迁入',
+    desc: 'Paste devin-session-token$... Direct Import',
     icon: Connection,
-    tag: '迁入',
+    tag: 'import into',
     tagType: 'warning' as const,
   },
   {
     value: 'devin_auth1',
     title: 'Devin Auth1 Token',
-    desc: '粘贴 auth1_... 直接迁入，支持刷新续期',
+    desc: 'Paste auth1_... Direct Import，supportRefreshrenew',
     icon: Connection,
-    tag: '迁入',
+    tag: 'import into',
     tagType: 'warning' as const,
   },
   {
     value: 'password',
-    title: '邮箱密码',
-    desc: '传统 Firebase 账号密码登录',
+    title: 'Email/Password',
+    desc: 'traditional Firebase AccountPasswordLogin',
     icon: Lock,
     tag: '',
     tagType: 'info' as const,
@@ -584,7 +584,7 @@ const modeOptions = [
   {
     value: 'refresh_token',
     title: 'Refresh Token',
-    desc: '粘贴 Firebase refresh_token 导入',
+    desc: 'Paste Firebase refresh_token Import',
     icon: Refresh,
     tag: '',
     tagType: 'info' as const,
@@ -592,24 +592,24 @@ const modeOptions = [
 ] as const;
 
 /**
- * Devin 邮箱验证码合并卡 —— source 子单选的卡片元数据
+ * Devin Email Verification Codemerge card —— source childsingleselectcardelementdata
  *
- * 与主 modeOptions 结构对齐：icon + title + desc + tag + tagType，
- * 复用 .mode-grid / .mode-card 的现有样式，不新增 CSS。
+ * andprimary modeOptions structurealign：icon + title + desc + tag + tagType，
+ * complexuse .mode-grid / .mode-card nowhasstyle，notadd new CSS。
  */
 const sourceOptions = [
   {
     value: 'devin_native',
-    title: 'Devin 原生',
-    desc: 'app.devin.ai，账号主归属 Devin + 自动桥接 Windsurf',
+    title: 'Devin native',
+    desc: 'app.devin.ai，Account Primary Attribution Devin + Auto Bridge Windsurf',
     icon: Message,
-    tag: '原生',
+    tag: 'native',
     tagType: 'success' as const,
   },
   {
     value: 'windsurf_side',
-    title: 'Windsurf 侧',
-    desc: 'windsurf.com，账号主归属 Windsurf',
+    title: 'Windsurf  side',
+    desc: 'windsurf.com，Account Primary Attribution Windsurf',
     icon: Connection,
     tag: 'WS',
     tagType: 'info' as const,
@@ -617,34 +617,34 @@ const sourceOptions = [
 ] as const;
 
 /**
- * Devin 邮箱验证码合并卡 —— flow 子单选的卡片元数据
+ * Devin Email Verification Codemerge card —— flow childsingleselectcardelementdata
  *
- * 仅在 source='windsurf_side' 时渲染。
+ * only in source='windsurf_side' whenrender。
  */
 const flowOptions = [
   {
     value: 'login',
-    title: '登录无密码账号',
-    desc: 'SSO / 忘密 / Google・GitHub 登录过的账号',
+    title: 'LoginnoPasswordAccount',
+    desc: 'SSO / forgot password / Google・GitHub LoginpassAccount',
     icon: Key,
-    tag: '登录',
+    tag: 'Login',
     tagType: 'info' as const,
   },
   {
     value: 'signup',
-    title: '注册新账号',
-    desc: '需额外设置密码与姓名',
+    title: 'Register New Account',
+    desc: 'needextraSettingsPasswordandName',
     icon: User,
-    tag: '注册',
+    tag: 'Register',
     tagType: 'warning' as const,
   },
 ] as const;
 
 /**
- * 切换添加方式
+ * SwitchAddmethod
  *
- * 卡片点击时由模板调用；内部直接写入 `addMode` 并复用原有的 `handleModeChange`
- * 清理逻辑（重置验证码 step / email_token / flow 等），保证与 el-radio 版本行为完全一致。
+ * cardclickwhenby模板call；internaldirectlywrite入 `addMode`  and complexuseoriginalhas `handleModeChange`
+ * cleanup逻辑（ResetVerification Code step / email_token / flow etc.），ensureand el-radio Versionrowascompleteconsistent。
  */
 function selectMode(value: string) {
   if (addMode.value === value) return;
@@ -653,11 +653,11 @@ function selectMode(value: string) {
 }
 
 /**
- * Devin 邮箱验证码合并卡——切换 source（原生 / Windsurf 侧）
+ * Devin Email Verification Codemerge card——Switch source（native / Windsurf  side）
  *
- * 切换来源时必须重置 step / token / 验证码输入，避免用户在已发过一次验证码后
- * 切换到另一端口，旧 token 被窜修改到新端口的提交逻辑而失败。
- * formData.email / nickname / tags / group 不重置，保留用户已输入内容。
+ * SwitchsourcewhenmustReset step / token / Verification Codeinput，avoidUserinalready sendpassonceVerification Codeafter
+ * Switchtoanotheroneport，old token wascrossmodifytonewportSubmit逻辑butfailed。
+ * formData.email / nickname / tags / group notReset，keepUserEnteredContent。
  */
 function selectSource(value: string) {
   const next = value as typeof devinEmailCodeSource.value;
@@ -671,10 +671,10 @@ function selectSource(value: string) {
 }
 
 /**
- * Devin 邮箱验证码合并卡——切换 flow（login / signup）
+ * Devin Email Verification Codemerge card——Switch flow（login / signup）
  *
- * 仅在 source='windsurf_side' 时有意义。切换时同样重置 step / token / 验证码输入，
- * 因为 login 和 signup 的 /email/start mode 不同，旧 token 不能复用。
+ * only in source='windsurf_side' whenhas意义。SwitchwhensamesampleReset step / token / Verification Codeinput，
+ * because login  and  signup  /email/start mode notsame，old token notcancomplexuse。
  */
 function selectFlow(value: string) {
   const next = value as typeof devinEmailCodeFlow.value;
@@ -687,96 +687,96 @@ function selectFlow(value: string) {
   formData.devinEmailCodeName = '';
 }
 
-// 邮箱密码模式的验证规则
+// Email/Passwordmode validation rules
 const passwordRules: FormRules = {
   email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+    { required: true, message: 'Please enter email', trigger: 'blur' },
+    { type: 'email', message: 'Please enter a valid email address', trigger: 'blur' }
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度至少6位', trigger: 'blur' }
+    { required: true, message: 'Please enter password', trigger: 'blur' },
+    { min: 6, message: 'Password must be at least6', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// Refresh Token 模式的验证规则
+// Refresh Token mode validation rules
 const refreshTokenRules: FormRules = {
   refreshToken: [
-    { required: true, message: '请输入 Refresh Token', trigger: 'blur' },
-    { min: 10, message: 'Refresh Token 格式不正确', trigger: 'blur' }
+    { required: true, message: 'Please enter Refresh Token', trigger: 'blur' },
+    { min: 10, message: 'Refresh Token formatnotcorrect', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// Devin 账密模式的验证规则（与 passwordRules 一致）
+// Devin credentialsmode validation rules（and passwordRules consistent）
 const devinRules: FormRules = {
   email: [
-    { required: true, message: '请输入 Devin 账号邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+    { required: true, message: 'Please enter Devin Account Email', trigger: 'blur' },
+    { type: 'email', message: 'Please enter a valid email address', trigger: 'blur' }
   ],
   password: [
-    { required: true, message: '请输入 Devin 账号密码', trigger: 'blur' },
-    { min: 6, message: '密码长度至少6位', trigger: 'blur' }
+    { required: true, message: 'Please enter Devin AccountPassword', trigger: 'blur' },
+    { min: 6, message: 'Password must be at least6', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// Devin 邮箱验证码模式的验证规则：按 step 分组
-// step 0 只校验 email，step 1 只校验 验证码
-// （避免在需要发验证码的阶段反骨用户填验证码）
+// Devin Email Verification Codemode validation rules：by step Group
+// step 0 onlyvalidate email，step 1 onlyvalidate Verification Code
+// （avoidinneedsendVerification CodestagerebelUser填Verification Code）
 const devinEmailCodeStep0Rules: FormRules = {
   email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' }
+    { required: true, message: 'Please enter email', trigger: 'blur' },
+    { type: 'email', message: 'Please enter a valid email address', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 const devinEmailCodeStep1Rules: FormRules = {
   devinEmailCodeOtp: [
-    { required: true, message: '请输入验证码', trigger: 'blur' },
-    { min: 4, message: '验证码长度不正确', trigger: 'blur' }
+    { required: true, message: 'Please enter verification code', trigger: 'blur' },
+    { min: 4, message: 'Verification Codelengthnotcorrect', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
-// Step 1 注册子流程：验证码 + 新密码 (至少 6 位) + 姓名 (可选)
+// Step 1 Registersubprocess：Verification Code + New Password (at least 6 ) + Name (Optional)
 const devinEmailCodeStep1SignupRules: FormRules = {
   devinEmailCodeOtp: [
-    { required: true, message: '请输入验证码', trigger: 'blur' },
-    { min: 4, message: '验证码长度不正确', trigger: 'blur' }
+    { required: true, message: 'Please enter verification code', trigger: 'blur' },
+    { min: 4, message: 'Verification Codelengthnotcorrect', trigger: 'blur' }
   ],
   devinEmailCodePassword: [
-    { required: true, message: '请设置新密码', trigger: 'blur' },
-    { min: 6, message: '密码长度至少 6 位', trigger: 'blur' }
+    { required: true, message: 'pleaseSettingsNew Password', trigger: 'blur' },
+    { min: 6, message: 'Password must be at least 6 ', trigger: 'blur' }
   ],
   devinEmailCodeName: [
-    { max: 50, message: '姓名最多 50 个字符', trigger: 'blur' }
+    { max: 50, message: 'Namemostmultiple 50 character', trigger: 'blur' }
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// Devin Session Token 模式的验证规则
+// Devin Session Token mode validation rules
 const devinSessionRules: FormRules = {
   sessionToken: [
-    { required: true, message: '请粘贴 Devin session_token', trigger: 'blur' },
+    { required: true, message: 'Please paste Devin session_token', trigger: 'blur' },
     {
       validator: (_rule, value: string, callback) => {
         const trimmed = (value || '').trim();
-        if (!trimmed) return callback(new Error('请粘贴 Devin session_token'));
+        if (!trimmed) return callback(new Error('Please paste Devin session_token'));
         if (!trimmed.startsWith('devin-session-token$')) {
-          return callback(new Error('session_token 必须以 devin-session-token$ 前缀开头'));
+          return callback(new Error('session_token must start with devin-session-token$ prefix start'));
         }
         callback();
       },
@@ -784,24 +784,24 @@ const devinSessionRules: FormRules = {
     },
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// Devin Auth1 Token 模式的验证规则：auth1_ 前缀 + 基本长度约束
+// Devin Auth1 Token mode validation rules：auth1_ prefix + 基thislengthconstraint
 const devinAuth1Rules: FormRules = {
   auth1Token: [
-    { required: true, message: '请粘贴 Devin auth1_token', trigger: 'blur' },
+    { required: true, message: 'Please paste Devin auth1_token', trigger: 'blur' },
     {
       validator: (_rule, value: string, callback) => {
         const trimmed = (value || '').trim();
-        if (!trimmed) return callback(new Error('请粘贴 Devin auth1_token'));
+        if (!trimmed) return callback(new Error('Please paste Devin auth1_token'));
         if (!trimmed.startsWith('auth1_')) {
-          return callback(new Error('auth1_token 必须以 auth1_ 前缀开头'));
+          return callback(new Error('auth1_token must start with auth1_ prefix start'));
         }
-        // 官方格式：auth1_ + 52 字符；给一定宽容度
+        // officialformat：auth1_ + 52 character；giveoneset tolerance
         if (trimmed.length < 20) {
-          return callback(new Error(`auth1_token 长度异常（${trimmed.length} 字符），请确认完整粘贴`));
+          return callback(new Error(`auth1_token lengthexception（${trimmed.length} character），pleaseConfirmcompletePaste`));
         }
         callback();
       },
@@ -809,23 +809,23 @@ const devinAuth1Rules: FormRules = {
     },
   ],
   nickname: [
-    { max: 20, message: '备注名称最多20个字符', trigger: 'blur' }
+    { max: 20, message: 'Nickname max20character', trigger: 'blur' }
   ]
 };
 
-// 根据模式选择验证规则
+// based onModeselectVerifyrules
 const currentRules = computed(() => {
-  // 智能模式复用邮箱密码规则（同样需要 email + password）
+  // smartModecomplexuseEmail/Passwordrules（samesampleneed email + password）
   if (addMode.value === 'smart' || addMode.value === 'password') return passwordRules;
   if (addMode.value === 'refresh_token') return refreshTokenRules;
   if (addMode.value === 'devin_session') return devinSessionRules;
   if (addMode.value === 'devin_auth1') return devinAuth1Rules;
   if (addMode.value === 'devin_email_code') {
     if (devinEmailCodeStep.value === 0) return devinEmailCodeStep0Rules;
-    // Step 1 按 source + flow 分流：
-    //   - source=devin_native：仅验证码（Devin 原生不需密码/姓名）
-    //   - source=windsurf_side + flow=login：仅验证码
-    //   - source=windsurf_side + flow=signup：验证码 + 新密码 + 姓名
+    // Step 1 by source + flow distribute：
+    //   - source=devin_native：only Verification Code（Devin nativenotneedPassword/Name）
+    //   - source=windsurf_side + flow=login：only Verification Code
+    //   - source=windsurf_side + flow=signup：Verification Code + New Password + Name
     const needsSignupExtras =
       devinEmailCodeSource.value === 'windsurf_side' && devinEmailCodeFlow.value === 'signup';
     return needsSignupExtras ? devinEmailCodeStep1SignupRules : devinEmailCodeStep1Rules;
@@ -833,10 +833,10 @@ const currentRules = computed(() => {
   return devinRules;
 });
 
-// 切换模式时重置表单
+// SwitchModewhenResetform
 function handleModeChange() {
   formRef.value?.resetFields();
-  // Devin 邮箱验证码合并卡专属状态重置（source + step + token + flow + 表单字段）
+  // Devin Email Verification Codemerge cardexclusiveStatusReset（source + step + token + flow + formfield）
   devinEmailCodeSource.value = 'devin_native';
   devinEmailCodeStep.value = 0;
   devinEmailCodeEmailToken.value = '';
@@ -846,14 +846,14 @@ function handleModeChange() {
   formData.devinEmailCodeName = '';
 }
 
-// 获取标签选项样式
+// fetchTagsoptionstyle
 function getTagOptionStyle(color: string): Record<string, string> {
   if (!color) return {};
   
   let r = 0, g = 0, b = 0;
   let parsed = false;
   
-  // 解析 rgba 或 rgb 格式
+  // parse rgba  or  rgb format
   if (color.startsWith('rgba') || color.startsWith('rgb')) {
     const match = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
     if (match) {
@@ -863,7 +863,7 @@ function getTagOptionStyle(color: string): Record<string, string> {
       parsed = true;
     }
   } 
-  // 解析 HEX 格式
+  // parse HEX format
   if (!parsed && color.startsWith('#')) {
     const hex = color.slice(1);
     if (hex.length >= 6) {
@@ -891,44 +891,44 @@ async function handleSubmit() {
     loading.value = true;
     try {
       if (addMode.value === 'refresh_token') {
-        // Refresh Token 模式
+        // Refresh Token Mode
         const trimmedToken = formData.refreshToken.trim();
         const trimmedNickname = formData.nickname.trim() || undefined;
         
         if (!trimmedToken) {
-          ElMessage.error('Refresh Token 不能为空');
+          ElMessage.error('Refresh Token cannot be empty');
           loading.value = false;
           return;
         }
         
-        // 调用后端接口添加账号
+        // callbackendAPIAdd Account
         const result = await invoke<any>('add_account_by_refresh_token', {
           refreshToken: trimmedToken,
           nickname: trimmedNickname,
           tags: formData.tags,
-          group: formData.group || '默认分组'
+          group: formData.group || 'Default Group'
         });
         
         if (result.success) {
-          ElMessage.success(`账号 ${result.email} 添加成功`);
-          // 刷新账号列表
+          ElMessage.success(`Account ${result.email} Added successfully`);
+          // Refresh account list
           await accountsStore.loadAccounts();
           handleClose();
         } else {
-          ElMessage.error(result.error || '添加失败');
+          ElMessage.error(result.error || 'Add failed');
         }
       } else if (addMode.value === 'devin') {
-        // Devin 账密模式
+        // Devin credentialsMode
         await handleDevinSubmit();
       } else if (addMode.value === 'devin_session') {
-        // Devin Session Token 直接迁入
+        // Devin Session Token Direct Import
         await handleDevinSessionSubmit();
       } else if (addMode.value === 'devin_auth1') {
-        // Devin Auth1 Token 直接迁入
+        // Devin Auth1 Token Direct Import
         await handleDevinAuth1Submit();
       } else if (addMode.value === 'devin_email_code') {
-        // Devin 邮箱验证码合并卡—— 按 step + source + flow 三路分派：
-        //   step 0 统一发验证码（sendDevinEmailCode 内部按 source 选端口）
+        // Devin Email Verification Codemerge card—— by step + source + flow three waydispatch：
+        //   step 0 unifysendVerification Code（sendDevinEmailCode internalby source selectport）
         //   step 1：
         //     - source=devin_native → completeDevinEmailCodeNativeRegister
         //     - source=windsurf_side + flow=signup → completeDevinEmailCodeRegister
@@ -943,14 +943,14 @@ async function handleSubmit() {
           await completeDevinEmailCodeLogin();
         }
       } else if (addMode.value === 'smart') {
-        // 智能识别模式：先嗅探再分派
+        // Smart DetectionMode：firstdetectionagaindispatch
         await handleSmartSubmit();
       } else {
-        // 邮箱密码模式（旧 Firebase）
+        // Email/PasswordMode（old Firebase）
         await handleFirebaseSubmit();
       }
     } catch (error) {
-      ElMessage.error(`添加失败: ${error}`);
+      ElMessage.error(`Add failed: ${error}`);
     } finally {
       loading.value = false;
     }
@@ -958,9 +958,9 @@ async function handleSubmit() {
 }
 
 /**
- * Firebase 邮箱密码登录流程（原 'password' 分支抽取）
+ * Firebase Email/PasswordLoginflow（original 'password' branchextractget）
  *
- * 供 'password' 模式直接调用，也被 'smart' 模式在嗅探结果为 firebase 时复用
+ * 供 'password' Modedirectlycall，alsowas 'smart' Modeindetectionresultas firebase whencomplexuse
  */
 async function handleFirebaseSubmit() {
   const trimmedEmail = formData.email.trim();
@@ -968,211 +968,211 @@ async function handleFirebaseSubmit() {
   const trimmedNickname = formData.nickname.trim() || trimmedEmail.split('@')[0];
 
   if (!trimmedPassword) {
-    ElMessage.error('密码不能为空或只包含空格');
+    ElMessage.error('Passwordcannot be empty or onlycontainsspace');
     return;
   }
 
-  // 添加账号
+  // Add Account
   const newAccount = await accountsStore.addAccount({
     email: trimmedEmail,
     password: trimmedPassword,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组'
+    group: formData.group || 'Default Group'
   });
 
-  ElMessage.success('账号添加成功，正在获取账号信息...');
+  ElMessage.success('AccountAdded successfully，fetchingAccount Info...');
 
-  // 自动登录并获取账号详细信息
+  // autoLogin and fetchAccountdetailedInfo
   try {
     const loginResult = await apiService.loginAccount(newAccount.id);
 
     if (loginResult.success) {
       const latestAccount = await accountApi.getAccount(newAccount.id);
       await accountsStore.updateAccount(latestAccount);
-      ElMessage.success('账号信息已更新');
+      ElMessage.success('Account Infoalready Update');
     } else {
-      ElMessage.warning('账号已添加，但登录失败，请手动刷新');
+      ElMessage.warning('AccountAdded，butLogin failed，pleasemanuallyRefresh');
     }
   } catch (infoError) {
-    console.error('获取账号信息失败:', infoError);
-    ElMessage.warning('账号已添加，但获取详细信息失败，请手动刷新');
+    console.error('Failed to get account info:', infoError);
+    ElMessage.warning('AccountAdded，butfetchdetailedInfofailed，pleasemanuallyRefresh');
   }
 
   handleClose();
 }
 
 /**
- * 智能识别模式：先嗅探账号属于 Firebase / Devin 哪一派，再自动分派
+ * Smart DetectionMode：firstdetectionAccountbelongs to Firebase / Devin whichonedispatch，againautodispatch
  *
- * 后端 `sniff_login_method` 并发调两侧探测端点，返回 `recommended` 字段：
- * - firebase：走 `handleFirebaseSubmit`
- * - devin：　走 `handleDevinSubmit`
- * - sso / no_password / not_found / blocked：弹对话框指引用户处理
+ * backend `sniff_login_method` concurrentcalltwo side探测sidepoint，Back `recommended` field：
+ * - firebase：use `handleFirebaseSubmit`
+ * - devin：　use `handleDevinSubmit`
+ * - sso / no_password / not_found / blocked：popupDialogguideUserhandle
  */
 async function handleSmartSubmit() {
   const trimmedEmail = formData.email.trim();
   const trimmedPassword = formData.password.trim();
 
   if (!trimmedEmail || !trimmedPassword) {
-    ElMessage.error('邮箱和密码不能为空');
+    ElMessage.error('Email and Passwordcannot be empty');
     return;
   }
 
-  ElMessage.info('正在识别账号类型……');
+  ElMessage.info('IdentifyingAccounttype……');
 
   let sniff: LoginMethodSniffResult;
   try {
     sniff = await devinApi.sniffLoginMethod(trimmedEmail);
   } catch (e) {
-    ElMessage.error(`识别登录方式失败: ${e}`);
+    ElMessage.error(`identifyLogin Methodfailed: ${e}`);
     return;
   }
 
   switch (sniff.recommended) {
     case 'firebase':
-      ElMessage.success('已识别为 Firebase 账号，正在登录……');
+      ElMessage.success('already identifyas Firebase Account，Logging in……');
       await handleFirebaseSubmit();
       break;
     case 'devin':
-      ElMessage.success('已识别为 Devin 账号，正在登录……');
+      ElMessage.success('already identifyas Devin Account，Logging in……');
       await handleDevinSubmit();
       break;
     case 'sso':
-      // 企业 SSO 账号：有些组织仍允许邮箱验证码登录，提供快捷按钮尝试
+      // Enterprise SSO Account：hassomegrouporgstillallowEmail Verification CodeLogin，provide shortcutbuttontry
       try {
         await ElMessageBox.confirm(
-          `${sniff.reason}\n\n可以尝试用邮箱验证码登录。若邮箱仍收不到验证码，请改用「Refresh Token」模式。`,
-          '企业 SSO 账号',
+          `${sniff.reason}\n\nYou can try logging in with email verification code. If you still cannot receive the code, please use "Refresh Token" mode instead.`,
+          'Enterprise SSO Account',
           {
             type: 'info',
-            confirmButtonText: '用邮箱验证码登录',
-            cancelButtonText: '我知道了',
+            confirmButtonText: 'Login with email verification code',
+            cancelButtonText: 'OK',
           }
         );
         await switchToEmailCodeModeAndSend();
       } catch {
-        // 用户取消，不做任何处理
+        // UserCancel，notdoanyhandle
       }
       break;
     case 'no_password':
-      // 无密码账号：正是“邮箱验证码登录”的主场景
+      // noPasswordAccount：正is“Email Verification CodeLogin”primaryscenario
       try {
         await ElMessageBox.confirm(
-          `${sniff.reason}\n\n此账号可以通过邮箱验证码登录，无需密码。是否立即发送验证码？`,
-          '账号未设置密码',
+          `${sniff.reason}\n\nThis account can log in via email verification code without a password. Send verification code now?`,
+          'Account has no password',
           {
             type: 'warning',
-            confirmButtonText: '发送验证码',
-            cancelButtonText: '我知道了',
+            confirmButtonText: 'Send Verification Code',
+            cancelButtonText: 'OK',
           }
         );
         await switchToEmailCodeModeAndSend();
       } catch {
-        // 用户取消
+        // UserCancel
       }
       break;
     case 'not_found':
-      // 账号两侧都不存在：直接走“邮箱验证码注册”流程（mode=signup）
-      // 不再弹 alert 要用户去别处注册，一步到位
+      // Accounttwo sideallnotsavein：directlyuse“Email Verification CodeRegister”flow（mode=signup）
+      // no longerpopup alert need toUsergoother处Register，onestepto
       try {
         await ElMessageBox.confirm(
-          `${sniff.reason}\n\n此邮箱尚未注册 Devin 账号。是否立即通过邮箱验证码注册新账号？需要在下一步设置密码。`,
-          '账号不存在',
+          `${sniff.reason}\n\nThis email is not registered for a Devin account. Register a new account via email verification code now? You will need to set a password in the next step.`,
+          'Account does not exist',
           {
             type: 'warning',
-            confirmButtonText: '立即注册',
-            cancelButtonText: '我知道了',
+            confirmButtonText: 'Register Now',
+            cancelButtonText: 'OK',
           }
         );
         await switchToEmailCodeModeAndSend('signup');
       } catch {
-        // 用户取消
+        // UserCancel
       }
       break;
     case 'blocked':
       await ElMessageBox.alert(
         `${sniff.reason}`,
-        '账号受限',
-        { type: 'error', confirmButtonText: '知道了' }
+        'Account Restricted',
+        { type: 'error', confirmButtonText: 'OK' }
       ).catch(() => {});
       break;
     default:
-      ElMessage.error(`未知的嗅探结果：${sniff.recommended}`);
+      ElMessage.error(`Unknown detection result：${sniff.recommended}`);
   }
 }
 
 /**
- * Devin Session Token 直接迁入流程
+ * Devin Session Token Direct Importflow
  *
- * 用户仅需粘贴 `devin-session-token$...` 即可建号，
- * 后端自动调 GetCurrentUser 反查 email / api_key / 配额 并落库。
+ * Useronly needPaste `devin-session-token$...` i.e.cancreate account，
+ * backendautocall GetCurrentUser reverse lookup email / api_key / Quota and persist to DB。
  */
 async function handleDevinSessionSubmit() {
   const trimmedToken = formData.sessionToken.trim();
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!trimmedToken) {
-    ElMessage.error('Session Token 不能为空');
+    ElMessage.error('Session Token cannot be empty');
     return;
   }
   if (!trimmedToken.startsWith('devin-session-token$')) {
-    ElMessage.error('session_token 必须以 devin-session-token$ 前缀开头');
+    ElMessage.error('session_token must start with devin-session-token$ prefix start');
     return;
   }
 
-  ElMessage.info('正在反查 Devin 账号信息……');
+  ElMessage.info('currentlyreverse lookup Devin Account Info……');
   const result = await devinApi.addAccountBySessionToken({
     sessionToken: trimmedToken,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
   if (result.success) {
-    ElMessage.success(`Devin 账号 ${result.email} 已通过 session_token 导入成功`);
+    ElMessage.success(`Devin Account ${result.email} Approved session_token Import successful`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || 'Session Token 迁入失败');
+    ElMessage.error(result.message || 'Session Token import intofailed');
   }
 }
 
 /**
- * Devin Auth1 Token 直接迁入流程
+ * Devin Auth1 Token Direct Importflow
  *
- * 与 handleDevinSessionSubmit 对称，但通过 auth1_token 换取 session_token 并额外保留 auth1_token，
- * 后续 Devin session 到期可直接用 refreshSession 刷新，无需重新手动获取 token。
+ * and handleDevinSessionSubmit forcall，butvia auth1_token exchange for session_token  and extrakeep auth1_token，
+ * subsequent Devin session toperiodcandirectlyuse refreshSession Refresh，noneedre-manuallyfetch token。
  *
- * 多组织场景：后端返回 { requires_org_selection, email, auth1_token, orgs }，
- * 前端弹 promptOrgSelection → 调 addAccountWithOrg 完成落库（复用 handleDevinSubmit 的交互）。
+ * multiplegrouporgscenario：backendBack { requires_org_selection, email, auth1_token, orgs }，
+ * beforesidepopup promptOrgSelection → call addAccountWithOrg Donepersist to DB（complexuse handleDevinSubmit 交互）。
  */
 async function handleDevinAuth1Submit() {
   const trimmedToken = formData.auth1Token.trim();
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!trimmedToken) {
-    ElMessage.error('Auth1 Token 不能为空');
+    ElMessage.error('Auth1 Token cannot be empty');
     return;
   }
   if (!trimmedToken.startsWith('auth1_')) {
-    ElMessage.error('auth1_token 必须以 auth1_ 前缀开头');
+    ElMessage.error('auth1_token must start with auth1_ prefix start');
     return;
   }
 
-  ElMessage.info('正在用 auth1_token 换取 session 并反查账号信息……');
+  ElMessage.info('currentlyuse auth1_token exchange for session  and reverse lookupAccount Info……');
   const result = await devinApi.addAccountByAuth1Token({
     auth1Token: trimmedToken,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
-  // 分支 1：多组织，需用户二次选择
+  // branch 1：multiplegrouporg，needUsersecondaryselect
   if (result.requires_org_selection && result.auth1_token && result.orgs && result.email) {
     const chosenOrg = await promptOrgSelection(result.orgs);
     if (!chosenOrg) {
-      ElMessage.info('已取消多组织选择');
+      ElMessage.info('Multi-organization selection cancelled');
       return;
     }
 
@@ -1182,35 +1182,35 @@ async function handleDevinAuth1Submit() {
       orgId: chosenOrg,
       nickname: trimmedNickname,
       tags: formData.tags,
-      group: formData.group || '默认分组',
+      group: formData.group || 'Default Group',
     });
 
     if (confirmResult.success) {
-      ElMessage.success(`Devin 账号 ${result.email} 已通过 auth1_token 导入成功`);
+      ElMessage.success(`Devin Account ${result.email} Approved auth1_token Import successful`);
       await accountsStore.loadAccounts();
       handleClose();
     } else {
-      ElMessage.error(confirmResult.message || '组织选择后创建账号失败');
+      ElMessage.error(confirmResult.message || 'Failed to create account after organization selection');
     }
     return;
   }
 
-  // 分支 2：直接成功
+  // branch 2：Direct success
   if (result.success) {
-    ElMessage.success(`Devin 账号 ${result.email} 已通过 auth1_token 导入成功`);
+    ElMessage.success(`Devin Account ${result.email} Approved auth1_token Import successful`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || 'Auth1 Token 迁入失败');
+    ElMessage.error(result.message || 'Auth1 Token import intofailed');
   }
 }
 
 /**
- * Devin 账密登录的完整流程
+ * Devin credentialsLogincompleteflow
  *
- * 1. 调用 addAccountByLogin
- * 2. 若返回 requires_org_selection=true，弹出组织选择对话框
- * 3. 用户选择后调用 addAccountWithOrg 完成创建
+ * 1. call addAccountByLogin
+ * 2. ifBack requires_org_selection=true，popupgrouporgselectDialog
+ * 3. Userselectaftercall addAccountWithOrg Donecreate
  */
 async function handleDevinSubmit() {
   const trimmedEmail = formData.email.trim();
@@ -1218,7 +1218,7 @@ async function handleDevinSubmit() {
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!trimmedEmail || !trimmedPassword) {
-    ElMessage.error('邮箱和密码不能为空');
+    ElMessage.error('Email and Passwordcannot be empty');
     return;
   }
 
@@ -1227,14 +1227,14 @@ async function handleDevinSubmit() {
     password: trimmedPassword,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
-  // 分支 1：需要选择组织
+  // branch 1：Organization selection required
   if (result.requires_org_selection && result.auth1_token && result.orgs) {
     const chosenOrg = await promptOrgSelection(result.orgs);
     if (!chosenOrg) {
-      ElMessage.info('已取消多组织选择');
+      ElMessage.info('Multi-organization selection cancelled');
       return;
     }
 
@@ -1244,36 +1244,36 @@ async function handleDevinSubmit() {
       orgId: chosenOrg,
       nickname: trimmedNickname,
       tags: formData.tags,
-      group: formData.group || '默认分组',
+      group: formData.group || 'Default Group',
     });
 
     if (confirmResult.success) {
-      ElMessage.success(`Devin 账号 ${trimmedEmail} 添加成功`);
+      ElMessage.success(`Devin Account ${trimmedEmail} Added successfully`);
       await accountsStore.loadAccounts();
       handleClose();
     } else {
-      ElMessage.error(confirmResult.message || '组织选择后创建账号失败');
+      ElMessage.error(confirmResult.message || 'Failed to create account after organization selection');
     }
     return;
   }
 
-  // 分支 2：直接成功
+  // branch 2：Direct success
   if (result.success) {
-    ElMessage.success(`Devin 账号 ${result.email} 添加成功`);
+    ElMessage.success(`Devin Account ${result.email} Added successfully`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || 'Devin 登录失败');
+    ElMessage.error(result.message || 'Devin Login failed');
   }
 }
 
 /**
- * 多组织选择对话框
+ * multiplegrouporgselectDialog
  *
- * 使用 ElMessageBox 以最小依赖实现，返回用户选择的 org_id 或 null（取消）
+ * use ElMessageBox toMindependimplement，BackUserselect org_id  or  null（Cancel）
  */
 async function promptOrgSelection(orgs: WindsurfOrg[]): Promise<string | null> {
-  // 构建选项 HTML（Element Plus 的 MessageBox 支持 dangerouslyUseHTMLString）
+  // buildoption HTML（Element Plus  MessageBox support dangerouslyUseHTMLString）
   const optionsHtml = orgs
     .map(
       (org, i) => `
@@ -1281,7 +1281,7 @@ async function promptOrgSelection(orgs: WindsurfOrg[]): Promise<string | null> {
           <label style="display: flex; align-items: center; cursor: pointer;">
             <input type="radio" name="devin-org" value="${escapeHtml(org.id)}" ${i === 0 ? 'checked' : ''} style="margin-right: 8px;" />
             <div>
-              <div style="font-weight: 600;">${escapeHtml(org.name) || '(未命名组织)'}</div>
+              <div style="font-weight: 600;">${escapeHtml(org.name) || '(notnamednamegrouporg)'}</div>
               <div style="font-size: 11px; color: #909399; font-family: monospace;">${escapeHtml(org.id)}</div>
             </div>
           </label>
@@ -1292,12 +1292,12 @@ async function promptOrgSelection(orgs: WindsurfOrg[]): Promise<string | null> {
 
   try {
     await ElMessageBox({
-      title: `该账号属于 ${orgs.length} 个组织，请选择`,
+      title: `theAccountbelongs to ${orgs.length} grouporg，Please select`,
       message: `<div id="devin-org-picker">${optionsHtml}</div>`,
       dangerouslyUseHTMLString: true,
       showCancelButton: true,
-      confirmButtonText: '选择此组织',
-      cancelButtonText: '取消',
+      confirmButtonText: 'selectthisgrouporg',
+      cancelButtonText: 'Cancel',
       closeOnClickModal: false,
     });
 
@@ -1310,7 +1310,7 @@ async function promptOrgSelection(orgs: WindsurfOrg[]): Promise<string | null> {
   }
 }
 
-/** 转义 HTML 以避免 XSS */
+/** escape HTML toavoid XSS */
 function escapeHtml(s: string): string {
   return (s || '')
     .replace(/&/g, '&amp;')
@@ -1321,20 +1321,20 @@ function escapeHtml(s: string): string {
 }
 
 /**
- * 切换到「Devin 邮箱验证码」模式并自动发送验证码
+ * Switchto「Devin Email Verification Code」Mode and autoSend Verification Code
  *
- * 供智能识别分派失败时的快捷引导：保留用户已输入的邮箱，
- * 自动切换 addMode、重置 step=0、马上发送验证码，进入 step=1等待用户输入。
+ * 供Smart Detectiondispatchfailedwhenshortcut guide：keepUserEnteredEmail，
+ * autoSwitch addMode、Reset step=0、immediatelyonSend Verification Code，enter step=1waitUserinput。
  *
- * - `flow = 'login'`（默认）：登录已有无密码账号（no_password / sso 分派使用）
- * - `flow = 'signup'`：注册新账号（not_found 分派使用）
+ * - `flow = 'login'`（default）：Loginalready hasnoPasswordAccount（no_password / sso dispatchuse）
+ * - `flow = 'signup'`：Register New Account（not_found dispatchuse）
  *
- * 外层 handleSmartSubmit 已在 validate 回调内 `loading = true`，本函数无需再管理。
+ * outer layer handleSmartSubmit already in validate backcallinside `loading = true`，thisfunctioncountnoneedagainManagement。
  */
 async function switchToEmailCodeModeAndSend(flow: 'login' | 'signup' = 'login') {
   addMode.value = 'devin_email_code';
-  // smart 分派进入的场景都是 Windsurf 侧（sniff_login_method 只探测 windsurf.com 侧的登录方式），
-  // 合并卡默认 source='devin_native' 会走错端口，此处必须强制置为 'windsurf_side'
+  // smart dispatchenterscenarioallis Windsurf  side（sniff_login_method only探测 windsurf.com  sideLogin Method），
+  // merge carddefault source='devin_native' willuse错port，this处mustforcesetas 'windsurf_side'
   devinEmailCodeSource.value = 'windsurf_side';
   devinEmailCodeFlow.value = flow;
   devinEmailCodeStep.value = 0;
@@ -1342,98 +1342,98 @@ async function switchToEmailCodeModeAndSend(flow: 'login' | 'signup' = 'login') 
   formData.devinEmailCodeOtp = '';
   formData.devinEmailCodePassword = '';
   formData.devinEmailCodeName = '';
-  // formData.email 保留，不清空
+  // formData.email keep，notClear
 
-  // 等模式切换后再发验证码（避免 currentRules 切换时的瑕疵触发 validate）
+  // etc.ModeSwitchafteragainsendVerification Code（avoid currentRules Switchwhenflawtrigger validate）
   await nextTick();
   await sendDevinEmailCode();
 }
 
 /**
- * Devin 邮箱验证码合并卡 —— 第 1 步：按 source 分派发验证码
+ * Devin Email Verification Codemerge card —— # 1 step：by source dispatchsendVerification Code
  *
- * - source=devin_native：走 `app.devin.ai/api/auth1/email/start(mode=signup)`
- *   账号主归属 Devin；只有 signup，不用分 login/signup
- * - source=windsurf_side：走 `windsurf.com/_devin-auth/email/start`。mode 按 flow 切：
- *     * login —— 仅对已存在账号有效，服务端不会创建新账号
- *     * signup —— 服务端向邮箱发送注册验证码，后续 `/email/complete` 时创建新账号
+ * - source=devin_native：use `app.devin.ai/api/auth1/email/start(mode=signup)`
+ *   Account Primary Attribution Devin；only when signup，no need to分 login/signup
+ * - source=windsurf_side：use `windsurf.com/_devin-auth/email/start`。mode by flow switch：
+ *     * login —— only forAlready existsAccountvalid，servernotwillcreatenewAccount
+ *     * signup —— server toEmailsendRegisterVerification Code，subsequent `/email/complete` whencreatenewAccount
  *
- * 成功后更新 step=1，进入验证码输入屏。
+ * successfulafterUpdate step=1，enterVerification Codeinputscreen。
  */
 async function sendDevinEmailCode() {
   const trimmedEmail = formData.email.trim();
   if (!trimmedEmail) {
-    ElMessage.error('邮箱不能为空');
+    ElMessage.error('Emailcannot be empty');
     return;
   }
 
-  // 分支 1：Devin 原生—— app.devin.ai 端口，仅 signup
+  // branch 1：Devin native—— app.devin.ai port，only  signup
   if (devinEmailCodeSource.value === 'devin_native') {
     try {
-      const resp = await devinApi.nativeEmailStart(trimmedEmail, 'signup');
+      const resp = await devinApi.nativeEmailstart(trimmedEmail, 'signup');
       if (!resp || !resp.email_verification_token) {
-        ElMessage.error('后端未返回 email_verification_token，无法继续');
+        ElMessage.error('backendnotBack email_verification_token，nocannot continue');
         return;
       }
       devinEmailCodeEmailToken.value = resp.email_verification_token;
       devinEmailCodeStep.value = 1;
-      ElMessage.success(`Devin 原生注册验证码已发送至 ${trimmedEmail}`);
+      ElMessage.success(`Devin Native RegistrationVerification code sent to ${trimmedEmail}`);
     } catch (e: any) {
       const errMsg = String(e?.message || e || '');
-      ElMessage.error(`发送验证码失败：${errMsg}`);
+      ElMessage.error(`Send Verification Codefailed：${errMsg}`);
     }
     return;
   }
 
-  // 分支 2：Windsurf 侧—— windsurf.com/_devin-auth 端口，mode 按 flow 切
+  // branch 2：Windsurf  side—— windsurf.com/_devin-auth port，mode by flow switch
   const mode = devinEmailCodeFlow.value === 'signup' ? 'signup' : 'login';
   try {
-    const resp = await devinApi.emailStart(trimmedEmail, mode, 'Windsurf');
+    const resp = await devinApi.emailstart(trimmedEmail, mode, 'Windsurf');
     if (!resp || !resp.email_verification_token) {
-      ElMessage.error('后端未返回 email_verification_token，无法继续');
+      ElMessage.error('backendnotBack email_verification_token，nocannot continue');
       return;
     }
     devinEmailCodeEmailToken.value = resp.email_verification_token;
     devinEmailCodeStep.value = 1;
-    const hint = mode === 'signup' ? '注册验证码已发送至' : '验证码已发送至';
+    const hint = mode === 'signup' ? 'RegisterVerification code sent to' : 'Verification code sent to';
     ElMessage.success(`${hint} ${trimmedEmail}`);
   } catch (e: any) {
     const errMsg = String(e?.message || e || '');
-    // login flow 遇到服务端“账号不存在”判定时，引导用户改为 signup flow 并自动重试
-    // 覆盖三种场景：
-    // 1) radio 主入口直选 devin_email_code 但输入了未注册邮箱
-    // 2) sniff_login_method 给出的 no_password / sso 判定与 /email/start 不一致
-    // 3) 账号刚被删除/迁移，CheckUserLoginMethod 仍有缓存但 /email/start 已同步
+    // login flow meettoserver“Account does not exist”determinewhen，guideUserchangeas signup flow  and autoretry
+    // coverthree typesscenario：
+    // 1) radio primary入口directselect devin_email_code butinputnotRegisterEmail
+    // 2) sniff_login_method giveout no_password / sso determineand /email/start inconsistent
+    // 3) AccountjustwasDelete/migrate，CheckUserLoginMethod stillhascachebut /email/start Synced
     if (mode === 'login' && /no account found/i.test(errMsg)) {
       try {
         await ElMessageBox.confirm(
-          `服务端判定此邮箱尚未注册 Devin 账号：\n${errMsg}\n\n是否改为「邮箱验证码注册」创建新账号？下一步需要设置密码。`,
-          '账号不存在',
+          `serverdeterminethisEmailnot yetRegister Devin Account：\n${errMsg}\n\nwhetherchangeas「Email Verification CodeRegister」createnewAccount？NextneedSettingsPassword。`,
+          'Account does not exist',
           {
             type: 'warning',
-            confirmButtonText: '改为注册',
-            cancelButtonText: '我知道了',
+            confirmButtonText: 'changeasRegister',
+            cancelButtonText: 'OK',
           }
         );
-        // 切 flow 后递归一次；signup mode 不会再返回 No account found，不会无限循环
+        // switch flow afterrecursiveonce；signup mode notwillagainBack No account found，notwillunlimitedloop
         devinEmailCodeFlow.value = 'signup';
         await sendDevinEmailCode();
       } catch {
-        // 用户取消：保持在 step=0，提示原始错误以便用户修正邮箱或切换模式
-        ElMessage.info('已取消。请确认邮箱是否正确，或改用其它添加方式。');
+        // UserCancel：maintainin step=0，NoticeoriginalErrorto便UsercorrectEmail or SwitchMode
+        ElMessage.info('Cancelled。pleaseConfirmEmailwhethercorrect， or changeuseotherAddmethod。');
       }
       return;
     }
-    ElMessage.error(`发送验证码失败：${errMsg}`);
+    ElMessage.error(`Send Verification Codefailed：${errMsg}`);
   }
 }
 
 /**
- * Devin 邮箱验证码登录—— 第 2 步：提交验证码，完成登录并建账号
+ * Devin Email Verification CodeLogin—— # 2 step：SubmitVerification Code，DoneLogin and buildAccount
  *
- * - 未设密码的 Devin 账号要走「/email/complete mode=login」，后端命令为
- *   `add_account_by_devin_email_login`（内部自动完成 WindsurfPostAuth + enrich）
- * - 多组织场景复用 `promptOrgSelection` + `addAccountWithOrg`（与 handleDevinSubmit 同步一致）
+ * - notsetPassword Devin Accountneed touse「/email/complete mode=login」，backendcommandas
+ *   `add_account_by_devin_email_login`（internalautoDone WindsurfPostAuth + enrich）
+ * - multiplegrouporg scenario reuseuse `promptOrgSelection` + `addAccountWithOrg`（and handleDevinSubmit syncconsistent）
  */
 async function completeDevinEmailCodeLogin() {
   const trimmedEmail = formData.email.trim();
@@ -1441,11 +1441,11 @@ async function completeDevinEmailCodeLogin() {
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!otp) {
-    ElMessage.error('请输入验证码');
+    ElMessage.error('Please enter verification code');
     return;
   }
   if (!devinEmailCodeEmailToken.value) {
-    ElMessage.error('会话状态异常，请返回上一步重新发送验证码');
+    ElMessage.error('Session state error, please go back and resend verification code');
     return;
   }
 
@@ -1455,14 +1455,14 @@ async function completeDevinEmailCodeLogin() {
     code: otp,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
-  // 分支 1：需要选择组织
+  // branch 1：Organization selection required
   if (result.requires_org_selection && result.auth1_token && result.orgs) {
     const chosenOrg = await promptOrgSelection(result.orgs);
     if (!chosenOrg) {
-      ElMessage.info('已取消多组织选择');
+      ElMessage.info('Multi-organization selection cancelled');
       return;
     }
 
@@ -1472,34 +1472,34 @@ async function completeDevinEmailCodeLogin() {
       orgId: chosenOrg,
       nickname: trimmedNickname,
       tags: formData.tags,
-      group: formData.group || '默认分组',
+      group: formData.group || 'Default Group',
     });
 
     if (confirmResult.success) {
-      ElMessage.success(`Devin 账号 ${trimmedEmail} 添加成功`);
+      ElMessage.success(`Devin Account ${trimmedEmail} Added successfully`);
       await accountsStore.loadAccounts();
       handleClose();
     } else {
-      ElMessage.error(confirmResult.message || '组织选择后创建账号失败');
+      ElMessage.error(confirmResult.message || 'Failed to create account after organization selection');
     }
     return;
   }
 
-  // 分支 2：直接成功
+  // branch 2：Direct success
   if (result.success) {
-    ElMessage.success(`Devin 账号 ${result.email || trimmedEmail} 添加成功`);
+    ElMessage.success(`Devin Account ${result.email || trimmedEmail} Added successfully`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || '邮箱验证码登录失败');
+    ElMessage.error(result.message || 'Email Verification CodeLogin failed');
   }
 }
 
 /**
- * Devin 邮箱验证码注册—— 第 2 步：提交验证码 + 新密码 + 姓名，完成注册并建账号
+ * Devin Email Verification CodeRegister—— # 2 step：SubmitVerification Code + New Password + Name，Complete Registration and buildAccount
  *
- * - 调用后端 `add_account_by_devin_register`（内部自动完成注册 + WindsurfPostAuth + enrich）
- * - 多组织场景复用 `promptOrgSelection` + `addAccountWithOrg`（注册流程的原始密码会随二次写入账号卡的 password 字段）
+ * - callbackend `add_account_by_devin_register`（internalautoComplete Registration + WindsurfPostAuth + enrich）
+ * - multiplegrouporg scenario reuseuse `promptOrgSelection` + `addAccountWithOrg`（RegisterfloworiginalPasswordwill随secondarywrite入Accountcard password field）
  */
 async function completeDevinEmailCodeRegister() {
   const trimmedEmail = formData.email.trim();
@@ -1510,15 +1510,15 @@ async function completeDevinEmailCodeRegister() {
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!otp) {
-    ElMessage.error('请输入验证码');
+    ElMessage.error('Please enter verification code');
     return;
   }
   if (!newPassword) {
-    ElMessage.error('请设置新密码');
+    ElMessage.error('pleaseSettingsNew Password');
     return;
   }
   if (!devinEmailCodeEmailToken.value) {
-    ElMessage.error('会话状态异常，请返回上一步重新发送验证码');
+    ElMessage.error('Session state error, please go back and resend verification code');
     return;
   }
 
@@ -1530,58 +1530,58 @@ async function completeDevinEmailCodeRegister() {
     name: displayName,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
-  // 分支 1：需要选择组织
+  // branch 1：Organization selection required
   if (result.requires_org_selection && result.auth1_token && result.orgs) {
     const chosenOrg = await promptOrgSelection(result.orgs);
     if (!chosenOrg) {
-      ElMessage.info('已取消多组织选择');
+      ElMessage.info('Multi-organization selection cancelled');
       return;
     }
 
-    // 注册流程将原始密码随二次选组织入库，便于账号卡回显密码
+    // RegisterflowwilloriginalPassword随secondaryselectgrouporg入library，便于AccountcardbackshowPassword
     const confirmResult = await devinApi.addAccountWithOrg({
       email: trimmedEmail,
       auth1Token: result.auth1_token,
       orgId: chosenOrg,
       nickname: trimmedNickname,
       tags: formData.tags,
-      group: formData.group || '默认分组',
+      group: formData.group || 'Default Group',
       password: newPassword,
     });
 
     if (confirmResult.success) {
-      ElMessage.success(`Devin 账号 ${trimmedEmail} 注册成功`);
+      ElMessage.success(`Devin Account ${trimmedEmail} Registersuccessful`);
       await accountsStore.loadAccounts();
       handleClose();
     } else {
-      ElMessage.error(confirmResult.message || '组织选择后注册账号失败');
+      ElMessage.error(confirmResult.message || 'grouporgselectafterRegisterAccountfailed');
     }
     return;
   }
 
-  // 分支 2：直接注册成功
+  // branch 2：directlyRegistersuccessful
   if (result.success) {
-    ElMessage.success(`Devin 账号 ${result.email || trimmedEmail} 注册成功`);
+    ElMessage.success(`Devin Account ${result.email || trimmedEmail} Registersuccessful`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || '邮箱验证码注册失败');
+    ElMessage.error(result.message || 'Email Verification CodeRegisterfailed');
   }
 }
 
 /**
- * Devin 邮箱验证码合并卡（source=devin_native）—— 第 2 步：提交验证码完成注册 + 桥接 + 落库
+ * Devin Email Verification Codemerge card（source=devin_native）—— # 2 step：SubmitVerification CodeComplete Registration + bridge + persist to DB
  *
- * 调用后端 `add_account_by_devin_native_register`：
- * 1. `devin_app_email_complete(token, code, mode="signup")` → 得 auth1_token
- * 2. `WindsurfPostAuth(auth1_token, org_id)` → 得 session_token
- * 3. 落库为新账号（password 字段留空，因为 Devin 原生不收集密码）
+ * callbackend `add_account_by_devin_native_register`：
+ * 1. `devin_app_email_complete(token, code, mode="signup")` → get auth1_token
+ * 2. `WindsurfPostAuth(auth1_token, org_id)` → get session_token
+ * 3. persist to DBasnewAccount（password fieldleave empty，because Devin nativenotcollectPassword）
  *
- * 复用 `devinEmailCodeEmailToken` / `formData.devinEmailCodeOtp` 统一状态，不再维护独立的 devinNative* 字段。
- * 多组织场景复用 `promptOrgSelection` + `addAccountWithOrg`（与其他 Devin 注册流程一致）。
+ * complexuse `devinEmailCodeEmailToken` / `formData.devinEmailCodeOtp` unifyStatus，no longer维护independent devinNative* field。
+ * multiplegrouporg scenario reuseuse `promptOrgSelection` + `addAccountWithOrg`（andother Devin Registerflowconsistent）。
  */
 async function completeDevinEmailCodeNativeRegister() {
   const trimmedEmail = formData.email.trim();
@@ -1589,11 +1589,11 @@ async function completeDevinEmailCodeNativeRegister() {
   const trimmedNickname = formData.nickname.trim() || undefined;
 
   if (!otp) {
-    ElMessage.error('请输入验证码');
+    ElMessage.error('Please enter verification code');
     return;
   }
   if (!devinEmailCodeEmailToken.value) {
-    ElMessage.error('会话状态异常，请返回上一步重新发送验证码');
+    ElMessage.error('Session state error, please go back and resend verification code');
     return;
   }
 
@@ -1603,44 +1603,44 @@ async function completeDevinEmailCodeNativeRegister() {
     code: otp,
     nickname: trimmedNickname,
     tags: formData.tags,
-    group: formData.group || '默认分组',
+    group: formData.group || 'Default Group',
   });
 
-  // 分支 1：多组织，需用户二次选择
+  // branch 1：multiplegrouporg，needUsersecondaryselect
   if (result.requires_org_selection && result.auth1_token && result.orgs) {
     const chosenOrg = await promptOrgSelection(result.orgs);
     if (!chosenOrg) {
-      ElMessage.info('已取消多组织选择');
+      ElMessage.info('Multi-organization selection cancelled');
       return;
     }
 
-    // Devin 原生注册场景 password 始终留空（服务端不支持预设密码）
+    // Devin Native Registrationscenario password alwaysleave empty（servernotsupport预setPassword）
     const confirmResult = await devinApi.addAccountWithOrg({
       email: trimmedEmail,
       auth1Token: result.auth1_token,
       orgId: chosenOrg,
       nickname: trimmedNickname,
       tags: formData.tags,
-      group: formData.group || '默认分组',
+      group: formData.group || 'Default Group',
     });
 
     if (confirmResult.success) {
-      ElMessage.success(`Devin 原生账号 ${trimmedEmail} 注册成功（已桥接 Windsurf）`);
+      ElMessage.success(`Devin nativeAccount ${trimmedEmail} Registersuccessful（already bridge Windsurf）`);
       await accountsStore.loadAccounts();
       handleClose();
     } else {
-      ElMessage.error(confirmResult.message || '组织选择后注册账号失败');
+      ElMessage.error(confirmResult.message || 'grouporgselectafterRegisterAccountfailed');
     }
     return;
   }
 
-  // 分支 2：直接注册成功
+  // branch 2：directlyRegistersuccessful
   if (result.success) {
-    ElMessage.success(`Devin 原生账号 ${result.email || trimmedEmail} 注册成功（已桥接 Windsurf）`);
+    ElMessage.success(`Devin nativeAccount ${result.email || trimmedEmail} Registersuccessful（already bridge Windsurf）`);
     await accountsStore.loadAccounts();
     handleClose();
   } else {
-    ElMessage.error(result.message || 'Devin 原生注册失败');
+    ElMessage.error(result.message || 'Devin Native Registrationfailed');
   }
 }
 
@@ -1648,7 +1648,7 @@ function handleClose() {
   uiStore.closeAddAccountDialog();
   formRef.value?.resetFields();
   
-  // 重置表单数据
+  // Resetformdata
   formData.email = '';
   formData.password = '';
   formData.refreshToken = '';
@@ -1658,10 +1658,10 @@ function handleClose() {
   formData.devinEmailCodePassword = '';
   formData.devinEmailCodeName = '';
   formData.nickname = '';
-  formData.group = '默认分组';
+  formData.group = 'Default Group';
   formData.tags = [];
   addMode.value = 'smart';
-  // Devin 邮箱验证码合并卡状态重置
+  // Devin Email Verification Codemerge cardStatusReset
   devinEmailCodeSource.value = 'devin_native';
   devinEmailCodeStep.value = 0;
   devinEmailCodeEmailToken.value = '';
@@ -1670,13 +1670,13 @@ function handleClose() {
 </script>
 
 <style scoped>
-/* ==================== 添加方式卡片网格（紧凑版） ====================
- * 单行布局：icon + title(flex 1 可省略) + tag(可选) + check(仅选中时)
- * 说明文本仅以原生 tooltip 呈现（见模板 `:title="opt.desc"`），
- * 不占用纵向空间。
+/* ==================== Addmethodcardgrid（Compact） ====================
+ * singlerowlayout：icon + title(flex 1 can be omitted) + tag(Optional) + check(only selectedwhen)
+ * descriptiontextonly tonative tooltip render（see模板 `:title="opt.desc"`），
+ * notoccupyuseverticaltowardspace。
  */
 
-/* 外层 2 列网格，窄屏自动降为单列 */
+/* outer layer 2 columngrid，窄screenauto降assinglecolumn */
 .mode-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1684,7 +1684,7 @@ function handleClose() {
   width: 100%;
 }
 
-/* 单张卡片：单行 flex，矮版 34px */
+/* single cards：singlerow flex，mini 34px */
 .mode-card {
   display: flex;
   align-items: center;
@@ -1700,25 +1700,25 @@ function handleClose() {
   min-height: 34px;
 }
 
-/* 鼠标悬停：浅主色边框 + 极浅背景 */
+/* mouse hover: lightprimary色border + very lightbackground */
 .mode-card:hover {
   border-color: var(--el-color-primary-light-3);
   background-color: var(--el-color-primary-light-9);
 }
 
-/* 键盘 focus 态 */
+/* keyboard focus state */
 .mode-card:focus-visible {
   box-shadow: 0 0 0 2px var(--el-color-primary-light-5);
 }
 
-/* 选中态：主色边框 + 浅主色背景 + 外环 */
+/* selectedstate：primary色border + lightprimary色background + outer loop */
 .mode-card.is-active {
   border-color: var(--el-color-primary);
   background-color: var(--el-color-primary-light-9);
   box-shadow: 0 0 0 2px var(--el-color-primary-light-7);
 }
 
-/* 图标：紧凑版与文字基线对齐 */
+/* icon：Compactandtext基linealign */
 .mode-card__icon {
   flex-shrink: 0;
   font-size: 18px;
@@ -1727,7 +1727,7 @@ function handleClose() {
   height: 18px;
 }
 
-/* 标题：占用剩余空间单行省略；字号 13 避免在 2 列 ~220px 下频繁省略 */
+/* title：occupyuseRemainingspacesinglerow省略；character 13 avoidin 2 column ~220px underfrequently omit */
 .mode-card__title {
   flex: 1;
   min-width: 0;
@@ -1739,19 +1739,19 @@ function handleClose() {
   text-overflow: ellipsis;
 }
 
-/* 标签：不收缩，跟在标题后 */
+/* Tags：notshrink, followintitleafter */
 .mode-card__tag {
   flex-shrink: 0;
 }
 
-/* 选中勾选：内联放在最右，与 tag 并列；不再用 absolute 避免在紧凑高度下压到文字 */
+/* selectedhookselect：inline放inmostright，and tag  and column；no longeruse absolute avoidincompactheightunderpresstotext */
 .mode-card__check {
   flex-shrink: 0;
   font-size: 14px;
   color: var(--el-color-primary);
 }
 
-/* 窄屏降级：小窗下单列，避免标题 + 标签撑穷卡片 */
+/* 窄screen降level：smallwindowundersinglecolumn，avoidtitle + Tagspoor supportcard */
 @media (max-width: 520px) {
   .mode-grid {
     grid-template-columns: 1fr;

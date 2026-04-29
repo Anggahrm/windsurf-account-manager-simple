@@ -1,46 +1,46 @@
 // ============================================================
-// 本地账号管理类型
+// localAccount Managementtype
 // ============================================================
 
 /**
- * 带颜色的标签接口
+ * withcolorTagsAPI
  */
 export interface TagWithColor {
   name: string;
-  color: string; // RGBA格式，如 "rgba(255, 100, 100, 1)"
+  color: string; // RGBAformat，e.g. "rgba(255, 100, 100, 1)"
 }
 
 /**
- * 账户状态类型
+ * AccountStatustype
  */
 export type AccountStatusType = 'normal' | 'inactive' | 'disabled' | 'offline' | 'error';
 
 /**
- * 账号筛选条件
+ * Accountfilteritemsitem
  */
 export interface AccountFilter {
   group?: string;
   tags?: string[];
   search?: string;
-  // 高级筛选
-  remainingQuotaMin?: number;  // 剩余额度最小值
-  remainingQuotaMax?: number;  // 剩余额度最大值
-  totalQuotaMin?: number;      // 总额度最小值
-  totalQuotaMax?: number;      // 总额度最大值
-  expiryDaysMin?: number;      // 剩余天数最小值
-  expiryDaysMax?: number;      // 剩余天数最大值
-  // 日/周配额剩余百分比筛选（0-100，仅 billing_strategy === 2 (QUOTA) 的账号参与）
-  dailyQuotaPercentMin?: number;   // 日配额剩余% 最小值
-  dailyQuotaPercentMax?: number;   // 日配额剩余% 最大值
-  weeklyQuotaPercentMin?: number;  // 周配额剩余% 最小值
-  weeklyQuotaPercentMax?: number;  // 周配额剩余% 最大值
-  planNames?: string[];        // 套餐名称筛选
-  domains?: string[];          // 域名筛选
-  statuses?: AccountStatusType[];  // 状态筛选
+  // Advanced Filter
+  remainingQuotaMin?: number;  // Remaining QuotaMinvalue
+  remainingQuotaMax?: number;  // Remaining QuotaMaxvalue
+  totalQuotaMin?: number;      // Total QuotaMinvalue
+  totalQuotaMax?: number;      // Total QuotaMaxvalue
+  expiryDaysMin?: number;      // Days RemainingMinvalue
+  expiryDaysMax?: number;      // Days RemainingMaxvalue
+  // day/Weekly Quota Remainingpercentagefilter（0-100，only  billing_strategy === 2 (QUOTA) Accountparticipate）
+  dailyQuotaPercentMin?: number;   // Daily Quota % Minvalue
+  dailyQuotaPercentMax?: number;   // Daily Quota % Maxvalue
+  weeklyQuotaPercentMin?: number;  // Weekly Quota % Minvalue
+  weeklyQuotaPercentMax?: number;  // Weekly Quota % Maxvalue
+  planNames?: string[];        // PlanNamefilter
+  domains?: string[];          // Domainfilter
+  statuses?: AccountStatusType[];  // Statusfilter
 }
 
 /**
- * 分页配置
+ * Paginationconfig
  */
 export interface PaginationConfig {
   currentPage: number;
@@ -49,26 +49,26 @@ export interface PaginationConfig {
 }
 
 /**
- * 排序字段枚举
+ * sortfieldenum
  */
 export type SortField = 
-  | 'email'               // 邮箱/账户名称
-  | 'created_at'          // 创建时间
-  | 'used_quota'          // 已用积分
-  | 'remaining_quota'     // 剩余积分
-  | 'token_expires_at'    // Token过期时间
-  | 'subscription_expires_at'  // 订阅到期时间
-  | 'plan_name'           // 套餐类型
-  | 'daily_quota_remaining'    // 日配额剩余% (仅 billing_strategy=2(QUOTA) 有效)
-  | 'weekly_quota_remaining';  // 周配额剩余% (仅 billing_strategy=2(QUOTA) 有效)
+  | 'email'               // Email/AccountName
+  | 'created_at'          // Created At
+  | 'used_quota'          // Used Credits
+  | 'remaining_quota'     // Remaining Credits
+  | 'token_expires_at'    // Token ExpiresTime
+  | 'subscription_expires_at'  // Subscription ExpiresTime
+  | 'plan_name'           // Plan Type
+  | 'daily_quota_remaining'    // Daily Quota % (only  billing_strategy=2(QUOTA) valid)
+  | 'weekly_quota_remaining';  // Weekly Quota % (only  billing_strategy=2(QUOTA) valid)
 
 /**
- * 排序方向枚举
+ * sortsidetowardenum
  */
 export type SortDirection = 'asc' | 'desc';
 
 /**
- * 排序配置
+ * sort config
  */
 export interface SortConfig {
   field: SortField;
@@ -81,58 +81,58 @@ export interface Account {
   password?: string; // Optional for updates
   nickname: string;
   tags: string[];
-  tagColors?: TagWithColor[]; // 带颜色的标签
+  tagColors?: TagWithColor[]; // withcolorTags
   group?: string;
   token?: string;
-  refresh_token?: string; // Refresh Token（用于刷新 access_token）
+  refresh_token?: string; // Refresh Token（used forRefresh access_token）
   token_expires_at?: string;
   last_seat_count?: number;
   created_at: string;
   last_login_at?: string;
   status: 'active' | 'inactive' | 'error';
-  // 配额和套餐信息（从API获取）
+  // Quota and PlanInfo（fromAPIfetch）
   plan_name?: string;
   used_quota?: number;
   total_quota?: number;
   last_quota_update?: string;
-  // 订阅到期时间
+  // Subscription ExpiresTime
   subscription_expires_at?: string;
-  // 订阅是否激活 (从 GetCurrentUser API 的 team_info.subscription_active 获取)
+  // Subscriptionwhetheractivate (from GetCurrentUser API  team_info.subscription_active fetch)
   subscription_active?: boolean;
-  // Windsurf API Key (从 GetCurrentUser API 的 user.api_key 获取)
+  // Windsurf API Key (from GetCurrentUser API  user.api_key fetch)
   windsurf_api_key?: string;
-  // 账户是否被禁用 (从 GetCurrentUser API 的 user.disable_codeium 获取)
+  // AccountwhetherwasDisable (from GetCurrentUser API  user.disable_codeium fetch)
   is_disabled?: boolean;
-  // 是否为团队所有者（Admin角色，有团队成员的主账号）
+  // whether it isTeamall者（AdminRole，hasTeam MembersprimaryAccount）
   is_team_owner?: boolean;
-  // 计费策略 (0=UNSPECIFIED, 1=CREDITS, 2=QUOTA, 3=ACU)
+  // Billing Strategy (0=UNSPECIFIED, 1=CREDITS, 2=QUOTA, 3=ACU)
   billing_strategy?: number;
-  // 日配额剩余百分比 (0-100，仅 billing_strategy=2(QUOTA) 时有效)
+  // Daily Quota Remainingpercentage (0-100，only  billing_strategy=2(QUOTA) whenvalid)
   daily_quota_remaining_percent?: number;
-  // 周配额剩余百分比 (0-100，仅 billing_strategy=2(QUOTA) 时有效)
+  // Weekly Quota Remainingpercentage (0-100，only  billing_strategy=2(QUOTA) whenvalid)
   weekly_quota_remaining_percent?: number;
-  // 日配额重置时间 (Unix时间戳秒)
+  // Daily QuotaResetTime (UnixTimetimestampseconds)
   daily_quota_reset_at_unix?: number;
-  // 周配额重置时间 (Unix时间戳秒)
+  // Weekly QuotaResetTime (UnixTimetimestampseconds)
   weekly_quota_reset_at_unix?: number;
-  // 额外使用余额 (微美元，除以1e6得到美元)
+  // extrause余额 (微USD，divide by1e6gettoUSD)
   overage_balance_micros?: number;
-  // 自定义排序顺序（用于拖拽排序）
+  // customsortorder（used forDrag to reorder）
   sortOrder?: number;
 
-  // ==================== Devin Session 认证字段 ====================
-  /** Devin 一级认证令牌（可用于再次换取 session_token） */
+  // ==================== Devin Session authfield ====================
+  /** Devin onelevelauthToken（canused foragaintimeexchange for session_token） */
   devin_auth1_token?: string;
-  /** Devin 账号 ID（格式：account-<32 字符十六进制>） */
+  /** Devin Account ID（format：account-<32 character十六进制>） */
   devin_account_id?: string;
-  /** Devin 主组织 ID */
+  /** Devin Primary Org ID */
   devin_primary_org_id?: string;
-  /** 认证提供方："firebase"（默认旧体系）或 "devin"（Devin Session 新体系） */
+  /** auth提供side："firebase"（defaultoldsystem） or  "devin"（Devin Session newsystem） */
   auth_provider?: 'firebase' | 'devin';
 }
 
 /**
- * Devin 组织条目
+ * Devin grouporgitemsitem
  */
 export interface WindsurfOrg {
   id: string;
@@ -140,24 +140,24 @@ export interface WindsurfOrg {
 }
 
 /**
- * `devin_email_start` 的响应结构：发送邮箱验证码的底层接口
+ * `devin_email_start` responsestructure：sendEmail Verification Codelow-level API
  *
- * 服务端向邮箱发送 6 位验证码，并回传 `email_verification_token`，供后续
- * `/email/complete` 流程（登录 / 注册 / 忘记密码）作为会话凭证使用。
+ * server toEmailsend 6 -digit verification code， and callback `email_verification_token`，for subsequent
+ * `/email/complete` flow（Login / Register / forgetPassword）makeassessioncredentialuse。
  */
-export interface EmailStartResponse {
+export interface EmailstartResponse {
   email_verification_token: string;
   [key: string]: any;
 }
 
 /**
- * `devin_check_connections` / `devin_app_check_connections` 的响应结构
+ * `devin_check_connections` / `devin_app_check_connections` responsestructure
  *
- * 查询邮箱在 Devin 侧（Windsurf 同源或 app.devin.ai 原生）可用的连接方式。
- * 原始 JSON 透传在 `connections` / `auth_method` 等字段中；服务端可能返回额外字段。
+ * queryEmailin Devin  side（Windsurf same源 or  app.devin.ai native）canuseconnectmethod。
+ * original JSON 透passin `connections` / `auth_method` etc.fieldin；serverpossiblyBackextrafield。
  */
 export interface ConnectionsResponse {
-  /** 可用的连接方式列表（`email` / `google` / `github` / `windsurf-bridge` / SSO 等） */
+  /** canuseconnectmethodList（`email` / `google` / `github` / `windsurf-bridge` / SSO etc.） */
   connections?: Array<{
     id: string | null;
     type: string;
@@ -165,9 +165,9 @@ export interface ConnectionsResponse {
     client_id: string | null;
     [key: string]: any;
   }>;
-  /** 邮箱的认证方法判定 */
+  /** Emailauthmethoddetermine */
   auth_method?: {
-    /** `"not_found"` | `"auth1"` | 其他 */
+    /** `"not_found"` | `"auth1"` | other */
     method?: string;
     has_password?: boolean;
     sso_connections?: any[] | null;
@@ -177,23 +177,23 @@ export interface ConnectionsResponse {
 }
 
 /**
- * `devin_password_login` / `devin_email_complete` / `devin_app_email_complete` 的响应结构
+ * `devin_password_login` / `devin_email_complete` / `devin_app_email_complete` responsestructure
  *
- * 实测响应：`{ "token": "auth1_<52>", "user_id": "user-<32>", "email": "..." }`
- * 字段别名同时兼容 `auth1_token` / `account_id` 等历史命名。
+ * 实测response：`{ "token": "auth1_<52>", "user_id": "user-<32>", "email": "..." }`
+ * fieldothernamesamewhencompatible `auth1_token` / `account_id` etc.historynamedname。
  */
 export interface DevinPasswordLoginResponse {
-  /** 一级认证令牌（格式：`auth1_<52 字符随机>`） */
+  /** onelevelauthToken（format：`auth1_<52 characterrandom>`） */
   auth1_token: string;
-  /** Devin 账号/用户 ID（格式：`user-<32 字符>`） */
+  /** Devin Account/User ID（format：`user-<32 character>`） */
   account_id?: string | null;
-  /** 服务端回显的邮箱 */
+  /** serverbackshowEmail */
   email?: string | null;
   [key: string]: any;
 }
 
 /**
- * add_account_by_devin_login / add_account_by_devin_email_login 的响应结构
+ * add_account_by_devin_login / add_account_by_devin_email_login responsestructure
  */
 export interface DevinLoginResult {
   success: boolean;
@@ -211,9 +211,9 @@ export interface DevinLoginResult {
 }
 
 /**
- * CheckUserLoginMethod 的响应（Firebase 侧对邮箱的登录方式判断）
+ * CheckUserLoginMethod response（Firebase  sideforEmailLogin Methodjudge）
  *
- * 对应 `exa.seat_management_pb.SeatManagementService/CheckUserLoginMethod`
+ * corresponding `exa.seat_management_pb.SeatManagementService/CheckUserLoginMethod`
  */
 export interface CheckUserLoginMethodResult {
   redirect_url: string;
@@ -224,14 +224,14 @@ export interface CheckUserLoginMethodResult {
 }
 
 /**
- * 登录流派嗅探推荐值
+ * Loginprovider typedetectionrecommendvalue
  *
- * - `"firebase"`    — 老 Firebase 账号 + 已设密码，走 Firebase 邮箱密码登录
- * - `"devin"`       — 已迁移或新 Auth1 账号，走 Devin 账密登录
- * - `"sso"`         — 挂接企业 SSO，必须在浏览器中完成 SSO 跳转
- * - `"no_password"` — 老账号仅用过 Google/GitHub，需用 OAuth 或先重置密码
- * - `"not_found"`   — 邮箱两侧都不存在，需先注册
- * - `"blocked"`     — 企业用户被限制普通登录
+ * - `"firebase"`    — old Firebase Account + already setPassword，use Firebase Email/PasswordLogin
+ * - `"devin"`       — already migrate or new Auth1 Account，use Devin credentialsLogin
+ * - `"sso"`         — 挂接Enterprise SSO，must be inbrowserinDone SSO redirect
+ * - `"no_password"` — oldAccountonly usepass Google/GitHub，needuse OAuth  or firstResetPassword
+ * - `"not_found"`   — Emailtwo sideallnotsavein，needfirstRegister
+ * - `"blocked"`     — EnterpriseUserwaslimitnormalLogin
  */
 export type LoginMethodRecommendation =
   | 'firebase'
@@ -242,154 +242,154 @@ export type LoginMethodRecommendation =
   | 'blocked';
 
 /**
- * 登录流派嗅探聚合结果
+ * Loginprovider typedetectionaggregateresult
  *
- * 由后端 `sniff_login_method` Tauri 命令返回，聚合：
- * - Firebase 侧 `CheckUserLoginMethod`
- * - Devin 侧 `/_devin-auth/connections`
+ * bybackend `sniff_login_method` Tauri commandBack，aggregate：
+ * - Firebase  side `CheckUserLoginMethod`
+ * - Devin  side `/_devin-auth/connections`
  */
 export interface LoginMethodSniffResult {
-  /** 建议的登录流派 */
+  /** build议Loginprovider type */
   recommended: LoginMethodRecommendation;
-  /** 面向人的理由说明，可直接展给 UI */
+  /** sidetowardperson理bydescription，candirectly展give UI */
   reason: string;
 
-  // ==== Firebase(WS) 侧原始判定 ====
+  // ==== Firebase(WS)  sideoriginaldetermine ====
   user_exists: boolean;
   is_migrated: boolean;
   has_password: boolean;
   redirect_url: string | null;
   disallow_enterprise: boolean;
 
-  // ==== Devin 侧原始判定 ====
-  /** Devin `/connections` 返回的原始 JSON，接口失败或邮箱不存在时为 null */
+  // ==== Devin  sideoriginaldetermine ====
+  /** Devin `/connections` Backoriginal JSON，APIfailed or Emailnotsaveinwhenas null */
   devin_connections: Record<string, any> | null;
-  /** Devin 侧 `method` 字段：`"auth1"` | `"not_found"` | null */
+  /** Devin  side `method` field：`"auth1"` | `"not_found"` | null */
   devin_method: string | null;
-  /** Devin 侧 `has_password` 字段 */
+  /** Devin  side `has_password` field */
   devin_has_password: boolean | null;
-  /** Devin 侧 `sso_connections` 数组是否非空 */
+  /** Devin  side `sso_connections` countgroupwhethernon-empty */
   has_sso_connection: boolean;
 }
 
 // ============================================================
-// GetCurrentUser API 响应类型（与后端 proto_parser.rs 保持一致）
+// GetCurrentUser API responsetype（with backend proto_parser.rs maintainconsistent）
 // ============================================================
 
 /**
- * 用户基本信息 (seat_management_pb.User)
- * 对应后端 UserBasicInfo 结构体
+ * UserBasic Info (seat_management_pb.User)
+ * corresponds to backend UserBasicInfo struct
  */
 export interface UserBasicInfo {
-  api_key: string;           // field 1: API Key (UUID格式，用于API调用身份识别)
-  name: string;              // field 2: 用户显示名称
-  email: string;             // field 3: 邮箱
-  id: string;                // field 6: Firebase UID (用户唯一标识)
-  team_id: string;           // field 7: 所属团队ID
-  team_status: number;       // field 8: UserTeamStatus (0=未指定,1=待定,2=已批准,3=已拒绝)
-  username: string;          // field 9: 用户名 (如 righteously-handsome-kite-82267)
-  timezone: string;          // field 10: 时区 (如 Asia/Shanghai)
-  public_profile_enabled: boolean;  // field 11: 是否公开资料
-  pro: boolean;              // field 13: 是否Pro用户
-  disable_codeium: boolean;  // field 16: 是否禁用Codeium
-  newsletter: boolean;       // field 19: 是否订阅邮件
-  disabled_telemetry: boolean; // field 20: 是否禁用遥测
-  signup_stage?: string;     // field 22: 注册阶段
-  used_trial: boolean;       // field 25: 是否已使用试用
-  used_prompt_credits: number; // field 28: 已用Prompt积分
-  used_flow_credits: number;   // field 29: 已用Flow积分
-  referral_code?: string;    // field 30: 推荐码
-  // Timestamp fields (Unix秒级时间戳)
-  signup_time?: number;              // field 4: 注册时间
-  last_update_time?: number;         // field 5: 最后更新时间
-  first_windsurf_use_time?: number;  // field 26: 首次使用Windsurf时间
-  windsurf_pro_trial_end_time?: number; // field 27: Pro试用结束时间
+  api_key: string;           // field 1: API Key (UUIDformat，used forAPIcallidentityidentify)
+  name: string;              // field 2: UserdisplayName
+  email: string;             // field 3: Email
+  id: string;                // field 6: Firebase UID (Userunique标识)
+  team_id: string;           // field 7: 所属TeamID
+  team_status: number;       // field 8: UserTeamStatus (0=Not specified,1=pending,2=Approved,3=Rejected)
+  username: string;          // field 9: Username (e.g. righteously-handsome-kite-82267)
+  timezone: string;          // field 10: timezone (e.g. Asia/Shanghai)
+  public_profile_enabled: boolean;  // field 11: whetherpublic information
+  pro: boolean;              // field 13: whetherProUser
+  disable_codeium: boolean;  // field 16: whetherDisableCodeium
+  newsletter: boolean;       // field 19: whetherSubscriptionemail
+  disabled_telemetry: boolean; // field 20: whetherDisabletelemetry
+  signup_stage?: string;     // field 22: Registerstage
+  used_trial: boolean;       // field 25: whetherUsedtrial
+  used_prompt_credits: number; // field 28: UsedPromptCredits
+  used_flow_credits: number;   // field 29: UsedFlowCredits
+  referral_code?: string;    // field 30: Referral Code
+  // Timestamp fields (UnixsecondslevelTimetimestamp)
+  signup_time?: number;              // field 4: Registration Time
+  last_update_time?: number;         // field 5: Last UpdatedTime
+  first_windsurf_use_time?: number;  // field 26: firsttimeuseWindsurfTime
+  windsurf_pro_trial_end_time?: number; // field 27: ProtrialendTime
 }
 
 /**
- * 团队信息 (seat_management_pb.Team)
- * 对应后端 TeamInfo 结构体
+ * TeamInfo (seat_management_pb.Team)
+ * corresponds to backend TeamInfo struct
  */
 export interface TeamInfo {
-  id: string;                        // field 1: 团队ID
-  name: string;                      // field 2: 团队名称
-  signup_time?: number;              // field 3: 团队创建时间
-  invite_id?: string;                // field 4: 邀请码ID
-  used_trial: boolean;               // field 5: 是否已使用试用
-  stripe_subscription_id?: string;   // field 6: Stripe订阅ID
-  subscription_active: boolean;      // field 7: 订阅是否激活
-  stripe_customer_id?: string;       // field 8: Stripe客户ID
-  current_billing_period_start?: number; // field 9: 计费周期开始时间
-  num_seats_current_billing_period: number; // field 10: 当前计费周期席位数
-  attribution_enabled: boolean;      // field 11: 是否启用归因
-  sso_provider_id?: string;          // field 12: SSO提供商ID
-  offers_enabled: boolean;           // field 13: 是否启用优惠
+  id: string;                        // field 1: TeamID
+  name: string;                      // field 2: Team Name
+  signup_time?: number;              // field 3: TeamCreated At
+  invite_id?: string;                // field 4: Invite CodeID
+  used_trial: boolean;               // field 5: whetherUsedtrial
+  stripe_subscription_id?: string;   // field 6: StripeSubscriptionID
+  subscription_active: boolean;      // field 7: Subscriptionwhetheractivate
+  stripe_customer_id?: string;       // field 8: StripecustomerID
+  current_billing_period_start?: number; // field 9: Billing CyclestartTime
+  num_seats_current_billing_period: number; // field 10: CurrentBilling CycleSeatcount
+  attribution_enabled: boolean;      // field 11: whetherEnableattribution
+  sso_provider_id?: string;          // field 12: SSOproviderID
+  offers_enabled: boolean;           // field 13: whetherEnableoptimal惠
   teams_tier: number;                // field 14: TeamsTier (1=Teams,2=Pro,3=Enterprise...)
-  flex_credit_quota: number;         // field 15: Flex积分配额
-  used_flow_credits: number;         // field 16: 已用Flow积分
-  used_prompt_credits: number;       // field 17: 已用Prompt积分
-  current_billing_period_end?: number; // field 18: 计费周期结束时间
-  num_cascade_seats: number;         // field 19: Cascade席位数
-  cascade_usage_month_start?: number; // field 20: Cascade使用月开始
-  cascade_usage_month_end?: number;   // field 21: Cascade使用月结束
-  cascade_seat_type: number;         // field 22: CascadeSeatType枚举
-  top_up_enabled: boolean;           // field 23: 是否启用充值
-  monthly_top_up_amount: number;     // field 24: 月度充值金额
-  top_up_spent: number;              // field 25: 已花费充值
-  top_up_increment: number;          // field 26: 充值增量
-  used_flex_credits: number;         // field 27: 已用Flex积分
-  num_users: number;                 // 团队成员数量
+  flex_credit_quota: number;         // field 15: FlexCreditsQuota
+  used_flow_credits: number;         // field 16: UsedFlowCredits
+  used_prompt_credits: number;       // field 17: UsedPromptCredits
+  current_billing_period_end?: number; // field 18: Billing CycleendTime
+  num_cascade_seats: number;         // field 19: CascadeSeatcount
+  cascade_usage_month_start?: number; // field 20: Cascadeusemonthstart
+  cascade_usage_month_end?: number;   // field 21: Cascadeusemonthend
+  cascade_seat_type: number;         // field 22: CascadeSeatTypeenum
+  top_up_enabled: boolean;           // field 23: whetherEnableRecharge
+  monthly_top_up_amount: number;     // field 24: monthlyRechargeamount
+  top_up_spent: number;              // field 25: already 花费Recharge
+  top_up_increment: number;          // field 26: Recharge增量
+  used_flex_credits: number;         // field 27: UsedFlexCredits
+  num_users: number;                 // Team MembersCount
 }
 
 /**
- * 套餐信息 (codeium_common_pb.PlanInfo)
- * 对应后端 PlanInfo 结构体
+ * PlanInfo (codeium_common_pb.PlanInfo)
+ * corresponds to backend PlanInfo struct
  */
 export interface PlanInfo {
-  teams_tier: number;                // field 1: TeamsTier枚举
-  plan_name: string;                 // field 2: 套餐名称 (如 "Teams")
-  has_autocomplete_fast_mode: boolean;  // field 3: 快速自动补全
-  allow_sticky_premium_models: boolean; // field 4: 允许使用高级模型
-  has_forge_access: boolean;         // field 5: Forge访问权限
-  max_num_premium_chat_messages: number; // field 6: 最大高级聊天消息数
-  max_num_chat_input_tokens: number;    // field 7: 最大聊天输入tokens
-  max_custom_chat_instruction_characters: number; // field 8: 最大自定义指令字符
-  max_num_pinned_context_items: number;  // field 9: 最大固定上下文项数
-  max_local_index_size: number;      // field 10: 最大本地索引大小
-  disable_code_snippet_telemetry: boolean; // field 11: 禁用代码片段遥测
-  monthly_prompt_credits: number;    // field 12: 月度Prompt积分
-  monthly_flow_credits: number;      // field 13: 月度Flow积分
-  monthly_flex_credit_purchase_amount: number; // field 14: 月度Flex积分购买额度
-  allow_premium_command_models: boolean; // field 15: 允许高级命令模型
-  is_enterprise: boolean;            // field 16: 是否企业版
-  is_teams: boolean;                 // field 17: 是否团队版
-  can_buy_more_credits: boolean;     // field 18: 是否可购买更多积分
-  cascade_web_search_enabled: boolean; // field 19: Cascade网络搜索
-  can_customize_app_icon: boolean;   // field 20: 可自定义应用图标
-  cascade_can_auto_run_commands: boolean; // field 22: Cascade可自动运行命令
-  has_tab_to_jump: boolean;          // field 23: Tab跳转功能
-  can_generate_commit_messages: boolean; // field 25: 可生成提交消息
-  max_unclaimed_sites: number;       // field 26: 最大未认领站点数
-  knowledge_base_enabled: boolean;   // field 27: 知识库功能
-  can_share_conversations: boolean;  // field 28: 可分享对话
-  can_allow_cascade_in_background: boolean; // field 29: 允许Cascade后台运行
-  browser_enabled: boolean;          // field 31: 浏览器功能
+  teams_tier: number;                // field 1: TeamsTierenum
+  plan_name: string;                 // field 2: PlanName (e.g. "Teams")
+  has_autocomplete_fast_mode: boolean;  // field 3: quickautoautocomplete
+  allow_sticky_premium_models: boolean; // field 4: allowuseAdvancedmodel
+  has_forge_access: boolean;         // field 5: ForgeaccessPermission
+  max_num_premium_chat_messages: number; // field 6: MaxAdvancedchatdaysMessages
+  max_num_chat_input_tokens: number;    // field 7: Maxchatdaysinputtokens
+  max_custom_chat_instruction_characters: number; // field 8: Maxcustom指令character
+  max_num_pinned_context_items: number;  // field 9: Maxfixedonundertextitemcount
+  max_local_index_size: number;      // field 10: Maxlocal索quotesize
+  disable_code_snippet_telemetry: boolean; // field 11: Disablecodecode片segmenttelemetry
+  monthly_prompt_credits: number;    // field 12: monthlyPromptCredits
+  monthly_flow_credits: number;      // field 13: monthlyFlowCredits
+  monthly_flex_credit_purchase_amount: number; // field 14: monthlyFlexCredits购买Quota
+  allow_premium_command_models: boolean; // field 15: allowAdvancedcommandmodel
+  is_enterprise: boolean;            // field 16: whetherEnterprise
+  is_teams: boolean;                 // field 17: whetherTeam
+  can_buy_more_credits: boolean;     // field 18: whethercan购买moremultipleCredits
+  cascade_web_search_enabled: boolean; // field 19: CascadenetworkSearch
+  can_customize_app_icon: boolean;   // field 20: cancustomapplyicon
+  cascade_can_auto_run_commands: boolean; // field 22: Cascadecanautoruncommand
+  has_tab_to_jump: boolean;          // field 23: TabredirectFeature
+  can_generate_commit_messages: boolean; // field 25: cangenerateSubmitmessage
+  max_unclaimed_sites: number;       // field 26: Maxnot认领站pointcount
+  knowledge_base_enabled: boolean;   // field 27: Knowledge BaseFeature
+  can_share_conversations: boolean;  // field 28: cansharedialog
+  can_allow_cascade_in_background: boolean; // field 29: allowCascadeafter台run
+  browser_enabled: boolean;          // field 31: browserFeature
 }
 
 /**
- * 用户角色信息 (seat_management_pb.UserRole)
- * 对应后端 UserRole 结构体
+ * UserRoleInfo (seat_management_pb.UserRole)
+ * corresponds to backend UserRole struct
  */
 export interface UserRole {
   api_key: string;           // field 1: API Key
-  roles: string[];           // field 2: 角色列表
-  role_id: string;           // field 3: 角色ID (如 "root.admin")
-  role_name: string;         // field 4: 角色名称 (如 "Admin")
+  roles: string[];           // field 2: RoleList
+  role_id: string;           // field 3: RoleID (e.g. "root.admin")
+  role_name: string;         // field 4: RoleName (e.g. "Admin")
 }
 
 /**
- * 订阅信息
- * 对应后端 SubscriptionInfo 结构体
+ * SubscriptionInfo
+ * corresponds to backend SubscriptionInfo struct
  */
 export interface SubscriptionInfo {
   id: string;
@@ -400,34 +400,34 @@ export interface SubscriptionInfo {
   usage: number;
   quota: number;
   used_quota: number;
-  expires_at?: number;       // Unix时间戳（秒）
+  expires_at?: number;       // UnixTimetimestamp（seconds）
   subscription_active: boolean;
   on_trial: boolean;
 }
 
 /**
- * GetCurrentUser API 完整响应
- * 对应后端 UserInfo 结构体
+ * GetCurrentUser API completeresponse
+ * corresponds to backend UserInfo struct
  */
 export interface UserDetails {
   user: UserBasicInfo;
-  roles?: string;                    // 角色字符串 (如 "root.admin")
+  roles?: string;                    // Rolestring (e.g. "root.admin")
   subscription?: SubscriptionInfo;
   plan?: PlanInfo;
-  role?: UserRole;                   // 角色详情
-  admin?: UserRole;                  // 兼容旧代码
+  role?: UserRole;                   // RoleDetails
+  admin?: UserRole;                  // compatibleoldcodecode
   is_root_admin: boolean;
   team?: TeamInfo;
-  permissions?: any;                 // 权限对象
-  plan_features?: any;               // 功能配置
+  permissions?: any;                 // Permissionforobject
+  plan_features?: any;               // Featureconfig
 }
 
 // ============================================================
-// 枚举类型定义
+// enumtype定义
 // ============================================================
 
 /**
- * 团队层级枚举 (codeium_common_pb.TeamsTier)
+ * Teamhierarchyenum (codeium_common_pb.TeamsTier)
  */
 export enum TeamsTier {
   UNSPECIFIED = 0,
@@ -444,7 +444,7 @@ export enum TeamsTier {
 }
 
 /**
- * 用户团队状态枚举 (codeium_common_pb.UserTeamStatus)
+ * UserTeamStatusenum (codeium_common_pb.UserTeamStatus)
  */
 export enum UserTeamStatus {
   UNSPECIFIED = 0,
@@ -454,7 +454,7 @@ export enum UserTeamStatus {
 }
 
 /**
- * Cascade席位类型枚举 (seat_management_pb.CascadeSeatType)
+ * CascadeSeattypeenum (seat_management_pb.CascadeSeatType)
  */
 export enum CascadeSeatType {
   UNSPECIFIED = 0,
@@ -470,42 +470,42 @@ export interface Settings {
   retry_times: number;
   theme: string;
   concurrent_limit: number;
-  show_seats_result_dialog: boolean;  // 是否显示座位更新结果对话框
-  autoOpenPaymentLinkInWebview?: boolean;  // 是否自动在内置浏览器中打开支付链接
-  autoFillPaymentForm?: boolean;  // 是否自动填写支付表单
-  autoSubmitPaymentForm?: boolean;  // 是否自动提交支付表单
-  paymentPageDelay?: number;  // 支付页面加载延迟（秒）
-  showVirtualCardInfo?: boolean;  // 是否显示虚拟卡信息弹窗
-  customCardBin?: string;  // 自定义卡头（4-12位数字）
-  customCardBinRange?: string;  // 卡段范围（如 626200-626300）
-  cardBindRetryTimes?: number;  // 绑卡失败重试次数
-  testModeEnabled?: boolean;  // 测试模式：自动收集成功的卡BIN
-  useLocalSuccessBins?: boolean;  // 使用本地成功BIN池
-  testModeLastBin?: string | null;  // 测试模式下上次使用的BIN（用于顺序遍历）
-  seamlessSwitchEnabled?: boolean;  // 是否启用无感换号
-  windsurfClientType?: 'windsurf' | 'windsurf-next';  // 客户端类型
-  windsurfPath?: string | null;  // Windsurf安装路径
-  patchBackupPath?: string | null;  // 补丁备份文件路径
-  autoOpenBrowser?: boolean;  // 是否自动打开浏览器
-  browserMode?: 'incognito' | 'normal';  // 浏览器模式
-  privacyMode?: boolean;  // 隐私模式，隐藏邮箱地址
-  unlimitedConcurrentRefresh?: boolean;  // 自动刷新Token时不限制并发数
-  proxyEnabled?: boolean;  // 是否启用代理
-  proxyUrl?: string | null;  // 代理地址 (如 http://127.0.0.1:7890)
-  useLightweightApi?: boolean;  // 使用轻量级API(GetPlanStatus)获取配额信息
-  subscriptionPlan?: number;  // 订阅计划: 0=Free, 1=Teams, 2=Pro, 3=Enterprise SaaS, 4=Hybrid, 5=Enterprise Self-Hosted, 6=Waitlist Pro, 7=Teams Ultimate, 8=Pro Ultimate, 9=Trial, 10=Enterprise Self-Serve, 11=Enterprise SaaS Pooled, 12=Devin Enterprise, 14=Devin Teams, 15=Devin Teams V2, 16=Devin Pro, 17=Devin Max, 18=Max, 19=Devin Free, 20=Devin Trial
-  paymentPeriod?: number;  // 支付周期: 1=月付, 2=年付
-  startTrial?: boolean;  // 是否以试用方式开始订阅
-  teamName?: string;  // Teams 计划的团队名称
-  seatCount?: number;  // Teams 计划的席位数量
+  show_seats_result_dialog: boolean;  // whetherdisplayseatUpdateresultDialog
+  autoOpenPaymentLinkInWebview?: boolean;  // whetherautoinbuilt-inbrowser opened inpaymentlink
+  autoFillPaymentForm?: boolean;  // whetherautofill inpaymentform
+  autoSubmitPaymentForm?: boolean;  // whetherautoSubmitpaymentform
+  paymentPageDelay?: number;  // paymentPageLoadingdelay（seconds）
+  showVirtualCardInfo?: boolean;  // whetherdisplayVirtual CardInfodialog
+  customCardBin?: string;  // customcard header（4-12-digit number）
+  customCardBinRange?: string;  // card range（e.g. 626200-626300）
+  cardBindRetryTimes?: number;  // bind cardfailedretry count
+  testModeEnabled?: boolean;  // testMode：autocollectsuccessfulcardBIN
+  useLocalSuccessBins?: boolean;  // uselocalsuccessfulBINpool
+  testModeLastBin?: string | null;  // testModeunderontimeuseBIN（used fororderiterate）
+  seamlessSwitchEnabled?: boolean;  // whetherEnableSeamless Switch
+  windsurfClientType?: 'windsurf' | 'windsurf-next';  // Clienttype
+  windsurfPath?: string | null;  // WindsurfInstall Path
+  patchBackupPath?: string | null;  // patchbackupfilepath
+  autoOpenBrowser?: boolean;  // whetherautoopenbrowser
+  browserMode?: 'incognito' | 'normal';  // browserMode
+  privacyMode?: boolean;  // privacyMode，hideEmailAddress
+  unlimitedConcurrentRefresh?: boolean;  // Auto RefreshTokenwhennotlimitconcurrentcount
+  proxyEnabled?: boolean;  // whetherEnableProxy
+  proxyUrl?: string | null;  // ProxyAddress (e.g. http://127.0.0.1:7890)
+  useLightweightApi?: boolean;  // uselightweightlevelAPI(GetPlanStatus)fetchQuotaInfo
+  subscriptionPlan?: number;  // Subscriptionplan: 0=Free, 1=Teams, 2=Pro, 3=Enterprise SaaS, 4=Hybrid, 5=Enterprise Self-Hosted, 6=Waitlist Pro, 7=Teams Ultimate, 8=Pro Ultimate, 9=Trial, 10=Enterprise Self-Serve, 11=Enterprise SaaS Pooled, 12=Devin Enterprise, 14=Devin Teams, 15=Devin Teams V2, 16=Devin Pro, 17=Devin Max, 18=Max, 19=Devin Free, 20=Devin Trial
+  paymentPeriod?: number;  // Payment Period: 1=Monthly, 2=Annually
+  startTrial?: boolean;  // whethertotrialmethodstartSubscription
+  teamName?: string;  // Teams planTeam Name
+  seatCount?: number;  // Teams planSeatCount
 }
 
 /**
- * 全局标签定义（带默认颜色）
+ * globalTags定义（withdefaultcolor）
  */
 export interface GlobalTag {
   name: string;
-  color: string; // 默认颜色，RGBA或HEX格式
+  color: string; // defaultcolor，RGBA or HEXformat
 }
 
 export interface OperationLog {
@@ -514,7 +514,7 @@ export interface OperationLog {
   account_id?: string;
   account_email?: string;
   operation_type: OperationType;
-  status: OperationStatus;
+  status: Operation status;
   message: string;
   details?: any;
 }
@@ -531,7 +531,7 @@ export type OperationType =
   | 'edit_account'
   | 'batch_operation';
 
-export type OperationStatus = 'success' | 'failed' | 'pending' | 'processing';
+export type Operation status = 'success' | 'failed' | 'pending' | 'processing';
 
 export interface UpdateSeatsResult {
   success: boolean;

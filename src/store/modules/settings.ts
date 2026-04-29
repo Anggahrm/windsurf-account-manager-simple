@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import type { Settings, OperationLog, GlobalTag } from '@/types';
 import { settingsApi } from '@/api';
 
-// 默认设置值
+// defaultSettingsvalue
 const defaultSettings: Partial<Settings> = {
   auto_refresh_token: true,
   seat_count_options: [18, 19, 20],
@@ -31,7 +31,7 @@ export const useSettingsStore = defineStore('settings', () => {
     error.value = null;
     try {
       const loaded = await settingsApi.getSettings();
-      // 合并默认值，确保新增字段有默认值
+      // mergedefault value，ensureadd newfieldhasdefault value
       settings.value = { ...defaultSettings, ...loaded } as Settings;
     } catch (e) {
       error.value = (e as Error).message;
@@ -115,7 +115,7 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  // 标签管理
+  // Tag Management
   async function loadTags() {
     loading.value = true;
     error.value = null;
@@ -134,7 +134,7 @@ export const useSettingsStore = defineStore('settings', () => {
     error.value = null;
     try {
       await settingsApi.addTag(tag);
-      // 检查是否已存在
+      // check ifAlready exists
       const existingIndex = tags.value.findIndex(t => t.name === tag.name);
       if (existingIndex === -1) {
         tags.value.push(tag);
