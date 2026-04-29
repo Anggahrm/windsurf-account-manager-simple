@@ -1,14 +1,14 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="person机Verify"
+    title="Human Verification"
     width="400px"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     @close="handleClose"
   >
     <div class="turnstile-container">
-      <p class="turnstile-tip">pleaseDoneVerifytofetchtriallink</p>
+      <p class="turnstile-tip">Please complete verification to fetch trial link</p>
       
       <div class="turnstile-wrapper">
         <div 
@@ -19,15 +19,15 @@
       
       <p v-if="status === 'loading'" class="status-text loading">
         <el-icon class="is-loading"><Loading /></el-icon>
-        LoadingVerifyin...
+        Loading verification...
       </p>
       <p v-else-if="status === 'success'" class="status-text success">
         <el-icon><CircleCheck /></el-icon>
-        Verifysuccessful！
+        Verification successful!
       </p>
       <p v-else-if="status === 'error'" class="status-text error">
         <el-icon><CircleClose /></el-icon>
-        Verifyfailed，pleaseretry
+        Verification failed, please retry
       </p>
     </div>
     
@@ -39,7 +39,7 @@
         :loading="isSubmitting"
         @click="handleConfirm"
       >
-        fetchlink
+        Fetch Link
       </el-button>
     </template>
   </el-dialog>
@@ -68,7 +68,7 @@ const status = ref<'idle' | 'loading' | 'success' | 'error'>('loading');
 const isSubmitting = ref(false);
 const widgetId = ref<string | null>(null);
 
-// sync visible
+// Sync visible
 watch(() => props.visible, (val) => {
   dialogVisible.value = val;
   if (val) {
@@ -116,7 +116,7 @@ async function loadTurnstile() {
   try {
     await loadTurnstileScript();
     
-    // wait turnstile forobjectcanuse
+    // Wait for turnstile object to be available
     await new Promise<void>((resolve) => {
       const checkTurnstile = () => {
         if ((window as any).turnstile) {
@@ -130,7 +130,7 @@ async function loadTurnstile() {
     
     const turnstile = (window as any).turnstile;
     
-    // ifalready has widget，firstremove
+    // If widget already exists, remove it first
     if (widgetId.value) {
       try {
         turnstile.remove(widgetId.value);
@@ -139,12 +139,12 @@ async function loadTurnstile() {
       }
     }
     
-    // Clearcontainer
+    // Clear container
     if (turnstileRef.value) {
       turnstileRef.value.innerHTML = '';
     }
     
-    // rendernew widget
+    // Render new widget
     await nextTick();
     
     if (turnstileRef.value) {
@@ -188,7 +188,7 @@ function handleClose() {
   emit('cancel');
 }
 
-// cleanup
+// Cleanup
 onUnmounted(() => {
   if (widgetId.value && (window as any).turnstile) {
     try {
