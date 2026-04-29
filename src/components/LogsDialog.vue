@@ -1,27 +1,27 @@
 <template>
   <el-dialog
     v-model="uiStore.showLogsDialog"
-    title="操作日志"
+    title="Operation Logs"
     width="800px"
   >
     <div class="logs-container">
       <div class="logs-header">
         <el-button size="small" @click="loadLogs" :icon="Refresh">
-          刷新
+          Refresh
         </el-button>
         <el-button size="small" @click="clearLogs" :icon="Delete">
-          清空日志
+          Clearlog
         </el-button>
       </div>
       
       <el-table :data="logs" style="width: 100%" max-height="400">
-        <el-table-column prop="timestamp" label="时间" width="180">
+        <el-table-column prop="timestamp" label="Time" width="180">
           <template #default="{ row }">
             {{ formatDate(row.timestamp) }}
           </template>
         </el-table-column>
         
-        <el-table-column prop="operation_type" label="操作类型" width="120">
+        <el-table-column prop="operation_type" label="Operationtype" width="120">
           <template #default="{ row }">
             <el-tag :type="getOperationTypeTag(row.operation_type)">
               {{ formatOperationType(row.operation_type) }}
@@ -29,14 +29,14 @@
           </template>
         </el-table-column>
         
-        <el-table-column prop="account_email" label="账号" width="180" />
+        <el-table-column prop="account_email" label="Account" width="180" />
         
-        <el-table-column prop="message" label="消息" />
+        <el-table-column prop="message" label="message" />
         
-        <el-table-column prop="status" label="状态" width="80">
+        <el-table-column prop="status" label="Status" width="80">
           <template #default="{ row }">
             <el-tag :type="row.status === 'success' ? 'success' : 'danger'">
-              {{ row.status === 'success' ? '成功' : '失败' }}
+              {{ row.status === 'success' ? 'successful' : 'failed' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -56,7 +56,7 @@ const settingsStore = useSettingsStore();
 const uiStore = useUIStore();
 
 const logs = computed(() => {
-  // 按时间倒序排列，最新的在前面
+  // byTime倒序rowcolumn，mostnewinbeforeside
   return [...settingsStore.logs].sort((a, b) => {
     return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
   });
@@ -70,27 +70,27 @@ async function loadLogs() {
   try {
     await settingsStore.loadLogs(100);
   } catch (error) {
-    ElMessage.error(`加载日志失败: ${error}`);
+    ElMessage.error(`Loadinglogfailed: ${error}`);
   }
 }
 
 async function clearLogs() {
   try {
     await ElMessageBox.confirm(
-      '确定要清空所有日志吗？',
-      '清空日志',
+      'Confirmneed toClearalllog?？',
+      'Clearlog',
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
         type: 'warning',
       }
     );
     
     await settingsStore.clearLogs();
-    ElMessage.success('日志已清空');
+    ElMessage.success('logalready Clear');
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`清空日志失败: ${error}`);
+      ElMessage.error(`Clearlogfailed: ${error}`);
     }
   }
 }
@@ -101,16 +101,16 @@ function formatDate(date: string) {
 
 function formatOperationType(type: string) {
   const typeMap: Record<string, string> = {
-    login: '登录',
-    refresh_token: '刷新Token',
-    reset_credits: '重置积分',
-    update_seats: '更新座位',
-    get_billing: '查询账单',
-    update_plan: '更新计划',
-    add_account: '添加账号',
-    delete_account: '删除账号',
-    edit_account: '编辑账号',
-    batch_operation: '批量操作',
+    login: 'Login',
+    refresh_token: 'RefreshToken',
+    reset_credits: 'Reset Credits',
+    update_seats: 'Update Seats',
+    get_billing: 'Query Billing',
+    update_plan: 'Updateplan',
+    add_account: 'Add Account',
+    delete_account: 'DeleteAccount',
+    edit_account: 'Edit Account',
+    batch_operation: 'Batch Operations',
   };
   return typeMap[type] || type;
 }

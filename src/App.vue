@@ -14,51 +14,51 @@ const uiStore = useUIStore();
 
 // const showWelcomeDialog = ref(true);
 
-// 事件监听取消函数
+// eventlistenCancelfunctioncount
 let tokenRefreshedUnlisten: UnlistenFn | null = null;
 
-// 用于Element Plus的命名空间，支持深色模式
+// used forElement Plusnamednamespace，supportDark Mode
 const elNamespace = computed(() => 'el');
 
-// 禁用右键菜单
+// Disableright click menusingle
 const disableContextMenu = (e: MouseEvent) => {
   e.preventDefault();
   return false;
 };
 
-// 禁用调试快捷键
+// Disablecalltry shortcut
 const disableDebugKeys = (e: KeyboardEvent) => {
-  // 禁用F12
+  // DisableF12
   if (e.key === 'F12') {
     e.preventDefault();
     return false;
   }
   
-  // 禁用Ctrl+Shift+I (开发者工具)
+  // DisableCtrl+Shift+I (developertool)
   if (e.ctrlKey && e.shiftKey && e.key === 'I') {
     e.preventDefault();
     return false;
   }
   
-  // 禁用Ctrl+Shift+J (控制台)
+  // DisableCtrl+Shift+J (控制台)
   if (e.ctrlKey && e.shiftKey && e.key === 'J') {
     e.preventDefault();
     return false;
   }
   
-  // 禁用Ctrl+Shift+C (审查元素)
+  // DisableCtrl+Shift+C (reviewelement)
   if (e.ctrlKey && e.shiftKey && e.key === 'C') {
     e.preventDefault();
     return false;
   }
   
-  // 禁用Ctrl+U (查看源代码)
+  // DisableCtrl+U (View源codecode)
   if (e.ctrlKey && e.key === 'u') {
     e.preventDefault();
     return false;
   }
   
-  // 禁用Ctrl+S (保存页面)
+  // DisableCtrl+S (SavePage)
   if (e.ctrlKey && e.key === 's') {
     e.preventDefault();
     return false;
@@ -68,13 +68,13 @@ const disableDebugKeys = (e: KeyboardEvent) => {
 };
 
 onMounted(async () => {
-  // 禁用右键菜单
+  // Disableright click menusingle
   document.addEventListener('contextmenu', disableContextMenu);
   
-  // 禁用调试快捷键
+  // Disablecalltry shortcut
   document.addEventListener('keydown', disableDebugKeys);
   
-  // 获取并设置应用标题（包含版本号）
+  // fetch and Settingsapplytitle（containsVersion）
   try {
     const title = await invoke<string>('get_app_title');
     document.title = title;
@@ -82,30 +82,30 @@ onMounted(async () => {
     console.error('Failed to get app title:', error);
   }
   
-  // 初始化应用数据
+  // initializeapplydata
   await Promise.all([
     accountsStore.loadAccounts(),
     settingsStore.initialize()
   ]);
   
-  // 如果设置中有主题且与当前不同，则应用设置中的主题
+  // ifSettingsinhasprimarytopicandandCurrentnotsame，thenapplySettingsinprimarytopic
   const settingsTheme = settingsStore.settings.theme;
   if (settingsTheme && settingsTheme !== uiStore.theme) {
     uiStore.setTheme(settingsTheme as 'light' | 'dark');
   } else {
-    // 确保当前主题被应用
+    // ensureCurrentprimarytopicwasapply
     uiStore.setTheme(uiStore.theme);
   }
   
-  // 启动自动刷新Token功能
+  // launchAuto RefreshTokenFeature
   accountsStore.startAutoRefreshTimer(settingsStore);
   
-  // 监听后端 token 刷新事件，自动更新前端账户数据
+  // listenbackend token Refreshevent，autoUpdatebeforesideAccountdata
   tokenRefreshedUnlisten = await listen<{ account_id: string; token: string; token_expires_at: string }>('token-refreshed', (event) => {
     const { account_id, token, token_expires_at } = event.payload;
-    console.log('[Token刷新事件] 后端已刷新账户 token:', account_id);
+    console.log('[TokenRefreshevent] backendalready RefreshAccount token:', account_id);
     
-    // 更新对应账户的 token 和过期时间
+    // UpdatecorrespondingAccount token  and ExpiredTime
     const idx = accountsStore.accounts.findIndex(acc => acc.id === account_id);
     if (idx !== -1) {
       const updatedAccount = { 
@@ -115,17 +115,17 @@ onMounted(async () => {
         status: 'active' as const 
       };
       accountsStore.accounts.splice(idx, 1, updatedAccount);
-      console.log('[Token刷新事件] 已更新账户:', updatedAccount.email);
+      console.log('[TokenRefreshevent] already UpdateAccount:', updatedAccount.email);
     }
   });
 });
 
-// 组件卸载时停止定时器和移除事件监听
+// on component unmountStoptimer and removeeventlisten
 onUnmounted(() => {
   accountsStore.stopAutoRefreshTimer();
   document.removeEventListener('contextmenu', disableContextMenu);
   document.removeEventListener('keydown', disableDebugKeys);
-  // 取消 Tauri 事件监听
+  // Cancel Tauri eventlisten
   if (tokenRefreshedUnlisten) {
     tokenRefreshedUnlisten();
     tokenRefreshedUnlisten = null;
@@ -154,12 +154,12 @@ html, body, #app {
 }
 
 #app {
-  font-family: 'Microsoft YaHei', '微软雅黑', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Microsoft YaHei', '微软elegant黑', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 滚动条样式 */
+/* scrollitemsstyle */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -178,17 +178,17 @@ html, body, #app {
   background: #555;
 }
 
-/* Element Plus 样式覆盖 */
+/* Element Plus stylecover */
 .el-button-group {
   display: flex;
 }
 
-/* 调整消息提示位置，避免遮挡顶部按钮 */
+/* callwholemessageNoticeset，avoid遮挡topbutton */
 .el-message {
   top: 60px !important;
 }
 
-/* 深色模式样式 */
+/* Dark Modestyle */
 html.dark {
   background-color: #0c0d0e;
   color-scheme: dark;
@@ -199,7 +199,7 @@ html.dark body {
   color: #cfd3dc;
 }
 
-/* Element Plus 深色模式对话框 */
+/* Element Plus Dark ModeDialog */
 html.dark .el-dialog {
   background-color: #1d1e1f !important;
   border: 1px solid #4c4d4f;
@@ -228,7 +228,7 @@ html.dark .el-dialog__footer {
   border-top: 1px solid #4c4d4f;
 }
 
-/* 对话框内的表单和标签页 */
+/* Dialoginsideform and Tagspage */
 html.dark .el-dialog .el-form {
   background-color: transparent;
 }
@@ -255,7 +255,7 @@ html.dark .el-dialog .el-tabs__item.is-active {
   background-color: transparent;
 }
 
-/* 对话框内的描述文字 */
+/* Dialoginside描述text */
 html.dark .el-dialog .el-form-item > div {
   color: #94a3b8 !important;
 }
@@ -353,7 +353,7 @@ html.dark .el-switch__core .el-switch__action {
   background-color: #fff !important;
 }
 
-/* 确保开关在禁用状态下也可见 */
+/* ensuretoggleinDisableStatusunderalsocansee */
 html.dark .el-switch.is-disabled .el-switch__core {
   background-color: #303133 !important;
   border-color: #303133 !important;
@@ -419,7 +419,7 @@ html.dark .el-descriptions__content {
   color: #e5eaf3;
 }
 
-/* 深色模式滚动条 */
+/* Dark Modescrollitems */
 html.dark ::-webkit-scrollbar-track {
   background: #262729;
 }
@@ -432,7 +432,7 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   background: #5a5b5d;
 }
 
-/* 深色模式输入框数字步进器 */
+/* Dark Modeinputboxcountcharacterstep进manager */
 html.dark .el-input-number__decrease,
 html.dark .el-input-number__increase {
   background-color: #262729 !important;
@@ -446,7 +446,7 @@ html.dark .el-input-number__increase:hover {
   color: #409eff;
 }
 
-/* 深色模式单选按钮组 */
+/* Dark Modesingleselectbuttongroup */
 html.dark .el-radio-button__inner {
   background-color: #262729 !important;
   color: #cfd3dc;
@@ -459,7 +459,7 @@ html.dark .el-radio-button__original-radio:checked + .el-radio-button__inner {
   color: #fff !important;
 }
 
-/* 深色模式标签页 */
+/* Dark ModeTagspage */
 html.dark .el-tag {
   background-color: #262729;
   border-color: #4c4d4f;
@@ -496,7 +496,7 @@ html.dark .el-tag--info {
   color: #909399;
 }
 
-/* 深色模式Alert */
+/* Dark ModeAlert */
 html.dark .el-alert {
   background-color: #262729;
   border-color: #4c4d4f;
@@ -515,7 +515,7 @@ html.dark .el-alert__description {
   color: #cfd3dc;
 }
 
-/* 深色模式按钮 - 全面覆盖所有按钮类型 */
+/* Dark Modebutton - fullsidecoverallbuttontype */
 html.dark .el-button--default {
   background-color: #262729;
   border-color: #4c4d4f;
@@ -588,7 +588,7 @@ html.dark .el-button--info:hover {
   color: #fff;
 }
 
-/* plain按钮样式 */
+/* plainButton Style */
 html.dark .el-button--primary.is-plain {
   background-color: rgba(64, 158, 255, 0.1);
   border-color: rgba(64, 158, 255, 0.5);
@@ -613,7 +613,7 @@ html.dark .el-button--danger.is-plain:hover {
   color: #fff;
 }
 
-/* text按钮样式 */
+/* textButton Style */
 html.dark .el-button--text {
   background-color: transparent;
   border-color: transparent;
@@ -632,7 +632,7 @@ html.dark .el-button--text:active {
   color: #3a8ee6;
 }
 
-/* disabled按钮样式 */
+/* disabledButton Style */
 html.dark .el-button.is-disabled,
 html.dark .el-button.is-disabled:hover {
   background-color: #303133;
@@ -641,7 +641,7 @@ html.dark .el-button.is-disabled:hover {
   cursor: not-allowed;
 }
 
-/* 圆形按钮 */
+/* circlebutton */
 html.dark .el-button.is-circle {
   background-color: #262729;
   border-color: #4c4d4f;
@@ -654,12 +654,12 @@ html.dark .el-button.is-circle:hover {
   color: #409eff;
 }
 
-/* loading按钮 */
+/* loadingbutton */
 html.dark .el-button.is-loading {
   opacity: 0.7;
 }
 
-/* 按钮组 */
+/* buttongroup */
 html.dark .el-button-group .el-button {
   border-left-color: #4c4d4f;
   border-right-color: #4c4d4f;
@@ -673,7 +673,7 @@ html.dark .el-button-group .el-button:last-child {
   border-right-color: #4c4d4f;
 }
 
-/* 深色模式下拉菜单 */
+/* Dark Modeunderpullmenusingle */
 html.dark .el-dropdown-menu {
   background-color: #1d1e1f !important;
   border: 1px solid #4c4d4f;
@@ -688,7 +688,7 @@ html.dark .el-dropdown-menu__item:hover {
   color: #409eff;
 }
 
-/* 深色模式菜单 */
+/* Dark Modemenusingle */
 html.dark .el-menu {
   background-color: #1e1e1e !important;
   border-right-color: rgba(255, 255, 255, 0.08) !important;
@@ -713,7 +713,7 @@ html.dark .el-menu-item i {
   color: inherit !important;
 }
 
-/* 深色模式下的复选框组 */
+/* Dark Mode'scomplexselectboxgroup */
 html.dark .el-checkbox-group {
   color: #cfd3dc;
 }
@@ -726,7 +726,7 @@ html.dark .el-checkbox.is-checked .el-checkbox__label {
   color: #409eff !important;
 }
 
-/* 深色模式下的tooltip */
+/* Dark Mode'stooltip */
 html.dark .el-tooltip__popper {
   background-color: #303133 !important;
   border: 1px solid #4c4d4f;
@@ -738,7 +738,7 @@ html.dark .el-tooltip__popper[data-popper-placement^="top"] .el-tooltip__popper-
   border-color: #4c4d4f !important;
 }
 
-/* 深色模式下的输入框append按钮 */
+/* Dark Mode'sinputboxappendbutton */
 html.dark .el-input-group__append {
   background-color: #262729 !important;
   border-color: #4c4d4f !important;
@@ -755,7 +755,7 @@ html.dark .el-input-group__append .el-button:hover {
   color: #66b1ff !important;
 }
 
-/* 深色模式下的卡片 - 增强优先级 */
+/* Dark Mode'scard - enhanceprioritylevel */
 html.dark .el-card {
   background-color: #1d1e1f !important;
   border-color: #4c4d4f !important;
@@ -773,7 +773,7 @@ html.dark .el-card__body {
   color: #cfd3dc;
 }
 
-/* 嵌套卡片的深色模式 */
+/* nestcardDark Mode */
 html.dark .el-card .el-card {
   background-color: #262729 !important;
 }
@@ -782,7 +782,7 @@ html.dark .el-card .el-card__body {
   background-color: #262729 !important;
 }
 
-/* 对话框内的卡片 */
+/* Dialoginsidecard */
 html.dark .el-dialog .el-card {
   background-color: #262729 !important;
 }
@@ -791,7 +791,7 @@ html.dark .el-dialog .el-card__body {
   background-color: #262729 !important;
 }
 
-/* 席位统计卡片 */
+/* SeatStatisticscard */
 html.dark .el-col .el-card {
   background-color: #262729 !important;
 }
@@ -800,7 +800,7 @@ html.dark .el-col .el-card__body {
   background-color: #262729 !important;
 }
 
-/* 深色模式下的进度条 */
+/* Dark Mode'sprogressitems */
 html.dark .el-progress {
   background-color: transparent;
 }
@@ -817,7 +817,7 @@ html.dark .el-progress__text {
   color: #cfd3dc !important;
 }
 
-/* 深色模式下的时间线 */
+/* Dark Mode'sTimeline */
 html.dark .el-timeline-item__node {
   background-color: #262729 !important;
   border-color: #4c4d4f !important;
@@ -835,7 +835,7 @@ html.dark .el-timeline-item__timestamp {
   color: #94a3b8;
 }
 
-/* 深色模式下的分割线 */
+/* Dark Mode's分割line */
 html.dark .el-divider {
   background-color: #4c4d4f !important;
 }
@@ -845,7 +845,7 @@ html.dark .el-divider__text {
   color: #94a3b8;
 }
 
-/* 深色模式下的统计数值 */
+/* Dark Mode'sStatisticscountvalue */
 html.dark .el-statistic {
   color: #cfd3dc;
 }
@@ -862,7 +862,7 @@ html.dark .el-statistic__value {
   color: #e5eaf3;
 }
 
-/* 深色模式下的结果页 */
+/* Dark Mode'sresultpage */
 html.dark .el-result {
   background-color: transparent;
 }
@@ -875,7 +875,7 @@ html.dark .el-result__subtitle {
   color: #cfd3dc;
 }
 
-/* 深色模式下的空状态 */
+/* Dark Mode'semptyStatus */
 html.dark .el-empty {
   background-color: transparent;
 }
@@ -884,12 +884,12 @@ html.dark .el-empty__description {
   color: #94a3b8;
 }
 
-/* 深色模式下的骨架屏 */
+/* Dark Mode's骨架screen */
 html.dark .el-skeleton__item {
   background-color: #262729 !important;
 }
 
-/* 深色模式下的加载 */
+/* Dark Mode'sLoading */
 html.dark .el-loading-mask {
   background-color: rgba(0, 0, 0, 0.8) !important;
 }
@@ -902,7 +902,7 @@ html.dark .el-loading-text {
   color: #cfd3dc !important;
 }
 
-/* 深色模式下的步骤条 */
+/* Dark Mode'sstepstepitems */
 html.dark .el-steps {
   background-color: transparent;
 }
@@ -937,7 +937,7 @@ html.dark .el-step.is-process .el-step__icon {
   color: #fff;
 }
 
-/* 深色模式下的分页 */
+/* Dark Mode'sPagination */
 html.dark .el-pagination {
   color: #cfd3dc;
 }
@@ -964,12 +964,12 @@ html.dark .el-pagination__jump {
   color: #cfd3dc !important;
 }
 
-/* 深色模式下的弹出确认框 */
+/* Dark Mode'spopupConfirmbox */
 html.dark .el-popconfirm__main {
   color: #cfd3dc !important;
 }
 
-/* 深色模式下自定义的信息块 */
+/* Dark ModeundercustomInfoblock */
 html.dark .info-card,
 html.dark .info-block,
 html.dark .data-card {
@@ -990,7 +990,7 @@ html.dark .data-card .value {
   color: #e5eaf3 !important;
 }
 
-/* 深色模式下的列表项 */
+/* Dark Mode'sListitem */
 html.dark .list-item {
   background-color: #262729 !important;
   border-color: #4c4d4f !important;
@@ -1001,13 +1001,13 @@ html.dark .list-item:hover {
   background-color: #303133 !important;
 }
 
-/* 深色模式下的徽章 */
+/* Dark Mode'sbadge */
 html.dark .el-badge__content {
   background-color: #f56c6c !important;
   color: #fff !important;
 }
 
-/* 深色模式下的面包屑 */
+/* Dark Mode'sside包屑 */
 html.dark .el-breadcrumb__inner {
   color: #cfd3dc !important;
 }
@@ -1020,7 +1020,7 @@ html.dark .el-breadcrumb__separator {
   color: #94a3b8 !important;
 }
 
-/* 深色模式下的评分 */
+/* Dark Mode'sscore */
 html.dark .el-rate__icon {
   color: #4c4d4f !important;
 }
@@ -1029,7 +1029,7 @@ html.dark .el-rate__icon.is-active {
   color: #f7ba2a !important;
 }
 
-/* 强制修复对话框内所有白色背景 - 最高优先级 */
+/* forcefixDialoginsideallwhite background - most高prioritylevel */
 html.dark .el-dialog * {
   background-color: transparent !important;
 }
@@ -1038,7 +1038,7 @@ html.dark .el-dialog .el-dialog__body {
   background-color: #1d1e1f !important;
 }
 
-/* 统计组件容器 */
+/* Statisticscomponentcontainer */
 html.dark .el-statistic {
   background-color: #262729 !important;
   padding: 15px !important;
@@ -1049,7 +1049,7 @@ html.dark .el-col > .el-statistic {
   background-color: #262729 !important;
 }
 
-/* 修复el-row和el-col的背景 */
+/* fixel-row and el-colbackground */
 html.dark .el-dialog .el-row {
   background-color: transparent !important;
 }
@@ -1062,7 +1062,7 @@ html.dark .el-dialog .el-col > div:not(.el-statistic) {
   background-color: transparent !important;
 }
 
-/* 席位信息区块 */
+/* SeatInfoblock */
 html.dark .seats-section .el-col {
   background-color: transparent !important;
 }
@@ -1074,7 +1074,7 @@ html.dark .seats-section .el-statistic {
   border-radius: 4px !important;
 }
 
-/* 支付信息和计费信息表格 */
+/* Payment Info and billingInfotable */
 html.dark .el-descriptions {
   background-color: #262729 !important;
 }
@@ -1097,7 +1097,7 @@ html.dark .el-descriptions--border .el-descriptions__cell {
   border-color: #4c4d4f !important;
 }
 
-/* 确保卡片内的所有内容都是深色 */
+/* ensurecardinsideallContentallisdark */
 html.dark .billing-card,
 html.dark .billing-card * {
   background-color: transparent !important;
@@ -1107,13 +1107,13 @@ html.dark .billing-card .el-card__body {
   background-color: #1d1e1f !important;
 }
 
-/* 修复任何可能遗漏的白色背景 */
+/* fixanypossibly遗漏white background */
 html.dark .el-dialog [style*="background"],
 html.dark .el-dialog [style*="background-color"] {
   background-color: inherit !important;
 }
 
-/* 强制修复el-card的内联样式白色背景 */
+/* forcefixel-cardinlinestylewhite background */
 html.dark .el-card[style*="background: #f8f9fa"] {
   background-color: #262729 !important;
 }
@@ -1122,7 +1122,7 @@ html.dark .el-card[style*="background:#f8f9fa"] {
   background-color: #262729 !important;
 }
 
-/* 强制所有el-card使用深色背景 */
+/* forceallel-cardusedarkbackground */
 html.dark .el-dialog .el-card {
   background-color: #1d1e1f !important;
 }
@@ -1135,7 +1135,7 @@ html.dark .el-dialog .el-card__body {
   background-color: #1d1e1f !important;
 }
 
-/* 嵌套在el-space中的卡片 */
+/* nested inel-spaceincard */
 html.dark .el-space .el-card {
   background-color: #262729 !important;
 }
@@ -1144,13 +1144,13 @@ html.dark .el-space .el-card__body {
   background-color: #262729 !important;
 }
 
-/* 确保shadow="never"的卡片也被覆盖 */
+/* ensureshadow="never"cardalsowascover */
 html.dark .el-card[shadow="never"] {
   background-color: #1d1e1f !important;
   box-shadow: none !important;
 }
 
-/* 强制覆盖所有可能的白色内联样式 */
+/* forcecoverallpossibly白色inlinestyle */
 html.dark [style*="background: white"],
 html.dark [style*="background-color: white"],
 html.dark [style*="background: #fff"],

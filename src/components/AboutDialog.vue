@@ -7,7 +7,7 @@
     @closed="handleClosed"
   >
     <div class="about-content">
-      <!-- 背景装饰 -->
+      <!-- Background Decoration -->
       <div class="bg-decoration">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
@@ -61,8 +61,8 @@
             </el-icon>
           </div>
           <div class="card-info">
-            <span class="card-label">{{ (clientDisplayName || 'Windsurf') + ' 版本' }}</span>
-            <span class="card-value">{{ windsurfVersion || '未检测到' }}</span>
+            <span class="card-label">{{ (clientDisplayName || 'Windsurf') + ' Version' }}</span>
+            <span class="card-value">{{ windsurfVersion || 'notDetected' }}</span>
           </div>
         </div>
         
@@ -74,10 +74,10 @@
           </div>
           <div class="card-info">
             <span class="card-label">
-              当前账号
+              CurrentAccount
               <span v-if="clientDisplayName" class="client-hint">{{ clientDisplayName }}</span>
             </span>
-            <span class="card-value">{{ currentEmail || '未登录' }}</span>
+            <span class="card-value">{{ currentEmail || 'notLogin' }}</span>
           </div>
         </div>
       </div>
@@ -105,37 +105,37 @@
         </div>
       </div>
 
-      <!-- 赞助区域 -->
+      <!-- sponsorarea -->
       <div class="sponsor-section">
         <h3 class="section-title">
           <div class="title-icon-wrapper sponsor-icon">
             <el-icon><Coffee /></el-icon>
           </div>
-          请作者喝杯咖啡
+          pleasemake者喝杯咖啡
         </h3>
         <div class="sponsor-grid">
           <div class="sponsor-item alipay">
             <div class="qr-wrapper">
-              <img src="/支付宝支付.png" alt="支付宝" class="sponsor-qr" />
+              <img src="/支付宝支付.png" alt="Alipay" class="sponsor-qr" />
               <div class="qr-overlay">
-                <span class="qr-text">支付宝扫码</span>
+                <span class="qr-text">Alipay扫code</span>
               </div>
             </div>
             <div class="sponsor-label">
               <span class="pay-icon alipay-icon">支</span>
-              支付宝
+              Alipay
             </div>
           </div>
           <div class="sponsor-item wechat">
             <div class="qr-wrapper">
-              <img src="/微信支付.png" alt="微信支付" class="sponsor-qr" />
+              <img src="/微信支付.png" alt="WeChat Pay" class="sponsor-qr" />
               <div class="qr-overlay">
-                <span class="qr-text">微信扫码</span>
+                <span class="qr-text">WeChat scancode</span>
               </div>
             </div>
             <div class="sponsor-label">
               <span class="pay-icon wechat-icon">微</span>
-              微信支付
+              WeChat Pay
             </div>
           </div>
         </div>
@@ -146,80 +146,80 @@
           <div class="title-icon-wrapper">
             <el-icon><Star /></el-icon>
           </div>
-          功能特性
+          Featurefeature
         </h3>
         <div class="feature-grid">
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Document /></el-icon>
             </div>
-            <span class="feature-text">导出账号</span>
+            <span class="feature-text">Export Accounts</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><DataAnalysis /></el-icon>
             </div>
-            <span class="feature-text">统计信息</span>
+            <span class="feature-text">Statistics</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Refresh /></el-icon>
             </div>
-            <span class="feature-text">刷新状态</span>
+            <span class="feature-text">RefreshStatus</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><User /></el-icon>
             </div>
-            <span class="feature-text">多账号管理</span>
+            <span class="feature-text">multipleAccount Management</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Switch /></el-icon>
             </div>
-            <span class="feature-text">切换账号</span>
+            <span class="feature-text">Switch Account</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Delete /></el-icon>
             </div>
-            <span class="feature-text">删除账号</span>
+            <span class="feature-text">DeleteAccount</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Edit /></el-icon>
             </div>
-            <span class="feature-text">编辑账号</span>
+            <span class="feature-text">Edit Account</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Upload /></el-icon>
             </div>
-            <span class="feature-text">批量导入</span>
+            <span class="feature-text">Batch Import</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><List /></el-icon>
             </div>
-            <span class="feature-text">操作日志</span>
+            <span class="feature-text">Operation Logs</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Setting /></el-icon>
             </div>
-            <span class="feature-text">设置</span>
+            <span class="feature-text">Settings</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Link /></el-icon>
             </div>
-            <span class="feature-text">获取链接</span>
+            <span class="feature-text">fetchlink</span>
           </div>
           <div class="feature-card">
             <div class="feature-icon-wrapper">
               <el-icon><Lightning /></el-icon>
             </div>
-            <span class="feature-text">无感换号</span>
+            <span class="feature-text">Seamless Switch</span>
           </div>
         </div>
       </div>
@@ -232,7 +232,7 @@
           <p class="year">© 2025 All rights reserved</p>
         </div>
         <p class="disclaimer">
-          本软件仅供学习交流使用，请勿用于商业用途
+          this softwareonly for learning and exchangeuse，pleasedo notused formerchant业useway
         </p>
       </div>
     </div>
@@ -271,7 +271,7 @@ const props = defineProps<{
   modelValue: boolean;
   currentEmail?: string;
   windsurfVersion?: string;
-  /** 活跃客户端展示名：「Windsurf」 | 「Windsurf - Next」 */
+  /** ActiveClientshowname：「Windsurf」 | 「Windsurf - Next」 */
   clientDisplayName?: string;
 }>();
 
@@ -285,10 +285,10 @@ const visible = computed({
   set: (val) => emit('update:modelValue', val)
 });
 
-// 应用版本号
+// applyVersion
 const appVersion = ref<string>('');
 
-// 获取版本号
+// fetchVersion
 onMounted(async () => {
   try {
     const versionInfo = await invoke<any>('get_app_version');
@@ -301,29 +301,29 @@ onMounted(async () => {
 const checkButtonText = computed(() => {
   switch (updaterStore.phase) {
     case 'checking':
-      return '检查中...';
+      return 'Checking...';
     case 'available':
-      return '立即更新';
+      return 'immediatelyUpdate';
     case 'downloading':
-      return '下载中...';
+      return 'Downloading...';
     case 'installing':
-      return '安装中...';
+      return 'Installing...';
     case 'ready':
-      return '重启应用';
+      return 'restartapply';
     default:
-      return '检查更新';
+      return 'Check for Updates';
   }
 });
 
 async function handleCheckUpdate() {
-  // 已有可用更新或下载完成时，直接把更新对话框拉起来，由 UpdateDialog 接管
+  // already hascanuseUpdate or DownloadDonewhen，directlyputUpdateDialogpullstart来，by UpdateDialog takeover
   if (updaterStore.phase === 'available' || updaterStore.phase === 'downloading'
       || updaterStore.phase === 'installing' || updaterStore.phase === 'ready') {
     emit('open-update-dialog');
     return;
   }
 
-  // 手动触发：忽略 24h 防抖
+  // manuallytrigger：ignore 24h debounce
   const hasUpdate = await updaterStore.checkUpdate(false);
   if (hasUpdate) {
     emit('open-update-dialog');
@@ -331,10 +331,10 @@ async function handleCheckUpdate() {
   }
 
   if (updaterStore.phase === 'error') {
-    ElMessage.error(`检查更新失败: ${updaterStore.error || '未知错误'}`);
+    ElMessage.error(`checkUpdate failed: ${updaterStore.error || 'Unknown error'}`);
     updaterStore.dismiss();
   } else if (updaterStore.phase === 'up_to_date') {
-    ElMessage.success(`已是最新版本 v${appVersion.value}`);
+    ElMessage.success(`Already the latest version v${appVersion.value}`);
     updaterStore.dismiss();
   }
 }
@@ -360,7 +360,7 @@ function handleClosed() {
   overflow: hidden;
 }
 
-/* 背景装饰 */
+/* Background Decoration */
 .bg-decoration {
   position: absolute;
   top: 0;
@@ -406,7 +406,7 @@ function handleClosed() {
   50% { transform: translate(30px, -30px) scale(1.1); }
 }
 
-/* Logo 部分 */
+/* Logo Partial */
 .logo-section {
   text-align: center;
   padding: 30px 0;
@@ -500,7 +500,7 @@ function handleClosed() {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* 状态卡片 */
+/* Status Card */
 .status-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -555,7 +555,7 @@ function handleClosed() {
   gap: 6px;
 }
 
-/* 活跃客户端小标识：跟在「当前账号」后显示来源客户端名 */
+/* ActiveClientsmall标识：跟in「CurrentAccount」afterdisplaysourceClientname */
 .client-hint {
   font-size: 10px;
   font-weight: 500;
@@ -612,7 +612,7 @@ function handleClosed() {
   background: #e0e0e0;
 }
 
-/* 功能特性 */
+/* Featurefeature */
 .features-section {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
@@ -713,7 +713,7 @@ function handleClosed() {
   text-overflow: ellipsis;
 }
 
-/* 页脚 */
+/* footer */
 .footer-section {
   text-align: center;
   padding-top: 20px;
@@ -767,7 +767,7 @@ function handleClosed() {
   font-style: italic;
 }
 
-/* 赞助区域 */
+/* sponsorarea */
 .title-icon-wrapper.sponsor-icon {
   background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
 }
@@ -917,7 +917,7 @@ function handleClosed() {
   background: #07c160;
 }
 
-/* 暗色主题适配 */
+/* Dark Themeadapt */
 :root.dark .about-content {
   background: linear-gradient(135deg, #2d3561 0%, #1e1e2e 100%);
 }

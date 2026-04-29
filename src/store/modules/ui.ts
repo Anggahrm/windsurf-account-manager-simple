@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useUIStore = defineStore('ui', () => {
-  const sidebarCollapsed = ref(true);  // 默认收缩
-  // 从localStorage恢复主题，如果没有则默认为light
+  const sidebarCollapsed = ref(true);  // default收缩
+  // fromlocalStoragerestoreprimarytopic，ifnohasthendefaultaslight
   const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
   const theme = ref<'light' | 'dark'>(savedTheme || 'light');
   
-  // 初始化时立即应用主题
+  // initializewhenimmediatelyapplyprimarytopic
   if (savedTheme === 'dark') {
     document.documentElement.classList.add('dark');
     document.documentElement.classList.add('el-theme-dark');
@@ -23,7 +23,7 @@ export const useUIStore = defineStore('ui', () => {
   const currentEditingAccountId = ref<string | null>(null);
   const currentViewingAccountId = ref<string | null>(null);
   
-  // 通知相关
+  // through知related
   const notifications = ref<Array<{
     id: string;
     type: 'success' | 'warning' | 'error' | 'info';
@@ -40,13 +40,13 @@ export const useUIStore = defineStore('ui', () => {
   async function setTheme(newTheme: 'light' | 'dark') {
     theme.value = newTheme;
     
-    // 保存到localStorage
+    // SavetolocalStorage
     localStorage.setItem('theme', newTheme);
     
-    // 设置HTML根元素的class
+    // SettingsHTML根elementclass
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark');
-      // Element Plus 深色模式
+      // Element Plus Dark Mode
       document.documentElement.classList.add('el-theme-dark');
       document.documentElement.style.setProperty('--el-bg-color', '#1d1e1f');
       document.documentElement.style.setProperty('--el-bg-color-page', '#0c0d0e');
@@ -58,7 +58,7 @@ export const useUIStore = defineStore('ui', () => {
     } else {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.remove('el-theme-dark');
-      // 恢复默认颜色
+      // restoredefaultcolor
       document.documentElement.style.removeProperty('--el-bg-color');
       document.documentElement.style.removeProperty('--el-bg-color-page');
       document.documentElement.style.removeProperty('--el-color-primary');
@@ -68,10 +68,10 @@ export const useUIStore = defineStore('ui', () => {
       document.documentElement.style.removeProperty('--el-border-color');
     }
     
-    // 保存主题设置到后端
+    // SaveprimarytopicSettingstobackend
     try {
       const { settingsApi } = await import('@/api');
-      // 获取当前设置并更新主题
+      // fetchCurrentSettings and Updateprimarytopic
       const currentSettings = await settingsApi.getSettings();
       await settingsApi.updateSettings({ ...currentSettings, theme: newTheme });
     } catch (error) {

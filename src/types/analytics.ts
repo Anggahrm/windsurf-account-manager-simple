@@ -1,268 +1,268 @@
 /**
- * 每日 Cascade 代码行数统计 (Field 18: cascade_lines)
+ * daily Cascade codecoderowcountStatistics (Field 18: cascade_lines)
  */
 export interface DailyCascadeLinesCount {
-  /** 日期时间戳 */
+  /** DateTimetimestamp */
   timestamp: number;
-  /** 日期字符串 (YYYY-MM-DD) */
+  /** Datestring (YYYY-MM-DD) */
   date: string;
-  /** 接受的代码行数 (Accepted lines) */
+  /** Accepted Lines of Code (Accepted lines) */
   accepted_lines: number;
-  /** 建议的代码行数 (Suggested lines) */
+  /** suggested codecoderowcount (Suggested lines) */
   suggested_lines: number;
 }
 
 /**
- * 工具使用统计条目
+ * tooluseStatisticsitemsitem
  */
 export interface ToolUsageEntry {
-  /** 工具名称 */
+  /** toolName */
   tool_name: string;
-  /** 使用次数 */
+  /** usage count */
   count: number;
-  /** 使用占比（百分比） */
+  /** useproportion（percentage） */
   percentage: number;
 }
 
 /**
- * 模型使用统计条目
+ * modeluseStatisticsitemsitem
  */
 export interface ModelUsageEntry {
-  /** 日期时间戳 */
+  /** DateTimetimestamp */
   timestamp: number;
-  /** 日期字符串 */
+  /** Datestring */
   date: string;
-  /** 模型名称 */
+  /** Model Name */
   model_name: string;
-  /** 运行模式 */
+  /** runMode */
   mode: string;
-  /** 会话数/消息数 */
+  /** Sessions/Messages */
   session_count: number;
-  /** Token使用量 */
+  /** TokenUsage */
   token_usage: number;
-  /** 会话ID */
+  /** sessionID */
   session_id: string;
 }
 
 /**
- * 模型使用汇总
+ * modelusesummaryTotal
  */
 export interface ModelUsageSummary {
-  /** 模型名称 */
+  /** Model Name */
   model_name: string;
-  /** 总使用次数 */
+  /** Totalusage count */
   total_count: number;
-  /** 总Token消耗 */
+  /** TotalTokenConsumed */
   total_tokens: number;
-  /** 使用占比 */
+  /** useproportion */
   percentage: number;
 }
 
 /**
- * 总体统计摘要
+ * Overall Statistics摘need to
  */
 export interface AnalyticsSummary {
-  /** 总代码行数（接受的） */
+  /** Totalcodecoderowcount（accept） */
   total_accepted_lines: number;
-  /** 总代码行数（建议的） */
+  /** Totalcodecoderowcount（build议） */
   total_suggested_lines: number;
-  /** 平均每日代码行数（接受的） */
+  /** 平alldailycodecoderowcount（accept） */
   avg_daily_accepted_lines: number;
-  /** 峰值日期 */
+  /** 峰valueDate */
   peak_date: string;
-  /** 峰值代码行数 */
+  /** 峰valuecodecoderowcount */
   peak_lines: number;
-  /** 总工具使用次数 */
+  /** Totaltoolusage count */
   total_tool_usage: number;
-  /** 总会话数 */
+  /** TotalSessions */
   total_sessions: number;
-  /** 总Token消耗 */
+  /** TotalTokenConsumed */
   total_tokens: number;
-  /** 主要使用的模型 */
+  /** primaryneed tousemodel */
   primary_model: string;
-  /** 主要使用的工具 */
+  /** primaryneed tousetool */
   primary_tool: string;
 }
 
-// ============== 新增类型定义 ==============
+// ============== add newtype定义 ==============
 
 /**
- * 代码贡献百分比统计
+ * codecodecontributepercentageStatistics
  */
 export interface PercentCodeWritten {
-  /** AI 编写代码占比 (%) */
+  /** AI 编writecodecodeproportion (%) */
   percent_code_written: number;
-  /** 通过自动补全产生的字节数 */
+  /** viaautoautocompletegenerate bytescount */
   codeium_bytes_by_autocomplete: number;
-  /** 通过命令产生的字节数 */
+  /** viacommandgenerate bytescount */
   codeium_bytes_by_command: number;
-  /** 用户编写的字节数 */
+  /** User编writebytecount */
   user_bytes: number;
-  /** AI 总共产生的字节数 */
+  /** AI Totaltotalgenerate bytescount */
   codeium_bytes: number;
-  /** 总字节数 */
+  /** Totalbytecount */
   total_bytes: number;
-  /** 通过 Supercomplete 产生的字节数 */
+  /** via Supercomplete generate bytescount */
   codeium_bytes_by_supercomplete: number;
-  /** 通过 Cascade 产生的字节数 */
+  /** via Cascade generate bytescount */
   codeium_bytes_by_cascade: number;
 }
 
 /**
- * 代码补全统计
+ * codecodeautocompleteStatistics
  */
 export interface CompletionStatistics {
-  /** 接受次数 */
+  /** acceptcount */
   num_acceptances: number;
-  /** 拒绝次数 */
+  /** rejectcount */
   num_rejections: number;
-  /** 接受的代码行数 */
+  /** Accepted Lines of Code */
   num_lines_accepted: number;
-  /** 接受的字节数 */
+  /** acceptbytecount */
   num_bytes_accepted: number;
-  /** 用户数 */
+  /** Usercount */
   num_users: number;
-  /** 活跃开发天数 */
+  /** Activedevelopdayscount */
   active_developer_days: number;
-  /** 活跃开发小时数 */
+  /** Activedevelophourscount */
   active_developer_hours: number;
-  /** 接受率 (计算字段) */
+  /** Acceptance Rate (calculatefield) */
   acceptance_rate: number;
 }
 
 /**
- * 按日期的补全统计
+ * byDateautocompleteStatistics
  */
 export interface CompletionByDay {
-  /** 日期时间戳 */
+  /** DateTimetimestamp */
   timestamp: number;
-  /** 日期字符串 */
+  /** Datestring */
   date: string;
-  /** 补全统计 */
+  /** autocompleteStatistics */
   statistics: CompletionStatistics;
 }
 
 /**
- * 按语言的补全统计
+ * bylanguageautocompleteStatistics
  */
 export interface CompletionByLanguage {
-  /** 语言ID */
+  /** languageID */
   language_id: number;
-  /** 语言名称 */
+  /** languageName */
   language_name: string;
-  /** 补全统计 */
+  /** autocompleteStatistics */
   statistics: CompletionStatistics;
 }
 
 /**
- * Chat 统计
+ * Chat Statistics
  */
 export interface ChatStats {
-  /** 发送的聊天数 */
+  /** sendchatdayscount */
   chats_sent: number;
-  /** 接收的聊天数 */
+  /** receivechatdayscount */
   chats_received: number;
-  /** 接受的聊天数 */
+  /** acceptchatdayscount */
   chats_accepted: number;
-  /** 在光标处插入的次数 */
+  /** in光标处插入count */
   chats_inserted_at_cursor: number;
-  /** 应用的次数 */
+  /** applycount */
   chats_applied: number;
-  /** 使用的代码行数 */
+  /** usecodecoderowcount */
   chat_loc_used: number;
-  /** 使用的代码块数 */
+  /** usecodecodeblockcount */
   chat_code_blocks_used: number;
-  /** 函数解释次数 */
+  /** functioncountsolvereleasecount */
   function_explain_count: number;
-  /** 文档字符串生成次数 */
+  /** documentstringgeneratecount */
   function_docstring_count: number;
-  /** 函数重构次数 */
+  /** functioncount重构count */
   function_refactor_count: number;
-  /** 代码块解释次数 */
+  /** codecodeblocksolvereleasecount */
   code_block_explain_count: number;
-  /** 代码块重构次数 */
+  /** codecodeblock重构count */
   code_block_refactor_count: number;
-  /** 问题解释次数 */
+  /** 问topicsolvereleasecount */
   problem_explain_count: number;
-  /** 单元测试生成次数 */
+  /** singleelementtestgeneratecount */
   function_unit_tests_count: number;
-  /** 活跃开发天数 */
+  /** Activedevelopdayscount */
   active_developer_days: number;
 }
 
 /**
- * 按日期的 Chat 统计
+ * byDate Chat Statistics
  */
 export interface ChatStatsByDay {
-  /** 日期时间戳 */
+  /** DateTimetimestamp */
   timestamp: number;
-  /** 日期字符串 */
+  /** Datestring */
   date: string;
-  /** Chat 统计 */
+  /** Chat Statistics */
   stats: ChatStats;
 }
 
 /**
- * 按模型的 Chat 统计
+ * bymodel Chat Statistics
  */
 export interface ChatStatsByModel {
-  /** 模型ID */
+  /** modelID */
   model_id: number;
-  /** 模型名称 */
+  /** Model Name */
   model_name: string;
-  /** Chat 统计 */
+  /** Chat Statistics */
   stats: ChatStats;
 }
 
 /**
- * 自定义查询响应项
+ * customqueryresponseitem
  */
 export interface CustomQueryResponseItem {
-  /** 键值对数据 */
+  /** 键valuefordata */
   data: Record<string, string>;
 }
 
 /**
- * 自定义查询响应
+ * customqueryresponse
  */
 export interface CustomQueryResponse {
-  /** 响应项列表 */
+  /** responseitemList */
   items: CustomQueryResponseItem[];
 }
 
-// ============== 主数据结构 ==============
+// ============== primarydatastructure ==============
 
 /**
- * 使用分析响应数据
+ * useAnalysisresponsedata
  */
 export interface AnalyticsData {
-  /** 每日 Cascade 代码行数统计 (Field 18: cascade_lines) */
+  /** daily Cascade codecoderowcountStatistics (Field 18: cascade_lines) */
   daily_cascade_lines: DailyCascadeLinesCount[];
-  /** 工具使用统计 (Field 19: cascade_tool_usage) */
+  /** tooluseStatistics (Field 19: cascade_tool_usage) */
   tool_usage: ToolUsageEntry[];
-  /** 模型使用详情 (Field 20: cascade_runs) */
+  /** modeluseDetails (Field 20: cascade_runs) */
   model_usage_details: ModelUsageEntry[];
-  /** 模型使用汇总 */
+  /** modelusesummaryTotal */
   model_usage_summary: ModelUsageSummary[];
-  /** 总体统计 */
+  /** Overall Statistics */
   summary: AnalyticsSummary;
   
-  // ===== 新增字段 =====
-  /** 代码贡献百分比 */
+  // ===== add newfield =====
+  /** codecodecontributepercentage */
   percent_code_written: PercentCodeWritten;
-  /** 补全统计 */
+  /** autocompleteStatistics */
   completion_stats: CompletionStatistics;
-  /** 按日期的补全统计 */
+  /** byDateautocompleteStatistics */
   completions_by_day: CompletionByDay[];
-  /** 按语言的补全统计 */
+  /** bylanguageautocompleteStatistics */
   completions_by_language: CompletionByLanguage[];
-  /** Chat 统计 */
+  /** Chat Statistics */
   chat_stats: ChatStats;
-  /** 按日期的 Chat 统计 */
+  /** byDate Chat Statistics */
   chats_by_day: ChatStatsByDay[];
-  /** 按模型的 Chat 统计 */
+  /** bymodel Chat Statistics */
   chats_by_model: ChatStatsByModel[];
-  /** 自定义查询结果 */
+  /** customqueryresult */
   custom_query_results: CustomQueryResponse;
 }
 

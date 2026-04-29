@@ -14,33 +14,33 @@
           <el-icon><Trophy /></el-icon>
         </div>
         <div class="header-text">
-          <h3>批量更换订阅</h3>
-          <p>并发执行，快速更换多个账号的订阅计划</p>
+          <h3>Batch Change Subscription</h3>
+          <p>concurrentexecute，quickchangemultiple accountsSubscriptionplan</p>
         </div>
       </div>
     </template>
 
     <div class="batch-plan-content">
-      <!-- 选中账号信息 -->
+      <!-- selectedAccount Info -->
       <div class="selected-accounts-card">
         <div class="card-icon">
           <el-icon><User /></el-icon>
         </div>
         <div class="card-info">
-          <span class="label">已选择账号</span>
+          <span class="label">SelectedAccount</span>
           <span class="count">{{ selectedAccountIds.length }}</span>
         </div>
         <div class="card-badge" v-if="loopMode">
           <el-icon><Refresh /></el-icon>
-          循环模式
+          loopMode
         </div>
       </div>
       
-      <!-- 计划选择 -->
+      <!-- planselect -->
       <div class="plan-selection">
         <div class="section-header">
           <el-icon><Medal /></el-icon>
-          <span>选择目标计划</span>
+          <span>selecttargetplan</span>
         </div>
         <div class="plan-cards">
           <div 
@@ -64,33 +64,33 @@
         </div>
       </div>
       
-      <!-- 付款周期选择 -->
+      <!-- Payment Cycle Selection -->
       <div class="payment-period-section">
         <div class="period-label">
           <el-icon><Calendar /></el-icon>
-          <span>付款周期</span>
+          <span>Payment Cycle</span>
         </div>
         <el-radio-group v-model="paymentPeriod" :disabled="isRunning" size="small">
           <el-radio-button :value="1">
             <el-icon><Clock /></el-icon>
-            月付
+            Monthly
           </el-radio-button>
           <el-radio-button :value="2">
             <el-icon><Calendar /></el-icon>
-            年付
+            Annually
           </el-radio-button>
         </el-radio-group>
       </div>
 
-      <!-- 循环模式设置 -->
+      <!-- loopModeSettings -->
       <div class="loop-settings" :class="{ active: loopMode }">
         <div class="loop-content">
           <div class="loop-icon">
             <el-icon><Refresh /></el-icon>
           </div>
           <div class="loop-info">
-            <div class="loop-title">循环更换模式</div>
-            <div class="loop-desc">每个账号独立循环执行，连续3次失败后自动停止</div>
+            <div class="loop-title">cycle changeMode</div>
+            <div class="loop-desc">every accountsindependentloopexecute，consecutive3timefailedthen autoStop</div>
           </div>
         </div>
         <el-switch 
@@ -100,13 +100,13 @@
         />
       </div>
       
-      <!-- 执行状态 -->
+      <!-- executeStatus -->
       <div v-if="isRunning || stats.totalAttempts > 0" class="execution-panel">
         <div class="panel-header">
           <div class="header-left">
             <el-icon v-if="isRunning" class="is-loading"><Loading /></el-icon>
             <el-icon v-else><SuccessFilled /></el-icon>
-            <span>{{ isRunning ? '正在执行' : '执行完成' }}</span>
+            <span>{{ isRunning ? 'currentlyexecute' : 'executeDone' }}</span>
           </div>
           <el-tag 
             :type="isRunning ? 'primary' : 'success'" 
@@ -114,57 +114,57 @@
             size="small"
             round
           >
-            {{ isRunning ? '运行中' : '已完成' }}
+            {{ isRunning ? 'Running' : 'Completed' }}
           </el-tag>
         </div>
         
-        <!-- 统计卡片 -->
+        <!-- Statisticscard -->
         <div class="stats-cards">
           <div class="stat-card success">
             <el-icon><SuccessFilled /></el-icon>
             <div class="stat-value">{{ stats.successCount }}</div>
-            <div class="stat-label">成功</div>
+            <div class="stat-label">successful</div>
           </div>
           <div class="stat-card failed">
             <el-icon><CircleCloseFilled /></el-icon>
             <div class="stat-value">{{ stats.failedCount }}</div>
-            <div class="stat-label">失败</div>
+            <div class="stat-label">failed</div>
           </div>
           <div class="stat-card total">
             <el-icon><DataLine /></el-icon>
             <div class="stat-value">{{ stats.totalAttempts }}</div>
-            <div class="stat-label">总计</div>
+            <div class="stat-label">Total</div>
           </div>
           <div class="stat-card progress">
             <el-icon><User /></el-icon>
             <div class="stat-value">{{ stats.processedAccounts }}/{{ selectedAccountIds.length }}</div>
-            <div class="stat-label">进度</div>
+            <div class="stat-label">progress</div>
           </div>
         </div>
         
-        <!-- 连续失败警告 -->
+        <!-- consecutivefailedWarning -->
         <div v-if="stats.consecutiveFailures > 0" class="warning-alert">
           <el-icon><Warning /></el-icon>
-          <span>连续失败: {{ stats.consecutiveFailures }} / 3</span>
+          <span>consecutivefailed: {{ stats.consecutiveFailures }} / 3</span>
         </div>
         
-        <!-- 最后错误 -->
+        <!-- lastError -->
         <div v-if="stats.lastError" class="error-alert">
           <el-icon><InfoFilled /></el-icon>
           <span>{{ stats.lastError }}</span>
         </div>
         
-        <!-- 执行日志 -->
+        <!-- executelog -->
         <div v-if="executionLogs.length > 0" class="logs-section">
           <div class="logs-header">
             <div class="header-left">
               <el-icon><Document /></el-icon>
-              <span>执行日志</span>
+              <span>executelog</span>
               <el-tag size="small" type="info" effect="plain">{{ executionLogs.length }}</el-tag>
             </div>
             <el-button link size="small" @click="executionLogs = []">
               <el-icon><Delete /></el-icon>
-              清空
+              Clear
             </el-button>
           </div>
           <div class="logs-container" ref="logsContainer">
@@ -184,7 +184,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose" :disabled="isRunning" size="large">
-          取消
+          Cancel
         </el-button>
         <el-button
           v-if="isRunning"
@@ -193,7 +193,7 @@
           @click="stopExecution"
         >
           <el-icon><VideoPause /></el-icon>
-          停止执行
+          Stopexecute
         </el-button>
         <el-button
           v-else
@@ -203,7 +203,7 @@
           :disabled="!selectedPlan || selectedAccountIds.length === 0"
         >
           <el-icon><VideoPlay /></el-icon>
-          {{ loopMode ? '开始循环更换' : '开始批量更换' }}
+          {{ loopMode ? 'startcycle change' : 'startbatchchange' }}
         </el-button>
       </div>
     </template>
@@ -234,36 +234,36 @@ const emit = defineEmits<{
 
 const visible = ref(props.modelValue);
 
-// 所有可用的订阅计划类型
+// allcanuseSubscriptionplan type
 type PlanType = 'free' | 'teams' | 'pro' | 'enterprise_saas' | 'hybrid' | 'enterprise_self_hosted' | 'waitlist_pro' | 'teams_ultimate' | 'pro_ultimate' | 'trial' | 'enterprise_self_serve' | 'enterprise_saas_pooled' | 'devin_enterprise' | 'devin_teams' | 'devin_teams_v2' | 'devin_pro' | 'devin_max' | 'max' | 'devin_free' | 'devin_trial' | '';
 const selectedPlan = ref<PlanType>('');
 
-// 订阅计划配置
+// Subscriptionplanconfig
 const planConfigs = [
-  { key: 'free', name: 'Free', tier: 0, color: '#6b7280', desc: '免费版' },
-  { key: 'teams', name: 'Teams', tier: 1, color: '#10b981', desc: '团队版' },
-  { key: 'pro', name: 'Pro', tier: 2, color: '#3b82f6', desc: '专业版' },
-  { key: 'enterprise_saas', name: 'Ent SaaS', tier: 3, color: '#8b5cf6', desc: '企业SaaS' },
-  { key: 'hybrid', name: 'Hybrid', tier: 4, color: '#f59e0b', desc: '混合部署' },
-  { key: 'enterprise_self_hosted', name: 'Ent Self', tier: 5, color: '#ec4899', desc: '企业自托管' },
-  { key: 'waitlist_pro', name: 'Wait Pro', tier: 6, color: '#6366f1', desc: '等待列表' },
-  { key: 'teams_ultimate', name: 'Teams Ult', tier: 7, color: '#14b8a6', desc: '团队旗舰' },
-  { key: 'pro_ultimate', name: 'Pro Ult', tier: 8, color: '#f97316', desc: 'Pro旗舰' },
-  { key: 'trial', name: 'Trial', tier: 9, color: '#84cc16', desc: '试用版' },
-  { key: 'enterprise_self_serve', name: 'Ent Self-Serve', tier: 10, color: '#a855f7', desc: '企业自助' },
-  { key: 'enterprise_saas_pooled', name: 'Ent Pooled', tier: 11, color: '#0891b2', desc: 'SaaS池化' },
-  { key: 'devin_enterprise', name: 'Devin Ent', tier: 12, color: '#dc2626', desc: 'Devin企业' },
-  { key: 'devin_teams', name: 'Devin Teams', tier: 14, color: '#e11d48', desc: 'Devin团队' },
-  { key: 'devin_teams_v2', name: 'Devin T V2', tier: 15, color: '#be123c', desc: 'Devin团队V2' },
-  { key: 'devin_pro', name: 'Devin Pro', tier: 16, color: '#ea580c', desc: 'Devin专业' },
-  { key: 'devin_max', name: 'Devin Max', tier: 17, color: '#c2410c', desc: 'Devin旗舰' },
-  { key: 'max', name: 'Max', tier: 18, color: '#7c3aed', desc: '旗舰版' },
-  { key: 'devin_free', name: 'Devin Free', tier: 19, color: '#9ca3af', desc: 'Devin免费' },
-  { key: 'devin_trial', name: 'Devin Trial', tier: 20, color: '#f472b6', desc: 'Devin试用' },
+  { key: 'free', name: 'Free', tier: 0, color: '#6b7280', desc: 'Free' },
+  { key: 'teams', name: 'Teams', tier: 1, color: '#10b981', desc: 'Team' },
+  { key: 'pro', name: 'Pro', tier: 2, color: '#3b82f6', desc: 'Pro' },
+  { key: 'enterprise_saas', name: 'Ent SaaS', tier: 3, color: '#8b5cf6', desc: 'EnterpriseSaaS' },
+  { key: 'hybrid', name: 'Hybrid', tier: 4, color: '#f59e0b', desc: 'mixdeploy' },
+  { key: 'enterprise_self_hosted', name: 'Ent Self', tier: 5, color: '#ec4899', desc: 'Enterpriseself-hosted' },
+  { key: 'waitlist_pro', name: 'Wait Pro', tier: 6, color: '#6366f1', desc: 'waitList' },
+  { key: 'teams_ultimate', name: 'Teams Ult', tier: 7, color: '#14b8a6', desc: 'Teamflagship' },
+  { key: 'pro_ultimate', name: 'Pro Ult', tier: 8, color: '#f97316', desc: 'Proflagship' },
+  { key: 'trial', name: 'Trial', tier: 9, color: '#84cc16', desc: 'Trial' },
+  { key: 'enterprise_self_serve', name: 'Ent Self-Serve', tier: 10, color: '#a855f7', desc: 'Enterpriseself-service' },
+  { key: 'enterprise_saas_pooled', name: 'Ent Pooled', tier: 11, color: '#0891b2', desc: 'SaaSpooled' },
+  { key: 'devin_enterprise', name: 'Devin Ent', tier: 12, color: '#dc2626', desc: 'DevinEnterprise' },
+  { key: 'devin_teams', name: 'Devin Teams', tier: 14, color: '#e11d48', desc: 'DevinTeam' },
+  { key: 'devin_teams_v2', name: 'Devin T V2', tier: 15, color: '#be123c', desc: 'DevinTeamV2' },
+  { key: 'devin_pro', name: 'Devin Pro', tier: 16, color: '#ea580c', desc: 'DevinPro' },
+  { key: 'devin_max', name: 'Devin Max', tier: 17, color: '#c2410c', desc: 'Devinflagship' },
+  { key: 'max', name: 'Max', tier: 18, color: '#7c3aed', desc: 'Flagship' },
+  { key: 'devin_free', name: 'Devin Free', tier: 19, color: '#9ca3af', desc: 'DevinFree' },
+  { key: 'devin_trial', name: 'Devin Trial', tier: 20, color: '#f472b6', desc: 'Devintrial' },
 ];
 
 const loopMode = ref(false);
-// 付款周期: 1=月付, 2=年付
+// Payment Cycle: 1=Monthly, 2=Annually
 const paymentPeriod = ref<number>(1);
 const isRunning = ref(false);
 const shouldStop = ref(false);
@@ -320,7 +320,7 @@ function addLog(message: string, type: 'success' | 'error' | 'info') {
   const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
   executionLogs.value.push({ time, message, type });
   
-  // 自动滚动到底部
+  // autoscrolltobottom
   nextTick(() => {
     if (logsContainer.value) {
       logsContainer.value.scrollTop = logsContainer.value.scrollHeight;
@@ -332,7 +332,7 @@ function getSelectedAccounts(): Account[] {
   return props.accounts.filter(a => props.selectedAccountIds.includes(a.id));
 }
 
-// 返回: success=是否成功, error=错误信息, hasReason=失败时是否有明确原因
+// Back: success=whethersuccessful, error=Error Info, hasReason=failedwhenwhetherhasclearreason
 async function executeSingleUpdate(account: Account): Promise<{ success: boolean; error?: string; hasReason: boolean }> {
   try {
     const result = await apiService.updatePlan(account.id, selectedPlan.value, paymentPeriod.value, false);
@@ -342,12 +342,12 @@ async function executeSingleUpdate(account: Account): Promise<{ success: boolean
       const reason = result.payment_failure_reason;
       return { 
         success: false, 
-        error: reason || '更换计划失败',
-        hasReason: !!reason  // 有明确原因（如卡号错误）不计入连续失败
+        error: reason || 'Failed to change plan',
+        hasReason: !!reason  // hasclearreason（e.g.Card NumberError）notinclude inconsecutivefailed
       };
     }
   } catch (err: any) {
-    return { success: false, error: err.toString(), hasReason: true }; // 异常也算有原因
+    return { success: false, error: err.toString(), hasReason: true }; // exceptionalso算has reason
   }
 }
 
@@ -355,9 +355,9 @@ function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// 单个账号独立循环执行（循环模式下使用）
+// single accountsindependentloopexecute（loopModeunderuse）
 async function executeAccountLoop(account: Account): Promise<void> {
-  let consecutiveFailures = 0;  // 连续无原因失败次数
+  let consecutiveFailures = 0;  // consecutivenoreasonfailedcount
   let loopCount = 0;
   
   while (!shouldStop.value && consecutiveFailures < 3) {
@@ -369,39 +369,39 @@ async function executeAccountLoop(account: Account): Promise<void> {
     if (result.success) {
       stats.successCount++;
       consecutiveFailures = 0;
-      addLog(`[${account.email}] 第${loopCount}轮 更换成功`, 'success');
+      addLog(`[${account.email}] #${loopCount}round changesuccessful`, 'success');
     } else {
       stats.failedCount++;
-      stats.lastError = result.error || '未知错误';
+      stats.lastError = result.error || 'Unknown error';
       
-      // 只有无明确原因的失败才计入连续失败次数
+      // only whennoclearreasonfailed才include inconsecutivefailedcount
       if (!result.hasReason) {
         consecutiveFailures++;
-        addLog(`[${account.email}] 第${loopCount}轮 更换失败(${consecutiveFailures}/3): ${result.error}`, 'error');
+        addLog(`[${account.email}] #${loopCount}round changefailed(${consecutiveFailures}/3): ${result.error}`, 'error');
       } else {
-        // 有明确原因（如卡号错误）的失败重置计数器
+        // hasclearreason（e.g.Card NumberError）failedResetcountcountmanager
         consecutiveFailures = 0;
-        addLog(`[${account.email}] 第${loopCount}轮 更换失败(有原因): ${result.error}`, 'error');
+        addLog(`[${account.email}] #${loopCount}round changefailed(has reason): ${result.error}`, 'error');
       }
     }
     
     if (consecutiveFailures >= 3) {
-      addLog(`[${account.email}] 连续3次无原因失败，已停止`, 'error');
+      addLog(`[${account.email}] consecutive3timenoreasonfailed，already Stop`, 'error');
       stats.processedAccounts++;
       break;
     }
     
-    // 每次执行之间短暂延迟
+    // every timeexecuteofbrief intervaldelay
     await delay(300);
   }
   
   if (shouldStop.value) {
-    addLog(`[${account.email}] 用户停止，共执行${loopCount}轮`, 'info');
+    addLog(`[${account.email}] UserStop，totalexecute${loopCount}round`, 'info');
     stats.processedAccounts++;
   }
 }
 
-// 单次并发执行所有账号
+// singletimeconcurrentexecuteallAccount
 async function executeBatchOnce(accounts: Account[]): Promise<void> {
   const tasks = accounts.map(async (account) => {
     if (shouldStop.value) return;
@@ -411,11 +411,11 @@ async function executeBatchOnce(accounts: Account[]): Promise<void> {
     
     if (result.success) {
       stats.successCount++;
-      addLog(`[${account.email}] 更换成功`, 'success');
+      addLog(`[${account.email}] changesuccessful`, 'success');
     } else {
       stats.failedCount++;
-      stats.lastError = result.error || '未知错误';
-      addLog(`[${account.email}] 更换失败: ${result.error}`, 'error');
+      stats.lastError = result.error || 'Unknown error';
+      addLog(`[${account.email}] changefailed: ${result.error}`, 'error');
     }
     
     stats.processedAccounts++;
@@ -426,13 +426,13 @@ async function executeBatchOnce(accounts: Account[]): Promise<void> {
 
 async function startExecution() {
   if (!selectedPlan.value) {
-    ElMessage.warning('请选择目标计划');
+    ElMessage.warning('Please selecttargetplan');
     return;
   }
 
   const selectedAccounts = getSelectedAccounts();
   if (selectedAccounts.length === 0) {
-    ElMessage.warning('没有选中的账号');
+    ElMessage.warning('nohasselectedAccount');
     return;
   }
 
@@ -446,38 +446,38 @@ async function startExecution() {
   stats.lastError = '';
   currentLoopCount.value = 1;
 
-  addLog(`开始并发批量更换订阅到 ${selectedPlan.value.toUpperCase()}（${selectedAccounts.length} 个账号）`, 'info');
+  addLog(`startconcurrentBatch Change Subscriptionto ${selectedPlan.value.toUpperCase()}（${selectedAccounts.length}  accounts）`, 'info');
 
   if (loopMode.value) {
-    // 循环模式 - 每个账号独立循环，各自执行直到连续3次失败或手动停止
-    addLog(`循环模式：每个账号独立循环执行，连续3次失败后停止`, 'info');
+    // loopMode - every accountsindependentloop，各自executedirecttoconsecutive3timefailed or manuallyStop
+    addLog(`loopMode：every accountsindependentloopexecute，consecutive3timefailedafterStop`, 'info');
     
-    // 所有账号并发启动各自的循环
+    // allAccountconcurrentlaunch各自loop
     const tasks = selectedAccounts.map(account => executeAccountLoop(account));
     await Promise.all(tasks);
     
-    addLog(`所有账号循环执行完成`, 'info');
+    addLog(`allAccountloopexecuteDone`, 'info');
   } else {
-    // 单次模式 - 并发执行所有账号一次
-    addLog(`单次模式：并发执行 ${selectedAccounts.length} 个账号...`, 'info');
+    // singletimeMode - concurrentexecuteallAccountonce
+    addLog(`singletimeMode：concurrentexecute ${selectedAccounts.length}  accounts...`, 'info');
     await executeBatchOnce(selectedAccounts);
   }
 
   isRunning.value = false;
   currentAccount.value = null;
   
-  // 显示最终结果
+  // displaymostendresult
   if (stats.successCount > 0) {
-    ElMessage.success(`批量更换完成: 成功 ${stats.successCount} 次，失败 ${stats.failedCount} 次`);
+    ElMessage.success(`batchchangeDone: successful ${stats.successCount} time，failed ${stats.failedCount} time`);
     emit('success');
   } else if (stats.totalAttempts > 0) {
-    ElMessage.error('批量更换失败，没有成功的操作');
+    ElMessage.error('batchchangefailed，nohassuccessfulOperation');
   }
 }
 
 function stopExecution() {
   shouldStop.value = true;
-  ElMessage.info('正在停止执行...');
+  ElMessage.info('currentlyStopexecute...');
 }
 
 function handleClose() {
@@ -717,7 +717,7 @@ function handleClose() {
   }
 }
 
-/* 付款周期选择 */
+/* Payment Cycle Selection */
 .payment-period-section {
   display: flex;
   align-items: center;
@@ -1031,7 +1031,7 @@ function handleClose() {
   padding-top: 8px;
 }
 
-/* 暗色主题 */
+/* Dark Theme */
 :global(.dark) {
   .dialog-header {
     .header-text {

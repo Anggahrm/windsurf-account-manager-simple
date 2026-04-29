@@ -6,27 +6,27 @@
     :show-close="false"
     class="card-generator-dialog"
   >
-    <!-- 自定义对话框头部 -->
+    <!-- customDialogheader -->
     <template #header>
       <div class="dialog-header">
         <div class="header-title">
           <div class="header-icon">
             <el-icon><CreditCard /></el-icon>
           </div>
-          <h3 class="header-text">虚拟卡生成器</h3>
+          <h3 class="header-text">Virtual Card Generatormanager</h3>
         </div>
         <el-button :icon="Close" circle @click="visible = false" class="close-btn" />
       </div>
     </template>
     
     <div class="card-generator-content">
-      <!-- 左侧：BIN管理 -->
+      <!-- left side：BINManagement -->
       <div class="bin-manager">
         <div class="section-header">
           <div class="section-icon">
             <el-icon><Collection /></el-icon>
           </div>
-          <span>卡BIN管理</span>
+          <span>cardBINManagement</span>
           <el-tag size="small" type="info" class="count-tag">{{ binList.length }}</el-tag>
         </div>
         
@@ -34,7 +34,7 @@
           <div class="form-row">
             <el-input
               v-model="newBin.prefix"
-              placeholder="BIN前缀 (如: 411111)"
+              placeholder="BINprefix (e.g.: 411111)"
               size="default"
               class="bin-input"
             />
@@ -42,7 +42,7 @@
           <div class="form-row">
             <el-select
               v-model="newBin.type"
-              placeholder="卡类型"
+              placeholder="Card Type"
               size="default"
               class="type-select"
             >
@@ -53,7 +53,7 @@
               <el-option label="JCB" value="jcb" />
               <el-option label="UnionPay" value="unionpay" />
             </el-select>
-            <el-button type="primary" size="default" :icon="Plus" @click="addBin">添加</el-button>
+            <el-button type="primary" size="default" :icon="Plus" @click="addBin">Add</el-button>
           </div>
         </div>
         
@@ -73,8 +73,8 @@
                   <span class="bin-type-name">{{ getCardTypeName(bin.type) }}</span>
                 </div>
                 <div class="bin-meta">
-                  <span class="bin-digits"><el-icon><Postcard /></el-icon>{{ getCardDigits(bin.type) }}位</span>
-                  <span class="bin-cvc"><el-icon><Key /></el-icon>{{ getCvcDigits(bin.type) }}位</span>
+                  <span class="bin-digits"><el-icon><Postcard /></el-icon>{{ getCardDigits(bin.type) }}</span>
+                  <span class="bin-cvc"><el-icon><Key /></el-icon>{{ getCvcDigits(bin.type) }}</span>
                 </div>
               </div>
               <el-button
@@ -92,23 +92,23 @@
             <div class="empty-icon">
               <el-icon><CreditCard /></el-icon>
             </div>
-            <p>暂无BIN，请添加</p>
+            <p>NoneBIN，Please add</p>
           </div>
         </div>
       </div>
       
-      <!-- 右侧：生成器 -->
+      <!-- right side：generatemanager -->
       <div class="generator-panel">
         <div class="section-header">
           <div class="section-icon">
             <el-icon><Cpu /></el-icon>
           </div>
-          <span>卡片生成</span>
+          <span>cardgenerate</span>
         </div>
         
         <div class="generator-options">
           <div class="option-row">
-            <span class="option-label">生成数量</span>
+            <span class="option-label">generateCount</span>
             <el-input-number
               v-model="generateCount"
               :min="1"
@@ -119,20 +119,20 @@
           </div>
           
           <div class="option-row">
-            <span class="option-label">姓名格式</span>
+            <span class="option-label">Nameformat</span>
             <el-select v-model="nameFormat" size="small" class="full-width">
-              <el-option label="随机英文名" value="random" />
-              <el-option label="自定义姓名" value="custom" />
+              <el-option label="random英textname" value="random" />
+              <el-option label="customName" value="custom" />
             </el-select>
           </div>
           
           <div class="option-row" v-if="nameFormat === 'custom'">
-            <span class="option-label">持卡人姓名</span>
-            <el-input v-model="customName" placeholder="如: JOHN DOE" size="small" class="full-width" />
+            <span class="option-label">cardholderName</span>
+            <el-input v-model="customName" placeholder="e.g.: JOHN DOE" size="small" class="full-width" />
           </div>
           
           <div class="option-row">
-            <span class="option-label">有效期年份</span>
+            <span class="option-label">Expiry年份</span>
             <el-input-number
               v-model="expiryYear"
               :min="currentYear"
@@ -143,7 +143,7 @@
           </div>
           
           <div class="option-row">
-            <span class="option-label">有效期月份</span>
+            <span class="option-label">Expirymonth份</span>
             <el-select v-model="expiryMonth" size="small" class="full-width">
               <el-option
                 v-for="m in 12"
@@ -163,7 +163,7 @@
             :disabled="selectedBinIndex === null"
             class="generate-btn"
           >
-            生成卡片
+            Generate Cards
           </el-button>
           <el-button
             :icon="DocumentCopy"
@@ -171,7 +171,7 @@
             :disabled="generatedCards.length === 0"
             class="action-btn"
           >
-            复制全部
+            CopyAll
           </el-button>
           <el-button
             :icon="Delete"
@@ -179,16 +179,16 @@
             :disabled="generatedCards.length === 0"
             class="action-btn"
           >
-            清空
+            Clear
           </el-button>
         </div>
         
-        <!-- 生成结果 -->
+        <!-- generateresult -->
         <div class="generated-cards">
           <div class="cards-header" v-if="generatedCards.length > 0">
             <div class="cards-header-left">
               <el-icon><Tickets /></el-icon>
-              <span>已生成 <strong>{{ generatedCards.length }}</strong> 张卡片</span>
+              <span>Generated <strong>{{ generatedCards.length }}</strong>  cards</span>
             </div>
             <div class="cards-header-right">
               <el-tag v-if="selectedBinIndex !== null" size="small" :type="getCardTypeTagType(binList[selectedBinIndex].type)">
@@ -236,7 +236,7 @@
               <div class="empty-icon">
                 <el-icon><Tickets /></el-icon>
               </div>
-              <p>选择BIN后点击“生成卡片”</p>
+              <p>selectBINafterclick“Generate Cards”</p>
             </div>
           </div>
         </div>
@@ -287,7 +287,7 @@ const visible = computed({
   set: (val) => emit('update:modelValue', val)
 });
 
-// BIN管理
+// BINManagement
 const binList = ref<BinConfig[]>([
   { prefix: '411111', type: 'visa' },
   { prefix: '521234', type: 'mastercard' },
@@ -297,7 +297,7 @@ const binList = ref<BinConfig[]>([
 const newBin = ref<BinConfig>({ prefix: '', type: 'visa' });
 const selectedBinIndex = ref<number | null>(null);
 
-// 生成选项
+// generateoption
 const generateCount = ref(10);
 const nameFormat = ref<'random' | 'custom'>('random');
 const customName = ref('');
@@ -305,10 +305,10 @@ const currentYear = new Date().getFullYear();
 const expiryYear = ref(currentYear + 3);
 const expiryMonth = ref(12);
 
-// 生成结果
+// generateresult
 const generatedCards = ref<GeneratedCard[]>([]);
 
-// 随机英文名库
+// random英textnamelibrary
 const firstNames = [
   'JAMES', 'JOHN', 'ROBERT', 'MICHAEL', 'WILLIAM', 'DAVID', 'RICHARD', 'JOSEPH',
   'THOMAS', 'CHARLES', 'MARY', 'PATRICIA', 'JENNIFER', 'LINDA', 'ELIZABETH',
@@ -326,7 +326,7 @@ const lastNames = [
   'YOUNG', 'ALLEN', 'KING', 'WRIGHT', 'SCOTT', 'TORRES', 'NGUYEN', 'HILL', 'FLORES'
 ];
 
-// 卡类型配置
+// Card Typeconfig
 const cardTypeConfig = {
   visa: { digits: 16, cvc: 3, name: 'Visa' },
   mastercard: { digits: 16, cvc: 3, name: 'MasterCard' },
@@ -362,21 +362,21 @@ function getCardTypeTagType(type: string): '' | 'success' | 'info' | 'warning' |
 
 function addBin() {
   if (!newBin.value.prefix) {
-    ElMessage.warning('请输入BIN前缀');
+    ElMessage.warning('Please enterBINprefix');
     return;
   }
   if (!/^\d{4,8}$/.test(newBin.value.prefix)) {
-    ElMessage.warning('BIN前缀应为4-8位数字');
+    ElMessage.warning('BINprefixshouldas4-8-digit number');
     return;
   }
   if (binList.value.some(b => b.prefix === newBin.value.prefix)) {
-    ElMessage.warning('该BIN已存在');
+    ElMessage.warning('theBINAlready exists');
     return;
   }
   binList.value.push({ ...newBin.value });
   newBin.value = { prefix: '', type: 'visa' };
   saveBinList();
-  ElMessage.success('BIN添加成功');
+  ElMessage.success('BINAdded successfully');
 }
 
 function removeBin(index: number) {
@@ -393,11 +393,11 @@ function selectBin(index: number) {
   selectedBinIndex.value = selectedBinIndex.value === index ? null : index;
 }
 
-// Luhn算法生成校验位
-// 注意：计算校验位时，部分卡号的最右边数字在完整卡号中是倒数第2位，应该加倍
+// Luhnalgorithmgeneratevalidate
+// note：calculatevalidatewhen，PartialCard Numbermostright边countcharacterincompleteCard Numberinis倒count#2，shouldthe加倍
 function luhnChecksum(cardNumber: string): number {
   let sum = 0;
-  let shouldDouble = true; // 从true开始，因为部分卡号最右边的数字在完整卡号中需要加倍
+  let shouldDouble = true; // fromtruestart，becausePartialCard Numbermostright边countcharacterincompleteCard Numberinneed加倍
   
   for (let i = cardNumber.length - 1; i >= 0; i--) {
     let digit = parseInt(cardNumber[i], 10);
@@ -416,7 +416,7 @@ function luhnChecksum(cardNumber: string): number {
   return (10 - (sum % 10)) % 10;
 }
 
-// 生成随机数字
+// generaterandomcountcharacter
 function randomDigits(length: number): string {
   let result = '';
   for (let i = 0; i < length; i++) {
@@ -425,14 +425,14 @@ function randomDigits(length: number): string {
   return result;
 }
 
-// 生成随机姓名
+// generaterandomName
 function generateRandomName(): string {
   const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
   const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
   return `${firstName} ${lastName}`;
 }
 
-// 生成卡号
+// generateCard Number
 function generateCardNumber(bin: BinConfig): string {
   const config = cardTypeConfig[bin.type];
   const totalDigits = config.digits;
@@ -444,16 +444,16 @@ function generateCardNumber(bin: BinConfig): string {
   return partialNumber + checksum.toString();
 }
 
-// 生成CVC
+// generateCVC
 function generateCvc(type: string): string {
   const cvcLength = getCvcDigits(type);
   return randomDigits(cvcLength);
 }
 
-// 生成卡片
+// Generate Cards
 function generateCards() {
   if (selectedBinIndex.value === null) {
-    ElMessage.warning('请先选择一个BIN');
+    ElMessage.warning('please firstselectoneBIN');
     return;
   }
   
@@ -473,41 +473,41 @@ function generateCards() {
   }
   
   generatedCards.value = cards;
-  ElMessage.success(`已生成 ${cards.length} 张卡片`);
+  ElMessage.success(`Generated ${cards.length}  cards`);
 }
 
-// 格式化卡号显示
+// formatCard Numberdisplay
 function formatCardNumber(number: string): string {
   if (number.length === 15) {
-    // AMEX格式: 4-6-5
+    // AMEXformat: 4-6-5
     return `${number.slice(0, 4)} ${number.slice(4, 10)} ${number.slice(10)}`;
   }
-  // 标准格式: 4-4-4-4
+  // Standardformat: 4-4-4-4
   return number.match(/.{1,4}/g)?.join(' ') || number;
 }
 
-// 复制单张卡片
+// Copysingle cards
 function copyCard(card: GeneratedCard) {
   const text = `${card.number}|${card.expiry}|${card.cvc}|${card.name}`;
   navigator.clipboard.writeText(text);
-  ElMessage.success('已复制到剪贴板');
+  ElMessage.success('Copied to clipboard');
 }
 
-// 复制全部卡片
+// CopyAllcard
 function copyAllCards() {
   const text = generatedCards.value
     .map(card => `${card.number}|${card.expiry}|${card.cvc}|${card.name}`)
     .join('\n');
   navigator.clipboard.writeText(text);
-  ElMessage.success(`已复制 ${generatedCards.value.length} 张卡片`);
+  ElMessage.success(`Copied ${generatedCards.value.length}  cards`);
 }
 
-// 清空卡片
+// Clearcard
 function clearCards() {
   generatedCards.value = [];
 }
 
-// 本地存储BIN列表
+// localstoreBINList
 function saveBinList() {
   localStorage.setItem('card-generator-bins', JSON.stringify(binList.value));
 }
@@ -529,7 +529,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 对话框基础样式 */
+/* Dialogbasicstyle */
 .card-generator-dialog :deep(.el-dialog__body) {
   padding: 0;
 }
@@ -539,7 +539,7 @@ onMounted(() => {
   margin: 0;
 }
 
-/* 自定义头部 */
+/* customheader */
 .dialog-header {
   display: flex;
   align-items: center;
@@ -551,7 +551,7 @@ onMounted(() => {
   overflow: hidden;
 }
 
-/* 增加头部光泽感 */
+/* 增加header光泽sense */
 .dialog-header::after {
   content: '';
   position: absolute;
@@ -605,14 +605,14 @@ h3.header-text {
   transform: rotate(90deg);
 }
 
-/* 主内容区 */
+/* Main Content */
 .card-generator-content {
   display: flex;
   height: 620px;
-  background: #F9FAFB; /* 极淡的灰背景 */
+  background: #F9FAFB; /* 极淡graybackground */
 }
 
-/* 左侧BIN管理 */
+/* left sideBINManagement */
 .bin-manager {
   width: 320px;
   border-right: 1px solid #E5E7EB;
@@ -621,7 +621,7 @@ h3.header-text {
   background: #FFFFFF;
 }
 
-/* BIN添加表单 */
+/* BINAddform */
 .bin-add-form {
   padding: 16px;
   background: #F9FAFB;
@@ -646,7 +646,7 @@ h3.header-text {
   flex: 1;
 }
 
-/* BIN列表 */
+/* BINList */
 .bin-list {
   flex: 1;
   overflow-y: auto;
@@ -654,7 +654,7 @@ h3.header-text {
   background: #F9FAFB;
 }
 
-/* 右侧生成器 */
+/* right sidegeneratemanager */
 .generator-panel {
   flex: 1;
   display: flex;
@@ -663,7 +663,7 @@ h3.header-text {
   background: #FFFFFF;
 }
 
-/* 区域头部 */
+/* areaheader */
 .section-header {
   display: flex;
   align-items: center;
@@ -689,7 +689,7 @@ h3.header-text {
   box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
 }
 
-/* BIN列表项 */
+/* BINListitem */
 .bin-item {
   position: relative;
   display: flex;
@@ -718,7 +718,7 @@ h3.header-text {
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
 }
 
-/* 卡品牌颜色指示条 */
+/* card品牌color指示items */
 .card-brand-indicator {
   position: absolute;
   left: 0;
@@ -791,7 +791,7 @@ h3.header-text {
   opacity: 1;
 }
 
-/* 生成选项 */
+/* generateoption */
 .generator-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -819,7 +819,7 @@ h3.header-text {
   width: 100% !important;
 }
 
-/* 生成按钮 */
+/* generatebutton */
 .generate-btn {
   background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%) !important;
   border: none !important;
@@ -835,7 +835,7 @@ h3.header-text {
   filter: brightness(1.1);
 }
 
-/* 生成结果区 */
+/* generateresultarea */
 .generated-cards {
   flex: 1;
   display: flex;
@@ -877,7 +877,7 @@ h3.header-text {
   padding: 12px;
 }
 
-/* 卡片项 */
+/* carditem */
 .card-item {
   display: flex;
   align-items: center;
@@ -987,7 +987,7 @@ h3.header-text {
   transform: scale(1.1);
 }
 
-/* 空状态 */
+/* emptyStatus */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -1019,7 +1019,7 @@ h3.header-text {
   height: 100%;
 }
 
-/* 列表动画 */
+/* Listanimation */
 .bin-list-enter-active,
 .bin-list-leave-active,
 .card-list-enter-active,
@@ -1039,7 +1039,7 @@ h3.header-text {
   transform: translateX(20px);
 }
 
-/* 自定义滚动条 */
+/* customscrollitems */
 .bin-list::-webkit-scrollbar,
 .cards-list::-webkit-scrollbar {
   width: 8px;
@@ -1063,7 +1063,7 @@ h3.header-text {
   background: #9CA3AF;
 }
 
-/* 暗色模式滚动条 */
+/* Dark Modescrollitems */
 :root.dark .bin-list::-webkit-scrollbar-track,
 :root.dark .cards-list::-webkit-scrollbar-track {
   background: #1F2937;
@@ -1080,7 +1080,7 @@ h3.header-text {
   background: #6B7280;
 }
 
-/* 暗色模式适配 */
+/* Dark Modeadapt */
 :root.dark .dialog-header {
   background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
 }

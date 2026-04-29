@@ -1,6 +1,6 @@
 <template>
   <el-container class="main-container">
-    <!-- 侧边栏 -->
+    <!-- Sidebar -->
     <el-aside :width="sidebarWidth" class="sidebar" :style="{ overflow: 'hidden' }">
       <div class="app-title">
         <el-icon size="24"><Connection /></el-icon>
@@ -19,7 +19,7 @@
       >
         <el-menu-item index="accounts" @click="setActiveMenu('accounts')">
           <el-icon><User /></el-icon>
-          <template #title>账号管理</template>
+          <template #title>Account Management</template>
         </el-menu-item>
         
         <el-sub-menu
@@ -29,7 +29,7 @@
         >
           <template #title>
             <el-icon><Folder /></el-icon>
-            <span>分组管理</span>
+            <span>Group Management</span>
           </template>
           <el-menu-item 
             v-for="group in settingsStore.groups" 
@@ -39,7 +39,7 @@
           >
             <div class="group-item-content">
               <span @click="filterByGroup(group)" class="group-name">{{ group }} <span class="group-count">({{ getGroupAccountCount(group) }})</span></span>
-              <div class="group-actions" v-if="group !== '默认分组'">
+              <div class="group-actions" v-if="group !== 'Default Group'">
                 <el-icon @click.stop="showRenameGroupDialog(group)" class="group-action-icon">
                   <Edit />
                 </el-icon>
@@ -51,38 +51,38 @@
           </el-menu-item>
           <el-menu-item index="add-group" class="group-add-action" @click="showAddGroupDialog">
             <el-icon><Plus /></el-icon>
-            添加分组
+            Add Group
           </el-menu-item>
         </el-sub-menu>
         
         <el-menu-item index="logs" @click="uiStore.openLogsDialog">
           <el-icon><Document /></el-icon>
-          <template #title>操作日志</template>
+          <template #title>Operation Logs</template>
         </el-menu-item>
         
         <el-menu-item index="stats" @click="uiStore.openStatsDialog">
           <el-icon><DataAnalysis /></el-icon>
-          <template #title>统计信息</template>
+          <template #title>Statistics</template>
         </el-menu-item>
         
         <el-menu-item index="auto-reset" @click="showAutoResetDialog = true">
           <el-icon><Timer /></el-icon>
-          <template #title>自动重置</template>
+          <template #title>Auto Reset</template>
         </el-menu-item>
         
         <el-menu-item index="card-generator" @click="showCardGeneratorDialog = true">
           <el-icon><CreditCard /></el-icon>
-          <template #title>虚拟卡生成</template>
+          <template #title>Virtual Card Generator</template>
         </el-menu-item>
         
         <el-menu-item index="about" @click="showAboutDialog">
           <el-icon><InfoFilled /></el-icon>
-          <template #title>关于</template>
+          <template #title>About</template>
         </el-menu-item>
         
         <el-menu-item index="settings" @click="uiStore.openSettingsDialog">
           <el-icon><Setting /></el-icon>
-          <template #title>设置</template>
+          <template #title>Settings</template>
         </el-menu-item>
       </el-menu>
       
@@ -95,20 +95,20 @@
       </div>
     </el-aside>
 
-    <!-- 主内容区 -->
+    <!-- Main Content -->
     <el-container>
-      <!-- 顶部操作栏 -->
+      <!-- Top Action Bar -->
       <el-header class="header">
         <div class="header-left">
           <el-input
             v-model="searchQuery"
-            placeholder="搜索账号..."
+            placeholder="Search accounts..."
             :prefix-icon="Search"
             clearable
             class="search-input"
             @input="handleSearch"
           />
-          <el-tooltip content="高级筛选" placement="bottom">
+          <el-tooltip content="Advanced Filter" placement="bottom">
             <el-button
               :icon="Filter"
               circle
@@ -118,25 +118,25 @@
             />
           </el-tooltip>
           
-          <!-- 排序选择器 -->
+          <!-- sortselectmanager -->
           <el-select
             v-model="currentSortField"
-            placeholder="排序方式"
+            placeholder="Sort By"
             size="default"
             class="sort-select"
             @change="handleSortChange"
           >
-            <el-option label="邮箱名称" value="email" />
-            <el-option label="创建时间" value="created_at" />
-            <el-option label="已用积分" value="used_quota" />
-            <el-option label="剩余积分" value="remaining_quota" />
-            <el-option label="Token过期" value="token_expires_at" />
-            <el-option label="订阅到期" value="subscription_expires_at" />
-            <el-option label="套餐类型" value="plan_name" />
-            <el-option label="日配额剩余%" value="daily_quota_remaining" />
-            <el-option label="周配额剩余%" value="weekly_quota_remaining" />
+            <el-option label="Email" value="email" />
+            <el-option label="Created At" value="created_at" />
+            <el-option label="Used Credits" value="used_quota" />
+            <el-option label="Remaining Credits" value="remaining_quota" />
+            <el-option label="Token Expires" value="token_expires_at" />
+            <el-option label="Subscription Expires" value="subscription_expires_at" />
+            <el-option label="Plan Type" value="plan_name" />
+            <el-option label="Daily Quota %" value="daily_quota_remaining" />
+            <el-option label="Weekly Quota %" value="weekly_quota_remaining" />
           </el-select>
-          <el-tooltip :content="sortDirection === 'asc' ? '升序' : '降序'" placement="bottom">
+          <el-tooltip :content="sortDirection === 'asc' ? 'Ascending' : 'Descending'" placement="bottom">
             <el-button
               :icon="sortDirection === 'asc' ? SortUp : SortDown"
               circle
@@ -146,8 +146,8 @@
         </div>
         
         <div class="header-right">
-          <!-- 批量删除 -->
-          <el-tooltip content="批量删除" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <!-- Batch Delete -->
+          <el-tooltip content="Batch Delete" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-badge :value="accountsStore.selectedAccounts.size" :offset="[12, -8]">
               <el-button
                 type="danger"
@@ -158,7 +158,7 @@
             </el-badge>
           </el-tooltip>
           
-          <el-tooltip content="批量转让订阅" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <el-tooltip content="Batch Transfer Subscription" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               type="success"
               :icon="Switch"
@@ -167,8 +167,8 @@
             />
           </el-tooltip>
           
-          <!-- 批量刷新状态 -->
-          <el-tooltip content="批量刷新状态" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <!-- Batch Refresh Status -->
+          <el-tooltip content="Batch Refresh Status" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               type="warning"
               :icon="RefreshRight"
@@ -177,7 +177,7 @@
             />
           </el-tooltip>
           
-          <el-tooltip content="批量更换订阅" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <el-tooltip content="Batch Change Subscription" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               type="primary"
               :icon="Trophy"
@@ -186,8 +186,8 @@
             />
           </el-tooltip>
           
-          <!-- 导出选中账号 -->
-          <el-tooltip content="导出选中账号" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <!-- Export Selected Accounts -->
+          <el-tooltip content="Export Selected Accounts" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               type="info"
               :icon="Download"
@@ -196,8 +196,8 @@
             />
           </el-tooltip>
           
-          <!-- 批量更改分组 -->
-          <el-tooltip content="批量更改分组" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <!-- Batch Change Group -->
+          <el-tooltip content="Batch Change Group" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               type="primary"
               :icon="FolderOpened"
@@ -206,8 +206,8 @@
             />
           </el-tooltip>
           
-          <!-- 取消已选 -->
-          <el-tooltip content="取消已选" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
+          <!-- Clear Selection -->
+          <el-tooltip content="Clear Selection" placement="bottom" v-if="accountsStore.selectedAccounts.size > 0">
             <el-button
               :icon="Close"
               circle
@@ -216,8 +216,8 @@
             />
           </el-tooltip>
           
-          <!-- 选择本页账号 -->
-          <el-tooltip content="选择本页账号" placement="bottom">
+          <!-- Select Page Accounts -->
+          <el-tooltip content="Select Page Accounts" placement="bottom">
             <el-button
               :icon="DocumentChecked"
               circle
@@ -226,8 +226,8 @@
             />
           </el-tooltip>
           
-          <!-- 全选按钮（带分隔线） -->
-          <el-tooltip content="全选" placement="bottom" class="select-all-button">
+          <!-- Select Allbutton（withdelimiterline） -->
+          <el-tooltip content="Select All" placement="bottom" class="select-all-button">
             <el-button
               :icon="Select"
               circle
@@ -236,8 +236,8 @@
             />
           </el-tooltip>
           
-          <!-- 添加账号 -->
-          <el-tooltip content="添加账号" placement="bottom">
+          <!-- Add Account -->
+          <el-tooltip content="Add Account" placement="bottom">
             <el-button 
               type="default" 
               :icon="Plus" 
@@ -246,8 +246,8 @@
             />
           </el-tooltip>
           
-          <!-- 批量添加 -->
-          <el-tooltip content="批量导入" placement="bottom">
+          <!-- batchAdd -->
+          <el-tooltip content="Batch Import" placement="bottom">
             <el-button 
               type="default" 
               :icon="Upload"
@@ -256,8 +256,8 @@
             />
           </el-tooltip>
           
-          <!-- 导出账号 -->
-          <el-tooltip content="导出账号" placement="bottom">
+          <!-- Export Accounts -->
+          <el-tooltip content="Export Accounts" placement="bottom">
             <el-button 
               :icon="Download"
               circle 
@@ -266,8 +266,8 @@
             />
           </el-tooltip>
           
-          <!-- 标签管理 -->
-          <el-tooltip content="标签管理" placement="bottom">
+          <!-- Tag Management -->
+          <el-tooltip content="Tag Management" placement="bottom">
             <el-button 
               :icon="PriceTag"
               circle 
@@ -276,8 +276,8 @@
             />
           </el-tooltip>
           
-          <!-- 全局刷新 -->
-          <el-tooltip content="刷新全部" placement="bottom">
+          <!-- globalRefresh -->
+          <el-tooltip content="Refresh All" placement="bottom">
             <el-button 
               :icon="RefreshRight" 
               circle 
@@ -288,89 +288,89 @@
         </div>
       </el-header>
 
-      <!-- 账号卡片区域 -->
+      <!-- Account Cards Area -->
       <el-main class="main-content">
-        <!-- 筛选面板 -->
+        <!-- filterpanel -->
         <transition name="filter-slide">
           <div v-if="showFilterPanel" class="filter-panel">
             <div class="filter-panel-header">
-              <span class="filter-title">高级筛选</span>
+              <span class="filter-title">Advanced Filter</span>
               <div class="filter-header-actions">
-                <el-button size="small" @click="clearAllFilters">清除筛选</el-button>
-                <el-button size="small" type="primary" @click="applyFilters">应用筛选</el-button>
+                <el-button size="small" @click="clearAllFilters">Clear Filters</el-button>
+                <el-button size="small" type="primary" @click="applyFilters">Apply Filters</el-button>
                 <el-button :icon="Close" circle size="small" @click="showFilterPanel = false" />
               </div>
             </div>
             <div class="filter-panel-body">
-              <!-- 第一行：数值范围筛选 -->
+              <!-- #onerow：countvaluerangefilter -->
               <div class="filter-row">
                 <div class="filter-item filter-item-range">
-                  <span class="filter-label">剩余额度</span>
+                  <span class="filter-label">Remaining Quota</span>
                   <div class="filter-range">
-                    <el-input-number v-model="filterForm.remainingQuotaMin" :min="0" :controls="false" placeholder="最小" size="small" />
+                    <el-input-number v-model="filterForm.remainingQuotaMin" :min="0" :controls="false" placeholder="Min" size="small" />
                     <span class="range-separator">-</span>
-                    <el-input-number v-model="filterForm.remainingQuotaMax" :min="0" :controls="false" placeholder="最大" size="small" />
+                    <el-input-number v-model="filterForm.remainingQuotaMax" :min="0" :controls="false" placeholder="Max" size="small" />
                   </div>
                 </div>
                 <div class="filter-item filter-item-range">
-                  <span class="filter-label">总额度</span>
+                  <span class="filter-label">Total Quota</span>
                   <div class="filter-range">
-                    <el-input-number v-model="filterForm.totalQuotaMin" :min="0" :controls="false" placeholder="最小" size="small" />
+                    <el-input-number v-model="filterForm.totalQuotaMin" :min="0" :controls="false" placeholder="Min" size="small" />
                     <span class="range-separator">-</span>
-                    <el-input-number v-model="filterForm.totalQuotaMax" :min="0" :controls="false" placeholder="最大" size="small" />
+                    <el-input-number v-model="filterForm.totalQuotaMax" :min="0" :controls="false" placeholder="Max" size="small" />
                   </div>
                 </div>
                 <div class="filter-item filter-item-range">
-                  <span class="filter-label">剩余天数</span>
+                  <span class="filter-label">Days Remaining</span>
                   <div class="filter-range">
-                    <el-input-number v-model="filterForm.expiryDaysMin" :controls="false" placeholder="最小" size="small" />
+                    <el-input-number v-model="filterForm.expiryDaysMin" :controls="false" placeholder="Min" size="small" />
                     <span class="range-separator">-</span>
-                    <el-input-number v-model="filterForm.expiryDaysMax" :controls="false" placeholder="最大" size="small" />
+                    <el-input-number v-model="filterForm.expiryDaysMax" :controls="false" placeholder="Max" size="small" />
                   </div>
                 </div>
               </div>
-              <!-- 第二行：日/周配额剩余百分比（仅 billing_strategy === 2 (QUOTA) 的账号参与） -->
+              <!-- #二row：day/Weekly Quota Remainingpercentage（only  billing_strategy === 2 (QUOTA) Accountparticipate） -->
               <div class="filter-row">
                 <div class="filter-item filter-item-range">
-                  <span class="filter-label">日配额剩余%</span>
+                  <span class="filter-label">Daily Quota %</span>
                   <div class="filter-range">
-                    <el-input-number v-model="filterForm.dailyQuotaPercentMin" :min="0" :max="100" :controls="false" placeholder="最小" size="small" />
+                    <el-input-number v-model="filterForm.dailyQuotaPercentMin" :min="0" :max="100" :controls="false" placeholder="Min" size="small" />
                     <span class="range-separator">-</span>
-                    <el-input-number v-model="filterForm.dailyQuotaPercentMax" :min="0" :max="100" :controls="false" placeholder="最大" size="small" />
+                    <el-input-number v-model="filterForm.dailyQuotaPercentMax" :min="0" :max="100" :controls="false" placeholder="Max" size="small" />
                   </div>
                 </div>
                 <div class="filter-item filter-item-range">
-                  <span class="filter-label">周配额剩余%</span>
+                  <span class="filter-label">Weekly Quota %</span>
                   <div class="filter-range">
-                    <el-input-number v-model="filterForm.weeklyQuotaPercentMin" :min="0" :max="100" :controls="false" placeholder="最小" size="small" />
+                    <el-input-number v-model="filterForm.weeklyQuotaPercentMin" :min="0" :max="100" :controls="false" placeholder="Min" size="small" />
                     <span class="range-separator">-</span>
-                    <el-input-number v-model="filterForm.weeklyQuotaPercentMax" :min="0" :max="100" :controls="false" placeholder="最大" size="small" />
+                    <el-input-number v-model="filterForm.weeklyQuotaPercentMax" :min="0" :max="100" :controls="false" placeholder="Max" size="small" />
                   </div>
                 </div>
               </div>
-              <!-- 第三行：选择器筛选 -->
+              <!-- #三row：selectmanagerfilter -->
               <div class="filter-row filter-row-select">
                 <div class="filter-item filter-item-select">
-                  <span class="filter-label">套餐</span>
-                  <el-select v-model="filterForm.selectedPlans" multiple collapse-tags collapse-tags-tooltip placeholder="全部" size="small">
+                  <span class="filter-label">Plan</span>
+                  <el-select v-model="filterForm.selectedPlans" multiple collapse-tags collapse-tags-tooltip placeholder="All" size="small">
                     <el-option v-for="plan in accountsStore.allPlanNames" :key="plan" :label="plan" :value="plan" />
                   </el-select>
                 </div>
                 <div class="filter-item filter-item-select">
-                  <span class="filter-label">标签</span>
-                  <el-select v-model="filterForm.selectedTags" multiple collapse-tags collapse-tags-tooltip placeholder="全部" size="small">
+                  <span class="filter-label">Tags</span>
+                  <el-select v-model="filterForm.selectedTags" multiple collapse-tags collapse-tags-tooltip placeholder="All" size="small">
                     <el-option v-for="tag in accountsStore.allTags" :key="tag" :label="tag" :value="tag" />
                   </el-select>
                 </div>
                 <div class="filter-item filter-item-select">
-                  <span class="filter-label">域名</span>
-                  <el-select v-model="filterForm.selectedDomains" multiple collapse-tags collapse-tags-tooltip placeholder="全部" size="small">
+                  <span class="filter-label">Domain</span>
+                  <el-select v-model="filterForm.selectedDomains" multiple collapse-tags collapse-tags-tooltip placeholder="All" size="small">
                     <el-option v-for="domain in accountsStore.allDomains" :key="domain" :label="domain" :value="domain" />
                   </el-select>
                 </div>
                 <div class="filter-item filter-item-select">
-                  <span class="filter-label">状态</span>
-                  <el-select v-model="filterForm.selectedStatuses" multiple collapse-tags collapse-tags-tooltip placeholder="全部" size="small">
+                  <span class="filter-label">Status</span>
+                  <el-select v-model="filterForm.selectedStatuses" multiple collapse-tags collapse-tags-tooltip placeholder="All" size="small">
                     <el-option v-for="status in statusOptions" :key="status.value" :label="status.label" :value="status.value" />
                   </el-select>
                 </div>
@@ -384,9 +384,9 @@
         </div>
         
         <div v-else-if="accountsStore.filteredAccounts.length === 0" class="empty-container">
-          <el-empty description="暂无账号数据">
+          <el-empty description="No account data">
             <el-button type="primary" @click="uiStore.openAddAccountDialog">
-              添加第一个账号
+              Add your first account
             </el-button>
           </el-empty>
         </div>
@@ -404,7 +404,7 @@
             />
           </div>
           
-          <!-- 分页组件 -->
+          <!-- Paginationcomponent -->
           <div class="pagination-container" v-if="accountsStore.totalCount > accountsStore.pagination.pageSize">
             <el-pagination
               v-model:current-page="accountsStore.pagination.currentPage"
@@ -421,7 +421,7 @@
       </el-main>
     </el-container>
 
-    <!-- 对话框组件 -->
+    <!-- Dialogcomponent -->
     <AddAccountDialog />
     <EditAccountDialog />
     <SettingsDialog />
@@ -434,7 +434,7 @@
     <StatsDialog />
     <AccountInfoDialog />
     
-    <!-- 关于对话框 -->
+    <!-- AboutDialog -->
     <AboutDialog 
       v-model="showAbout"
       :current-email="currentWindsurfEmail"
@@ -443,15 +443,15 @@
       @open-update-dialog="showUpdateDialog = true"
     />
 
-    <!-- 自动更新对话框 -->
+    <!-- autoUpdateDialog -->
     <UpdateDialog v-model="showUpdateDialog" :current-version="appVersion" />
 
     <AutoResetDialog v-model="showAutoResetDialog" />
     
-    <!-- 虚拟卡生成对话框 -->
+    <!-- Virtual Card GeneratorDialog -->
     <CardGeneratorDialog v-model="showCardGeneratorDialog" />
     
-    <!-- 账单对话框（传入当前查看的账号ID和数据） -->
+    <!-- accountsingleDialog（pass inCurrentViewAccountID and data） -->
     <BillingDialog 
       v-if="uiStore.currentViewingAccountId"
       v-model="uiStore.showBillingDialog"
@@ -461,7 +461,7 @@
       @refresh="refreshBillingData"
     />
     
-    <!-- 批量更换订阅对话框 -->
+    <!-- Batch Change SubscriptionDialog -->
     <BatchUpdatePlanDialog 
       v-model="showBatchUpdatePlanDialog"
       :selected-account-ids="Array.from(accountsStore.selectedAccounts)"
@@ -469,28 +469,28 @@
       @success="accountsStore.loadAccounts()"
     />
     
-    <!-- 标签管理对话框 -->
+    <!-- Tag ManagementDialog -->
     <TagManageDialog 
       v-model="showTagManageDialog"
       :selected-account-ids="Array.from(accountsStore.selectedAccounts)"
       @refresh="accountsStore.loadAccounts()"
     />
     
-    <!-- 批量更改分组对话框 -->
+    <!-- Batch Change GroupDialog -->
     <el-dialog
       v-model="showBatchGroupDialog"
-      title="批量更改分组"
+      title="Batch Change Group"
       width="400px"
       :close-on-click-modal="false"
       @close="closeBatchGroupDialog"
     >
       <div class="batch-group-content">
         <p class="batch-group-hint">
-          将选中的 <strong>{{ accountsStore.selectedAccounts.size }}</strong> 个账号移动到指定分组：
+          Move selected <strong>{{ accountsStore.selectedAccounts.size }}</strong>  accounts to the specified group:
         </p>
         <el-select
           v-model="batchGroupTarget"
-          placeholder="选择目标分组"
+          placeholder="Select target group"
           style="width: 100%;"
           size="large"
         >
@@ -503,64 +503,64 @@
         </el-select>
       </div>
       <template #footer>
-        <el-button @click="closeBatchGroupDialog">取消</el-button>
+        <el-button @click="closeBatchGroupDialog">Cancel</el-button>
         <el-button
           type="primary"
           :disabled="!batchGroupTarget"
           :loading="isBatchUpdatingGroup"
           @click="handleBatchUpdateGroup"
         >
-          确认更改
+          Confirm Change
         </el-button>
       </template>
     </el-dialog>
 
-    <!-- 批量转让订阅对话框 -->
+    <!-- Batch Transfer SubscriptionDialog -->
     <el-dialog
       v-model="showBatchTransferDialog"
-      title="批量转让订阅"
+      title="Batch Transfer Subscription"
       width="600px"
       :close-on-click-modal="false"
     >
       <el-alert
-        title="批量转让说明"
+        title="Batch Transfer Instructions"
         type="warning"
         :closable="false"
         show-icon
         style="margin-bottom: 20px"
       >
         <template #default>
-          <p>已选中 <strong>{{ accountsStore.selectedAccounts.size }}</strong> 个源账户需要转让订阅。</p>
-          <p>请在下方输入对应数量的目标邮箱（每行一个），转让后源账户将被移出团队。</p>
-          <p style="color: #e6a23c; margin-top: 8px;">⚠️ 此操作不可撤销！</p>
+          <p>Selected <strong>{{ accountsStore.selectedAccounts.size }}</strong>  source accounts need subscription transfer.</p>
+          <p>Enter the corresponding number of target emails below (one per line). Source accounts will be removed from the team after transfer.</p>
+          <p style="color: #e6a23c; margin-top: 8px;">⚠️ This action cannot be undone！</p>
         </template>
       </el-alert>
       
       <el-form label-width="100px">
-        <el-form-item label="目标邮箱">
+        <el-form-item label="Target Email">
           <el-input
             v-model="batchTransferEmails"
             type="textarea"
             :rows="8"
-            :placeholder="'请输入 ' + accountsStore.selectedAccounts.size + ' 个目标邮箱，每行一个\n例如：\nuser1@example.com\nuser2@example.com'"
+            :placeholder="'Please enter ' + accountsStore.selectedAccounts.size + ' Target Email，One per line\ne.g.：\nuser1@example.com\nuser2@example.com'"
             name="batch-transfer-emails-no-autofill"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item>
           <div class="email-count-hint">
-            已输入: {{ parsedTransferEmails.length }} / {{ accountsStore.selectedAccounts.size }} 个邮箱
+            Entered: {{ parsedTransferEmails.length }} / {{ accountsStore.selectedAccounts.size }}  emails
             <span v-if="parsedTransferEmails.length !== accountsStore.selectedAccounts.size" style="color: #e6a23c;">
-              （数量不匹配）
+              （Count mismatch）
             </span>
             <span v-else style="color: #67c23a;">
-              （数量匹配 ✓）
+              （Count matched ✓）
             </span>
           </div>
         </el-form-item>
       </el-form>
       
-      <!-- 转让进度显示 -->
+      <!-- transferprogressdisplay -->
       <div v-if="batchTransferring" class="batch-transfer-progress">
         <el-progress
           :percentage="Math.round((batchTransferProgress.current / batchTransferProgress.total) * 100)"
@@ -573,14 +573,14 @@
       </div>
       
       <template #footer>
-        <el-button @click="showBatchTransferDialog = false" :disabled="batchTransferring">取消</el-button>
+        <el-button @click="showBatchTransferDialog = false" :disabled="batchTransferring">Cancel</el-button>
         <el-button
           type="danger"
           :loading="batchTransferring"
           :disabled="parsedTransferEmails.length !== accountsStore.selectedAccounts.size"
           @click="handleBatchTransfer"
         >
-          确认批量转让
+          Confirm Batch Transfer
         </el-button>
       </template>
     </el-dialog>
@@ -660,58 +660,58 @@ const updaterStore = useUpdaterStore();
 const showTagManageDialog = ref(false);
 const showBatchImportDialog = ref(false);
 const batchImportDialogRef = ref<InstanceType<typeof BatchImportDialog> | null>(null);
-const appVersion = ref<string>('');  // 版本号从后端动态获取
+const appVersion = ref<string>('');  // Versionfrombackenddynamicfetch
 const showBatchGroupDialog = ref(false);
 const batchGroupTarget = ref('');
 const isBatchUpdatingGroup = ref(false);
 const showAutoResetDialog = ref(false);
 const showCardGeneratorDialog = ref(false);
 
-// 排序相关
+// sortrelated
 const currentSortField = ref<string>('custom');
 const sortDirection = ref<'asc' | 'desc'>('asc');
 
-// 处理排序变更
+// handlesortchangemore
 async function handleSortChange(field: string) {
   currentSortField.value = field;
   await accountsStore.setSortConfig(field as any, sortDirection.value);
 }
 
-// 切换排序方向
+// Switchsortsidetoward
 async function toggleSortDirection() {
   sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
   await accountsStore.setSortConfig(currentSortField.value as any, sortDirection.value);
 }
 
-// 初始化排序配置
+// initializesort config
 async function initSortConfig() {
   await accountsStore.loadSortConfig();
-  // 处理旧的 custom 值，自动改为 created_at
+  // handleold custom value，autochangeas created_at
   const field = accountsStore.sortConfig.field as string;
   currentSortField.value = (field === 'custom' ? 'created_at' : field) as any;
   sortDirection.value = accountsStore.sortConfig.direction;
 }
 
-// 批量转让订阅
+// Batch Transfer Subscription
 const showBatchTransferDialog = ref(false);
 const batchTransferEmails = ref('');
 const batchTransferring = ref(false);
 const batchTransferProgress = ref({ current: 0, total: 0, status: '' });
 
-// 解析输入的邮箱列表（支持"邮箱"或"邮箱 密码"格式）
+// parseinputEmailList（support"Email" or "Email Password"format）
 const parsedTransferEmails = computed(() => {
   return batchTransferEmails.value
     .split('\n')
     .map(line => {
       const trimmed = line.trim();
-      // 支持空格或制表符分隔的格式，只取第一部分（邮箱）
+      // supportspace or 制表符delimiterformat，onlyget#onePartial（Email）
       const parts = trimmed.split(/[\s\t]+/);
       return parts[0] || '';
     })
     .filter(e => e && e.includes('@'));
 });
 
-// 自动重置定时器
+// Auto Resettimer
 interface AutoResetConfig {
   id: string;
   targetType: string;
@@ -723,21 +723,21 @@ interface AutoResetConfig {
 }
 const autoResetTimerMap = ref<Map<string, ReturnType<typeof setInterval>>>(new Map());
 
-// 初始化自动重置定时器
+// initializeAuto Resettimer
 async function initAutoResetTimers() {
   try {
     const configs = await invoke<AutoResetConfig[]>('get_auto_reset_configs');
     
-    // 清除现有定时器
+    // Clearnowhastimer
     autoResetTimerMap.value.forEach(timer => clearInterval(timer));
     autoResetTimerMap.value.clear();
     
-    // 为每个启用的配置设置定时器
+    // aseveryEnableconfigSettingstimer
     configs.filter(c => c.enabled).forEach(config => {
-      // 立即执行一次检查
+      // immediatelyexecuteoncecheck
       executeAutoResetCheck(config.id);
       
-      // 设置定时器
+      // Settingstimer
       const timer = setInterval(() => {
         executeAutoResetCheck(config.id);
       }, config.checkInterval * 60 * 1000);
@@ -746,36 +746,36 @@ async function initAutoResetTimers() {
     });
     
     if (configs.filter(c => c.enabled).length > 0) {
-      console.log(`[AutoReset] 已启动 ${configs.filter(c => c.enabled).length} 个自动重置定时器`);
+      console.log(`[AutoReset] already launch ${configs.filter(c => c.enabled).length} Auto Resettimer`);
     }
   } catch (error) {
-    console.error('[AutoReset] 初始化定时器失败:', error);
+    console.error('[AutoReset] initializetimerfailed:', error);
   }
 }
 
-// 执行自动重置检查
+// executeAuto Resetcheck
 async function executeAutoResetCheck(configId: string) {
   try {
     const result = await invoke<any>('check_and_auto_reset', { configId });
     
     if (result.reset_count > 0) {
-      ElMessage.success(`自动重置: 重置了 ${result.reset_count} 个账号的积分`);
+      ElMessage.success(`Auto reset: reset ${result.reset_count}  accounts credits`);
       await accountsStore.loadAccounts();
     }
   } catch (error) {
-    console.error('[AutoReset] 检查失败:', error);
+    console.error('[AutoReset] Check failed:', error);
   }
 }
 
-// 筛选面板状态
+// filterpanelStatus
 const showFilterPanel = ref(false);
-// 状态选项
+// Statusoption
 const statusOptions = [
-  { value: 'normal', label: '🟢 正常', desc: '账户正常' },
-  { value: 'inactive', label: '🔘 未激活', desc: '订阅未激活' },
-  { value: 'disabled', label: '🟠 已禁用', desc: '被 Windsurf 禁用' },
-  { value: 'offline', label: '⚪ 离线', desc: 'Token 失效' },
-  { value: 'error', label: '🔴 错误', desc: '操作异常' },
+  { value: 'normal', label: '🟢 Normal', desc: 'Account normal' },
+  { value: 'inactive', label: '🔘 Inactive', desc: 'Subscription inactive' },
+  { value: 'disabled', label: '🟠 Disabled', desc: 'Disabled by Windsurf' },
+  { value: 'offline', label: '⚪ Offline', desc: 'Token invalid' },
+  { value: 'error', label: '🔴 Error', desc: 'Operation error' },
 ];
 
 const filterForm = ref({
@@ -785,7 +785,7 @@ const filterForm = ref({
   totalQuotaMax: undefined as number | undefined,
   expiryDaysMin: undefined as number | undefined,
   expiryDaysMax: undefined as number | undefined,
-  // 日/周配额剩余百分比（0-100，仅 billing_strategy === 2 (QUOTA) 账号参与）
+  // day/Weekly Quota Remainingpercentage（0-100，only  billing_strategy === 2 (QUOTA) Accountparticipate）
   dailyQuotaPercentMin: undefined as number | undefined,
   dailyQuotaPercentMax: undefined as number | undefined,
   weeklyQuotaPercentMin: undefined as number | undefined,
@@ -796,7 +796,7 @@ const filterForm = ref({
   selectedStatuses: [] as string[],
 });
 
-// 是否有激活的筛选条件
+// whetherhasactivatefilteritemsitem
 const hasActiveFilter = computed(() => {
   const f = accountsStore.currentFilter;
   return !!(
@@ -836,7 +836,7 @@ function handleSearch() {
   accountsStore.setFilter({ ...accountsStore.currentFilter, search: searchQuery.value });
 }
 
-// 应用筛选
+// Apply Filters
 function applyFilters() {
   accountsStore.setFilter({
     ...accountsStore.currentFilter,
@@ -857,7 +857,7 @@ function applyFilters() {
   });
 }
 
-// 清除所有筛选
+// Clearallfilter
 function clearAllFilters() {
   filterForm.value = {
     remainingQuotaMin: undefined,
@@ -879,7 +879,7 @@ function clearAllFilters() {
   searchQuery.value = '';
 }
 
-// 分页处理
+// Paginationhandle
 function handlePageSizeChange(size: number) {
   accountsStore.setPageSize(size);
 }
@@ -902,13 +902,13 @@ function handleAccountUpdate(account: Account) {
 
 async function refreshAccounts() {
   const loading = ElMessage({
-    message: '正在刷新账号列表...',
+    message: 'Refreshing account list...',
     duration: 0,
     icon: Loading
   });
   
   try {
-    // 批量刷新所有账号（使用优化的批量 API）
+    // Batch refreshallAccount（useoptimalbatch API）
     if (accountsStore.accounts.length > 0) {
       loading.close();
       
@@ -916,12 +916,12 @@ async function refreshAccounts() {
       const allIds = accountsStore.accounts.map(a => a.id);
       
       const progressLoading = ElMessage({
-        message: `正在批量刷新 ${totalCount} 个账号...`,
+        message: `Batch refreshing ${totalCount}  accounts...`,
         duration: 0,
         icon: Loading
       });
       
-      // 使用优化的批量刷新 API（后端只保存一次）
+      // useoptimalBatch refresh API（backend onlySaveonce）
       const result = await apiService.batchRefreshTokens(allIds);
       
       progressLoading.close();
@@ -929,7 +929,7 @@ async function refreshAccounts() {
       const successCount = result.success_count || 0;
       const failedCount = totalCount - successCount;
       
-      // 使用后端返回的完整数据更新本地 store（无需重新加载页面）
+      // usebackendBackcompletedataUpdatelocal store（noneedre-LoadingPage）
       if (result.results) {
         for (const item of result.results) {
           const idx = accountsStore.accounts.findIndex(a => a.id === item.id);
@@ -961,10 +961,10 @@ async function refreshAccounts() {
         }
       }
       
-      // 显示详细的刷新结果
+      // displaydetailedRefreshresult
       if (failedCount === 0) {
         ElMessage.success({
-          message: `✅ 全部刷新完成！\n成功: ${successCount}/${totalCount}`,
+          message: `✅ All refresh completed!\nsuccessful: ${successCount}/${totalCount}`,
           duration: 3000,
           showClose: true
         });
@@ -972,12 +972,12 @@ async function refreshAccounts() {
         const failedItems = result.results?.filter((r: any) => !r.success) || [];
         const failedDetails = failedItems.slice(0, 3).map((item: any) => {
           const account = accountsStore.accounts.find(a => a.id === item.id);
-          return `  • ${account?.email || item.id}: ${item.error || '未知错误'}`;
+          return `  • ${account?.email || item.id}: ${item.error || 'Unknown error'}`;
         }).join('\n');
-        const moreFailures = failedItems.length > 3 ? `\n  ... 还有 ${failedItems.length - 3} 个失败` : '';
+        const moreFailures = failedItems.length > 3 ? `\n  ... and ${failedItems.length - 3}  failed` : '';
         
         ElMessage.warning({
-          message: `⚠️ 刷新完成（部分失败）\n成功: ${successCount}/${totalCount}\n失败: ${failedCount}/${totalCount}\n\n失败账号:\n${failedDetails}${moreFailures}`,
+          message: `⚠️ Refresh complete (partial failure)\nsuccessful: ${successCount}/${totalCount}\nfailed: ${failedCount}/${totalCount}\n\nFailed accounts:\n${failedDetails}${moreFailures}`,
           duration: 5000,
           showClose: true,
           dangerouslyUseHTMLString: false
@@ -985,52 +985,52 @@ async function refreshAccounts() {
       }
     } else {
       loading.close();
-      ElMessage.success('账号列表已刷新');
+      ElMessage.success('Account list refreshed');
     }
   } catch (error) {
     loading.close();
-    ElMessage.error(`刷新失败: ${error}`);
+    ElMessage.error(`Refresh failed: ${error}`);
   }
 }
 
 async function handleBatchDelete() {
   try {
     await ElMessageBox.confirm(
-      `确定要删除选中的 ${accountsStore.selectedAccounts.size} 个账号吗？`,
-      '批量删除确认',
+      `Are you sure you want to delete the selected ${accountsStore.selectedAccounts.size}  accounts?`,
+      'Batch Delete Confirmation',
       {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Cancel',
         type: 'warning',
       }
     );
     
     const result = await accountsStore.deleteSelectedAccounts();
-    ElMessage.success(`成功删除 ${result?.success_count || 0} 个账号`);
+    ElMessage.success(`Successfully deleted ${result?.success_count || 0}  accounts`);
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`批量删除失败: ${error}`);
+      ElMessage.error(`Batch delete failed: ${error}`);
     }
   }
 }
 
-// 批量转让订阅（并发执行）
+// Batch Transfer Subscription（concurrentexecute）
 async function handleBatchTransfer() {
   const selectedIds = Array.from(accountsStore.selectedAccounts);
   const targetEmails = parsedTransferEmails.value;
   
   if (selectedIds.length !== targetEmails.length) {
-    ElMessage.warning('源账户数量与目标邮箱数量不匹配');
+    ElMessage.warning('Source account count does not match target email count');
     return;
   }
   
   try {
     await ElMessageBox.confirm(
-      `确定要将 ${selectedIds.length} 个账户的订阅转让给对应的目标邮箱吗？\n\n转让后源账户将被移出团队，此操作不可撤销！`,
-      '确认批量转让',
+      `Are you sure you want to transfer subscriptions of ${selectedIds.length} accounts to the target emails?\n\nSource accounts will be removed from the team after transfer. This action cannot be undone!`,
+      'Confirm Batch Transfer',
       {
-        confirmButtonText: '确认转让',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Confirm Transfer',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }
     );
@@ -1039,9 +1039,9 @@ async function handleBatchTransfer() {
   }
   
   batchTransferring.value = true;
-  batchTransferProgress.value = { current: 0, total: selectedIds.length, status: '并发执行中...' };
+  batchTransferProgress.value = { current: 0, total: selectedIds.length, status: 'Concurrent execution...' };
   
-  // 构建转让任务列表
+  // buildtransfertaskList
   const transferTasks = selectedIds.map((sourceId, index) => {
     const targetEmail = targetEmails[index];
     const sourceAccount = accountsStore.accounts.find(a => a.id === sourceId);
@@ -1055,7 +1055,7 @@ async function handleBatchTransfer() {
           targetName: targetEmail.split('@')[0]
         });
         
-        // 更新进度
+        // Updateprogress
         batchTransferProgress.value = {
           ...batchTransferProgress.value,
           current: batchTransferProgress.value.current + 1
@@ -1064,7 +1064,7 @@ async function handleBatchTransfer() {
         if (result.success) {
           return { sourceEmail, targetEmail, success: true };
         } else {
-          return { sourceEmail, targetEmail, success: false, error: result.error || '转让失败' };
+          return { sourceEmail, targetEmail, success: false, error: result.error || 'Transfer failed' };
         }
       } catch (error: any) {
         batchTransferProgress.value = {
@@ -1076,13 +1076,13 @@ async function handleBatchTransfer() {
     })();
   });
   
-  // 并发执行所有转让任务
+  // concurrentexecutealltransfertask
   const results = await Promise.all(transferTasks);
   
   batchTransferProgress.value = {
     current: selectedIds.length,
     total: selectedIds.length,
-    status: '完成'
+    status: 'Done'
   };
   
   batchTransferring.value = false;
@@ -1091,7 +1091,7 @@ async function handleBatchTransfer() {
   const failedCount = results.filter(r => !r.success).length;
   
   if (failedCount === 0) {
-    ElMessage.success(`批量转让完成！成功: ${successCount}/${selectedIds.length}`);
+    ElMessage.success(`Batch transfer complete! Success: ${successCount}/${selectedIds.length}`);
   } else {
     const failedDetails = results
       .filter(r => !r.success)
@@ -1099,18 +1099,18 @@ async function handleBatchTransfer() {
       .map(r => `${r.sourceEmail}: ${r.error}`)
       .join('\n');
     ElMessage.warning({
-      message: `批量转让完成\n成功: ${successCount}, 失败: ${failedCount}\n\n失败详情:\n${failedDetails}`,
+      message: `Batch transfer complete\nsuccessful: ${successCount}, failed: ${failedCount}\n\nFailure details:\n${failedDetails}`,
       duration: 5000,
       showClose: true
     });
   }
   
-  // 关闭对话框并清理
+  // disabledDialog and cleanup
   showBatchTransferDialog.value = false;
   batchTransferEmails.value = '';
   accountsStore.clearSelection();
   
-  // 刷新账号列表
+  // Refresh account list
   await accountsStore.loadAccounts();
 }
 
@@ -1123,14 +1123,14 @@ async function refreshBillingData() {
       const result = await apiService.getBilling(uiStore.currentViewingAccountId);
       currentBillingData.value = result;
     } catch (error) {
-      ElMessage.error(`获取账单信息失败: ${error}`);
+      ElMessage.error(`Failed to get billing info: ${error}`);
     } finally {
       billingLoading.value = false;
     }
   }
 }
 
-// 监听账单对话框打开
+// listenaccountsingleDialogopen
 watch(() => uiStore.showBillingDialog, (show) => {
   if (show && uiStore.currentViewingAccountId) {
     refreshBillingData();
@@ -1139,70 +1139,70 @@ watch(() => uiStore.showBillingDialog, (show) => {
   }
 });
 
-// 全选/取消全选
+// Select All/CancelSelect All
 function toggleSelectAll() {
   if (accountsStore.selectedAccounts.size === accountsStore.filteredAccounts.length && accountsStore.filteredAccounts.length > 0) {
-    // 当前是全选状态，取消全选
+    // CurrentisSelect AllStatus，CancelSelect All
     accountsStore.clearSelection();
   } else {
-    // 选择所有账号
+    // selectallAccount
     accountsStore.filteredAccounts.forEach(account => {
       accountsStore.selectedAccounts.add(account.id);
     });
   }
 }
 
-// 选择本页账号
+// Select Page Accounts
 function selectCurrentPageAccounts() {
   const pageAccounts = accountsStore.paginatedAccounts;
   if (pageAccounts.length === 0) {
-    ElMessage.info('当前页没有账号');
+    ElMessage.info('No accounts on current page');
     return;
   }
   
-  // 检查本页是否已全部选中
+  // checkthispagewhetheralready Allselected
   const allSelected = pageAccounts.every(acc => accountsStore.selectedAccounts.has(acc.id));
   
   if (allSelected) {
-    // 如果本页已全选，则取消本页选择
+    // ifthispagealready Select All，thenCancelthispageselect
     pageAccounts.forEach(account => {
       accountsStore.selectedAccounts.delete(account.id);
     });
-    ElMessage.info(`已取消选择本页 ${pageAccounts.length} 个账号`);
+    ElMessage.info(`Deselected current page ${pageAccounts.length}  accounts`);
   } else {
-    // 选择本页所有账号
+    // selectthispageallAccount
     pageAccounts.forEach(account => {
       accountsStore.selectedAccounts.add(account.id);
     });
-    ElMessage.success(`已选择本页 ${pageAccounts.length} 个账号`);
+    ElMessage.success(`Selected current page ${pageAccounts.length}  accounts`);
   }
 }
 
-// 打开批量导入对话框
+// openBatch ImportDialog
 function handleBatchImport() {
   showBatchImportDialog.value = true;
 }
 
-// 批量导入确认（从对话框接收数据）
+// Batch ImportConfirm（fromDialogreceivedata）
 async function handleBatchImportConfirm(
   accountsToImport: Array<{ email: string; password: string; remark: string; refreshToken?: string; sessionToken?: string; auth1Token?: string }>,
   autoLogin: boolean,
-  group: string = '默认分组',
+  group: string = 'Default Group',
   tags: string[] = [],
   mode: 'password' | 'refresh_token' | 'devin_session_token' | 'devin_auth1_token' = 'password',
   authProvider: 'firebase' | 'devin' | 'smart' = 'firebase'
 ) {
-  // 获取并发设置
+  // fetchconcurrentSettings
   const unlimitedConcurrent = settingsStore.settings?.unlimitedConcurrentRefresh || false;
   const concurrencyLimit = settingsStore.settings?.concurrent_limit || 5;
 
-  // === Devin Session Token 模式：逐条调 add_account_by_devin_session_token，不走 sniff/importTask ===
+  // === Devin Session Token Mode：eachitemscall add_account_by_devin_session_token，not use sniff/importTask ===
   if (mode === 'devin_session_token') {
     await handleDevinSessionTokenBatchImport(accountsToImport, group, tags, unlimitedConcurrent, concurrencyLimit);
     return;
   }
 
-  // === Devin Auth1 Token 模式：逐条调 add_account_by_devin_auth1_token（autoSelectPrimaryOrg=true） ===
+  // === Devin Auth1 Token Mode：eachitemscall add_account_by_devin_auth1_token（autoSelectPrimaryOrg=true） ===
   if (mode === 'devin_auth1_token') {
     await handleDevinAuth1TokenBatchImport(accountsToImport, group, tags, unlimitedConcurrent, concurrencyLimit);
     return;
@@ -1210,31 +1210,31 @@ async function handleBatchImportConfirm(
 
   const providerLabel =
     authProvider === 'devin' ? 'Devin'
-    : authProvider === 'smart' ? '智能识别'
+    : authProvider === 'smart' ? 'Smart Detection'
     : 'Firebase';
-  const modeLabel = mode === 'refresh_token' ? 'Refresh Token' : '邮箱密码';
+  const modeLabel = mode === 'refresh_token' ? 'Refresh Token' : 'Email/Password';
   const fullLabel = `${providerLabel} · ${modeLabel}`;
-  // 多组织自动首选计数：批量结束后汇总提示
+  // multiplegrouporgautofirstselectcountcount：batchendaftersummaryTotalNotice
   let devinAutoOrgPickedCount = 0;
-  // 智能模式下的嗅探结果：email -> 实际走的 provider
+  // smartMode'sdetectionresult：email -> actualuse provider
   const resolvedProviders = new Map<string, 'firebase' | 'devin'>();
-  // 嗅探环节被跳过的账号（SSO / 未设密码 / 未注册 / 企业禁许 / 网络异常等）
+  // detection环sectionwasskipAccount（SSO / notsetPassword / notRegister / Enterprise禁许 / networkexceptionetc.）
   const skippedBySniff: Array<{ email: string; reason: string }> = [];
 
-  // 显示进度提示
+  // displayprogressNotice
   let progressMsg = ElMessage({
     message: unlimitedConcurrent
-      ? `正在全量并发导入 ${accountsToImport.length} 个账号（${fullLabel}）...`
-      : `正在导入 ${accountsToImport.length} 个账号（${fullLabel}，并发${concurrencyLimit}）...`,
+      ? `Full concurrent import of ${accountsToImport.length}  accounts（${fullLabel}）...`
+      : `Importing ${accountsToImport.length}  accounts（${fullLabel}，concurrent${concurrencyLimit}）...`,
     duration: 0,
     icon: Loading
   });
 
-  // === 智能识别模式：导入前先并发嗅探所有账号的登录流派 ===
+  // === Smart DetectionMode：ImportbeforefirstconcurrentdetectionallAccountLoginprovider type ===
   if (authProvider === 'smart' && mode === 'password') {
     progressMsg.close();
     progressMsg = ElMessage({
-      message: `正在识别 ${accountsToImport.length} 个账号的登录类型……`,
+      message: `Identifying ${accountsToImport.length}  accounts login type...`,
       duration: 0,
       icon: Loading
     });
@@ -1252,7 +1252,7 @@ async function handleBatchImportConfirm(
 
     for (const r of sniffResults) {
       if (r.error || !r.sniff) {
-        skippedBySniff.push({ email: r.email, reason: `嗅探失败: ${r.error || '未知错误'}` });
+        skippedBySniff.push({ email: r.email, reason: `detectionfailed: ${r.error || 'Unknown error'}` });
         continue;
       }
       switch (r.sniff.recommended) {
@@ -1263,7 +1263,7 @@ async function handleBatchImportConfirm(
           resolvedProviders.set(r.email, 'devin');
           break;
         default:
-          // sso / no_password / not_found / blocked —— 均无法自动导入，挂失败
+          // sso / no_password / not_found / blocked —— allnowayautoImport，挂failed
           skippedBySniff.push({
             email: r.email,
             reason: `[${r.sniff.recommended}] ${r.sniff.reason}`,
@@ -1274,14 +1274,14 @@ async function handleBatchImportConfirm(
     progressMsg.close();
     progressMsg = ElMessage({
       message: unlimitedConcurrent
-        ? `嗅探完成，正在全量并发导入 ${resolvedProviders.size} 个账号……`
-        : `嗅探完成，正在导入 ${resolvedProviders.size} 个账号（并发${concurrencyLimit}）……`,
+        ? `Detection complete, full concurrent import of ${resolvedProviders.size}  accounts……`
+        : `Detection complete, importing ${resolvedProviders.size}  accounts（concurrent${concurrencyLimit}）……`,
       duration: 0,
       icon: Loading
     });
   }
 
-  // 崇探被跳过的账号不进入 importTask，但要在结果集中序列语义上表现为失败
+  // 崇探wasskipAccountnotenter importTask，butneed toinresultsetin序column语义on表nowasfailed
   const itemsToImport =
     authProvider === 'smart' && mode === 'password'
       ? accountsToImport.filter(item => resolvedProviders.has(item.email))
@@ -1295,15 +1295,15 @@ async function handleBatchImportConfirm(
     effectiveProvider?: 'firebase' | 'devin';
   }> = skippedBySniff.map(s => ({ email: s.email, success: false, error: s.reason }));
 
-  // 单个导入任务
+  // singleImporttask
   const importTask = async (item: { email: string; password: string; remark: string; refreshToken?: string }) => {
-    // 计算本条实际走的 provider（智能模式从嗅探结果取，其余模式直接用 authProvider）
+    // calculatethisitemsactualuse provider（smartModefromdetectionresultget，its余Modedirectlyuse authProvider）
     const effectiveProvider: 'firebase' | 'devin' =
       authProvider === 'smart' ? resolvedProviders.get(item.email)! : authProvider;
 
     try {
       if (mode === 'refresh_token' && item.refreshToken) {
-        // Refresh Token 模式：调用后端命令（仅 Firebase；Devin/smart 在对话框侧已禁用该 radio）
+        // Refresh Token Mode：callbackendcommand（only  Firebase；Devin/smart inDialog sideDisabledthe radio）
         const result = await invoke<any>('add_account_by_refresh_token', {
           refreshToken: item.refreshToken,
           nickname: item.remark || undefined,
@@ -1314,10 +1314,10 @@ async function handleBatchImportConfirm(
         if (result.success) {
           return { email: result.email, success: true, accountId: result.account?.id, effectiveProvider };
         } else {
-          return { email: item.email, success: false, error: result.error || '添加失败', effectiveProvider };
+          return { email: item.email, success: false, error: result.error || 'Add failed', effectiveProvider };
         }
       } else if (effectiveProvider === 'devin') {
-        // Devin 账密导入：调 add_account_by_devin_login；多组织时自动取 orgs[0] 再二次落库
+        // Devin credentialsImport：call add_account_by_devin_login；multiplegroupwhen orgautoget orgs[0] againsecondarypersist to DB
         const loginResult = await invoke<any>('add_account_by_devin_login', {
           email: item.email,
           password: item.password,
@@ -1328,7 +1328,7 @@ async function handleBatchImportConfirm(
         });
 
         if (loginResult?.success && !loginResult?.requires_org_selection) {
-          // 单组织直通：后端已完成落库 + enrich
+          // singlegrouporgdirectthrough：backendCompletedpersist to DB + enrich
           return {
             email: loginResult.email || item.email,
             success: true,
@@ -1344,7 +1344,7 @@ async function handleBatchImportConfirm(
             return {
               email: item.email,
               success: false,
-              error: '[Devin] 多组织但 orgs[] 为空，无法自动选择',
+              error: '[Devin] multiplegrouporgbut orgs[] asempty，nowayautoselect',
               effectiveProvider,
             };
           }
@@ -1353,11 +1353,11 @@ async function handleBatchImportConfirm(
             return {
               email: item.email,
               success: false,
-              error: '[Devin] 多组织响应缺失 auth1_token',
+              error: '[Devin] multiplegrouporgresponse缺失 auth1_token',
               effectiveProvider,
             };
           }
-          // 二次落库（使用首个组织）——传 password 让账号卡可回显用户原始密码
+          // secondarypersist to DB（usefirstgrouporg）——pass password letAccountcardcanbackshowUseroriginalPassword
           const withOrgResult = await invoke<any>('add_account_by_devin_with_org', {
             email: item.email,
             auth1Token,
@@ -1380,20 +1380,20 @@ async function handleBatchImportConfirm(
           return {
             email: item.email,
             success: false,
-            error: withOrgResult?.error || '[Devin] 多组织二次落库失败',
+            error: withOrgResult?.error || '[Devin] multiplegrouporgsecondarypersist to DBfailed',
             effectiveProvider,
           };
         }
 
-        // 既非 success 也非 requires_org_selection
+        // bothnon- success alsonon- requires_org_selection
         return {
           email: item.email,
           success: false,
-          error: loginResult?.error || loginResult?.message || '[Devin] 登录失败',
+          error: loginResult?.error || loginResult?.message || '[Devin] Login failed',
           effectiveProvider,
         };
       } else {
-        // 邮箱密码模式（Firebase）
+        // Email/PasswordMode（Firebase）
         const newAccount = await accountsStore.addAccount({
           email: item.email,
           password: item.password,
@@ -1404,43 +1404,43 @@ async function handleBatchImportConfirm(
         return { email: item.email, success: true, accountId: newAccount.id, effectiveProvider };
       }
     } catch (error) {
-      console.error(`导入账号 ${item.email} 失败:`, error);
+      console.error(`ImportAccount ${item.email} failed:`, error);
       return { email: item.email, success: false, error: String(error), effectiveProvider };
     }
   };
   
   try {
     if (unlimitedConcurrent) {
-      // 全量并发导入
+      // full concurrentImport
       const allResults = await Promise.all(itemsToImport.map(item => importTask(item)));
       results.push(...allResults);
     } else {
-      // 分批并发处理
+      // 分批concurrenthandle
       for (let i = 0; i < itemsToImport.length; i += concurrencyLimit) {
         const batch = itemsToImport.slice(i, i + concurrencyLimit);
         const batchResults = await Promise.all(batch.map(item => importTask(item)));
         results.push(...batchResults);
         
-        // 更新进度
+        // Updateprogress
         progressMsg.close();
         progressMsg = ElMessage({
-          message: `导入进度: ${results.length - skippedBySniff.length}/${itemsToImport.length}`,
+          message: `Import progress: ${results.length - skippedBySniff.length}/${itemsToImport.length}`,
           duration: 0,
           icon: Loading
         });
       }
     }
     
-    // 统计添加结果
+    // StatisticsAddresult
     const addedAccounts = results.filter(r => r.success);
     const failedAccounts = results.filter(r => !r.success);
     
-    // 并发登录成功添加的账号
-    // - refresh_token 模式：已拿账号信息，跳过
-    // - Devin 模式：add_account_by_devin_login 已完成 post_auth + enrich_account_with_plan_status，跳过
-    // - Firebase + 邮箱密码：按 autoLogin 选项决定是否逐账号调 loginAccount
+    // concurrentLoginsuccessfulAddAccount
+    // - refresh_token Mode：already getAccount Info，skip
+    // - Devin Mode：add_account_by_devin_login Completed post_auth + enrich_account_with_plan_status，skip
+    // - Firebase + Email/Password：by autoLogin optiondecidewhethereachAccountcall loginAccount
     //
-    // 智能模式下同一批中 Firebase/Devin 混合，按 result.effectiveProvider === 'firebase' 过滤
+    // smartModeundersameone批in Firebase/Devin mix，by result.effectiveProvider === 'firebase' filter
     const needsAutoLogin = (r: typeof results[number]) =>
       r.success && r.effectiveProvider === 'firebase';
     let loginSuccessCount = 0;
@@ -1448,28 +1448,28 @@ async function handleBatchImportConfirm(
       progressMsg.close();
       progressMsg = ElMessage({
         message: unlimitedConcurrent
-          ? `正在全量并发登录 ${addedAccounts.length} 个账号...`
-          : `正在登录 ${addedAccounts.length} 个账号（并发${concurrencyLimit}）...`,
+          ? `Full concurrent login of ${addedAccounts.length}  accounts...`
+          : `Logging in ${addedAccounts.length}  accounts（concurrent${concurrencyLimit}）...`,
         duration: 0,
         icon: Loading
       });
       
-      // Firebase 子集（智能模式下仅包含 effectiveProvider === 'firebase' 的行）
+      // Firebase childset（smartModeunderonly contains effectiveProvider === 'firebase' row）
       const firebaseAddedAccounts = addedAccounts.filter(needsAutoLogin);
 
-      // 单个登录任务
+      // singleLogintask
       const loginTask = async (item: { email: string; accountId?: string }) => {
         try {
           const loginResult = await apiService.loginAccount(item.accountId!);
           if (loginResult.success) {
-            // 从后端获取完整的账号信息（包含token）
+            // frombackendfetchcompleteAccount Info（containstoken）
             const latestAccount = await accountApi.getAccount(item.accountId!);
             await accountsStore.updateAccount(latestAccount);
             return { success: true };
           }
           return { success: false };
         } catch (loginError) {
-          console.error(`账号 ${item.email} 登录失败:`, loginError);
+          console.error(`Account ${item.email} Login failed:`, loginError);
           return { success: false };
         }
       };
@@ -1477,20 +1477,20 @@ async function handleBatchImportConfirm(
       const loginResults: Array<{ success: boolean }> = [];
       
       if (unlimitedConcurrent) {
-        // 全量并发登录
+        // full concurrentLogin
         const allLoginResults = await Promise.all(firebaseAddedAccounts.map(item => loginTask(item)));
         loginResults.push(...allLoginResults);
       } else {
-        // 分批并发登录
+        // 分批concurrentLogin
         for (let i = 0; i < firebaseAddedAccounts.length; i += concurrencyLimit) {
           const batch = firebaseAddedAccounts.slice(i, i + concurrencyLimit);
           const batchResults = await Promise.all(batch.map(item => loginTask(item)));
           loginResults.push(...batchResults);
           
-          // 更新进度
+          // Updateprogress
           progressMsg.close();
           progressMsg = ElMessage({
-            message: `登录进度: ${loginResults.length}/${firebaseAddedAccounts.length}`,
+            message: `Login progress: ${loginResults.length}/${firebaseAddedAccounts.length}`,
             duration: 0,
             icon: Loading
           });
@@ -1502,29 +1502,29 @@ async function handleBatchImportConfirm(
     
     progressMsg.close();
     
-    // 关闭对话框
+    // disabledDialog
     showBatchImportDialog.value = false;
     batchImportDialogRef.value?.resetImporting();
     
-    // 显示最终结果
+    // displaymostendresult
     if (addedAccounts.length > 0) {
-      let message = `成功导入 ${addedAccounts.length} 个账号（${providerLabel}）`;
+      let message = `Successfully imported ${addedAccounts.length}  accounts（${providerLabel}）`;
       if (authProvider === 'smart') {
         const firebaseCount = addedAccounts.filter(r => r.effectiveProvider === 'firebase').length;
         const devinCount = addedAccounts.filter(r => r.effectiveProvider === 'devin').length;
         message += `（Firebase ${firebaseCount} · Devin ${devinCount}）`;
       }
       if (autoLogin && loginSuccessCount > 0) {
-        message += `，${loginSuccessCount} 个已登录`;
+        message += `，${loginSuccessCount}  logged in`;
       }
       if (devinAutoOrgPickedCount > 0) {
-        message += `，${devinAutoOrgPickedCount} 个多组织账号已自动选择首个组织`;
+        message += `，${devinAutoOrgPickedCount}  multi-org accounts auto-selected first org`;
       }
       if (skippedBySniff.length > 0) {
-        message += `，${skippedBySniff.length} 个没识别到可用流派`;
+        message += `，${skippedBySniff.length}  accounts with unrecognized login method`;
       }
       if (failedAccounts.length - skippedBySniff.length > 0) {
-        message += `，其余失败 ${failedAccounts.length - skippedBySniff.length} 个`;
+        message += `，, rest failed ${failedAccounts.length - skippedBySniff.length} `;
       }
       ElMessage.success({
         message,
@@ -1533,9 +1533,9 @@ async function handleBatchImportConfirm(
       });
       await accountsStore.loadAccounts();
     } else {
-      let errorMsg = '没有成功导入任何账号';
+      let errorMsg = 'No accounts imported successfully';
       if (failedAccounts.length > 0) {
-        const details = failedAccounts.slice(0, 3).map(f => `${f.email}（${f.error || '未知'}）`).join('\n');
+        const details = failedAccounts.slice(0, 3).map(f => `${f.email}（${f.error || 'Unknown'}）`).join('\n');
         errorMsg += `\n${details}${failedAccounts.length > 3 ? '\n...' : ''}`;
       }
       ElMessage.error({
@@ -1548,19 +1548,19 @@ async function handleBatchImportConfirm(
     progressMsg.close();
     showBatchImportDialog.value = false;
     batchImportDialogRef.value?.resetImporting();
-    ElMessage.error(`批量导入失败: ${error}`);
+    ElMessage.error(`Batch import failed: ${error}`);
   }
 }
 
 /**
- * Devin Auth1 Token 批量导入辅助函数
+ * Devin Auth1 Token Batch Importhelper functioncount
  *
- * 逐条调 devinApi.addAccountByAuth1Token 并开启 autoSelectPrimaryOrg：
- * 后端用 auth1_token 换取 session_token → 反查 GetCurrentUser 拿 email / 配额 → 落库。
- * 多组织场景自动选择 primary org（批量场景不弹组织选择对话框，保证流程不被中断）。
+ * eachitemscall devinApi.addAccountByAuth1Token  and enabled autoSelectPrimaryOrg：
+ * backend uses auth1_token exchange for session_token → reverse lookup GetCurrentUser get email / Quota → persist to DB。
+ * multiplegrouporgscenarioautoselect primary org（batchscenarionotpopupgrouporgselectDialog，ensureflownotwasin断）。
  *
- * 与 handleDevinSessionTokenBatchImport 对称，区别在于落库后账号的 devin_auth1_token 字段已填充，
- * 后续 session 到期可直接用 refresh_devin_session 刷新，无需重新获取 token。
+ * and handleDevinSessionTokenBatchImport forcall，areaotherin于persist to DBafterAccount devin_auth1_token fieldalready 填充，
+ * subsequent session toperiodcandirectlyuse refresh_devin_session Refresh，noneedre-fetch token。
  */
 async function handleDevinAuth1TokenBatchImport(
   items: Array<{ email: string; password: string; remark: string; refreshToken?: string; sessionToken?: string; auth1Token?: string }>,
@@ -1571,8 +1571,8 @@ async function handleDevinAuth1TokenBatchImport(
 ) {
   let progressMsg = ElMessage({
     message: unlimitedConcurrent
-      ? `正在全量并发导入 ${items.length} 个 Devin Auth1 Token...`
-      : `正在导入 ${items.length} 个 Devin Auth1 Token（并发${concurrencyLimit}）...`,
+      ? `Full concurrent import of ${items.length}  Devin Auth1 Token...`
+      : `Importing ${items.length}  Devin Auth1 Token（concurrent${concurrencyLimit}）...`,
     duration: 0,
     icon: Loading,
   });
@@ -1581,7 +1581,7 @@ async function handleDevinAuth1TokenBatchImport(
 
   const importTask = async (item: { remark: string; auth1Token?: string }) => {
     if (!item.auth1Token) {
-      return { email: '(missing token)', success: false, error: '缺少 auth1Token' };
+      return { email: '(missing token)', success: false, error: 'Missing auth1Token' };
     }
     try {
       const result = await devinApi.addAccountByAuth1Token({
@@ -1597,7 +1597,7 @@ async function handleDevinAuth1TokenBatchImport(
       return {
         email: result.email || '(unknown)',
         success: false,
-        error: result.message || '导入失败',
+        error: result.message || 'Import failed',
       };
     } catch (e) {
       return {
@@ -1619,7 +1619,7 @@ async function handleDevinAuth1TokenBatchImport(
         results.push(...batchResults);
         progressMsg.close();
         progressMsg = ElMessage({
-          message: `导入进度: ${results.length}/${items.length}`,
+          message: `Import progress: ${results.length}/${items.length}`,
           duration: 0,
           icon: Loading,
         });
@@ -1633,14 +1633,14 @@ async function handleDevinAuth1TokenBatchImport(
     const succeeded = results.filter(r => r.success).length;
     const failed = results.filter(r => !r.success);
     if (succeeded > 0) {
-      let msg = `成功通过 Auth1 Token 导入 ${succeeded} 个 Devin 账号`;
-      if (failed.length > 0) msg += `，失败 ${failed.length} 个`;
+      let msg = `Successfully imported via Auth1 Token ${succeeded}  Devin Account`;
+      if (failed.length > 0) msg += `，failed ${failed.length} `;
       ElMessage.success({ message: msg, duration: 5000, showClose: true });
       await accountsStore.loadAccounts();
     } else {
-      const details = failed.slice(0, 3).map(f => `${f.email}（${f.error || '未知'}）`).join('\n');
+      const details = failed.slice(0, 3).map(f => `${f.email}（${f.error || 'Unknown'}）`).join('\n');
       ElMessage.error({
-        message: `没有成功导入任何账号\n${details}${failed.length > 3 ? '\n...' : ''}`,
+        message: `No accounts imported successfully\n${details}${failed.length > 3 ? '\n...' : ''}`,
         duration: 5000,
         showClose: true,
       });
@@ -1649,15 +1649,15 @@ async function handleDevinAuth1TokenBatchImport(
     progressMsg.close();
     showBatchImportDialog.value = false;
     batchImportDialogRef.value?.resetImporting();
-    ElMessage.error(`批量导入失败: ${e}`);
+    ElMessage.error(`Batch import failed: ${e}`);
   }
 }
 
 /**
- * Devin Session Token 批量导入辅助函数
+ * Devin Session Token Batch Importhelper functioncount
  *
- * 逐条调 devinApi.addAccountBySessionToken，后端反查 GetCurrentUser 拿 email / 配额并落库。
- * 不走 sniff/importTask 链路（session_token 本身就是 Devin 凭证，无需嗅探）。
+ * eachitemscall devinApi.addAccountBySessionToken，backendreverse lookup GetCurrentUser get email / Quotaand persist to DB。
+ * not use sniff/importTask chain（session_token thisbody就is Devin credential，noneeddetection）。
  */
 async function handleDevinSessionTokenBatchImport(
   items: Array<{ email: string; password: string; remark: string; refreshToken?: string; sessionToken?: string }>,
@@ -1668,8 +1668,8 @@ async function handleDevinSessionTokenBatchImport(
 ) {
   let progressMsg = ElMessage({
     message: unlimitedConcurrent
-      ? `正在全量并发导入 ${items.length} 个 Devin Session Token...`
-      : `正在导入 ${items.length} 个 Devin Session Token（并发${concurrencyLimit}）...`,
+      ? `Full concurrent import of ${items.length}  Devin Session Token...`
+      : `Importing ${items.length}  Devin Session Token（concurrent${concurrencyLimit}）...`,
     duration: 0,
     icon: Loading,
   });
@@ -1678,7 +1678,7 @@ async function handleDevinSessionTokenBatchImport(
 
   const importTask = async (item: { remark: string; sessionToken?: string }) => {
     if (!item.sessionToken) {
-      return { email: '(missing token)', success: false, error: '缺少 sessionToken' };
+      return { email: '(missing token)', success: false, error: 'Missing sessionToken' };
     }
     try {
       const result = await devinApi.addAccountBySessionToken({
@@ -1693,7 +1693,7 @@ async function handleDevinSessionTokenBatchImport(
       return {
         email: result.email || '(unknown)',
         success: false,
-        error: result.message || '导入失败',
+        error: result.message || 'Import failed',
       };
     } catch (e) {
       return {
@@ -1715,7 +1715,7 @@ async function handleDevinSessionTokenBatchImport(
         results.push(...batchResults);
         progressMsg.close();
         progressMsg = ElMessage({
-          message: `导入进度: ${results.length}/${items.length}`,
+          message: `Import progress: ${results.length}/${items.length}`,
           duration: 0,
           icon: Loading,
         });
@@ -1729,14 +1729,14 @@ async function handleDevinSessionTokenBatchImport(
     const succeeded = results.filter(r => r.success).length;
     const failed = results.filter(r => !r.success);
     if (succeeded > 0) {
-      let msg = `成功通过 Session Token 导入 ${succeeded} 个 Devin 账号`;
-      if (failed.length > 0) msg += `，失败 ${failed.length} 个`;
+      let msg = `Successfully imported via Session Token ${succeeded}  Devin Account`;
+      if (failed.length > 0) msg += `，failed ${failed.length} `;
       ElMessage.success({ message: msg, duration: 5000, showClose: true });
       await accountsStore.loadAccounts();
     } else {
-      const details = failed.slice(0, 3).map(f => `${f.email}（${f.error || '未知'}）`).join('\n');
+      const details = failed.slice(0, 3).map(f => `${f.email}（${f.error || 'Unknown'}）`).join('\n');
       ElMessage.error({
-        message: `没有成功导入任何账号\n${details}${failed.length > 3 ? '\n...' : ''}`,
+        message: `No accounts imported successfully\n${details}${failed.length > 3 ? '\n...' : ''}`,
         duration: 5000,
         showClose: true,
       });
@@ -1745,28 +1745,28 @@ async function handleDevinSessionTokenBatchImport(
     progressMsg.close();
     showBatchImportDialog.value = false;
     batchImportDialogRef.value?.resetImporting();
-    ElMessage.error(`批量导入失败: ${e}`);
+    ElMessage.error(`Batch import failed: ${e}`);
   }
 }
 
-// 批量刷新状态（使用优化的批量 API，只保存一次）
+// Batch Refresh Status（useoptimalbatch API，onlySaveonce）
 async function handleBatchRefresh() {
   const selectedIds = Array.from(accountsStore.selectedAccounts);
   if (selectedIds.length === 0) {
-    ElMessage.warning('请先选择账号');
+    ElMessage.warning('Please select accounts first');
     return;
   }
   
   const totalCount = selectedIds.length;
   
   const progressLoading = ElMessage({
-    message: `正在批量刷新 ${totalCount} 个账号状态...`,
+    message: `Batch refreshing ${totalCount}  accountsStatus...`,
     duration: 0,
     icon: Loading
   });
   
   try {
-    // 使用优化的批量刷新 API（后端只保存一次）
+    // useoptimalBatch refresh API（backend onlySaveonce）
     const result = await apiService.batchRefreshTokens(selectedIds);
     
     progressLoading.close();
@@ -1774,7 +1774,7 @@ async function handleBatchRefresh() {
     const successCount = result.success_count || 0;
     const failedCount = totalCount - successCount;
     
-    // 刷新成功的账号，从后端重新获取数据更新 store
+    // RefreshsuccessfulAccount，frombackendre-fetchdataUpdate store
     if (result.results) {
       for (const item of result.results) {
         const idx = accountsStore.accounts.findIndex(a => a.id === item.id);
@@ -1806,134 +1806,134 @@ async function handleBatchRefresh() {
       }
     }
     
-    // 显示结果
+    // Show Results
     if (failedCount === 0) {
-      ElMessage.success(`刷新完成: 成功 ${successCount} 个`);
+      ElMessage.success(`RefreshDone: successful ${successCount} `);
     } else {
-      // 收集失败信息
+      // collectfailedInfo
       const failedItems = result.results?.filter((r: any) => !r.success) || [];
       const failedEmails = failedItems.slice(0, 3).map((item: any) => {
         const account = accountsStore.accounts.find(a => a.id === item.id);
-        return `${account?.email || item.id}: ${item.error || '未知错误'}`;
+        return `${account?.email || item.id}: ${item.error || 'Unknown error'}`;
       });
       
       const moreCount = failedItems.length - 3;
-      let message = `刷新完成（部分失败）\n成功: ${successCount}/${totalCount}\n失败: ${failedCount}/${totalCount}`;
+      let message = `Refresh complete (partial failure)\nsuccessful: ${successCount}/${totalCount}\nfailed: ${failedCount}/${totalCount}`;
       if (failedEmails.length > 0) {
-        message += `\n\n失败账号:\n• ${failedEmails.join('\n• ')}`;
+        message += `\n\nFailed accounts:\n• ${failedEmails.join('\n• ')}`;
         if (moreCount > 0) {
-          message += `\n... 还有 ${moreCount} 个失败`;
+          message += `\n... and ${moreCount}  failed`;
         }
       }
       
-      ElMessageBox.alert(message, '刷新结果', {
+      ElMessageBox.alert(message, 'Refreshresult', {
         type: 'warning',
-        confirmButtonText: '确定'
+        confirmButtonText: 'Confirm'
       });
     }
     
     accountsStore.clearSelection();
   } catch (error) {
     progressLoading.close();
-    ElMessage.error(`批量刷新失败: ${error}`);
+    ElMessage.error(`batchRefresh failed: ${error}`);
   }
 }
 
-// 导出账号
+// Export Accounts
 async function handleExportAccounts(selectedOnly: boolean = false) {
   try {
     let accounts;
     if (selectedOnly) {
-      // 导出选中的账号
+      // ExportselectedAccount
       accounts = accountsStore.filteredAccounts.filter(a => accountsStore.selectedAccounts.has(a.id));
       if (accounts.length === 0) {
-        ElMessage.warning('没有选中的账号');
+        ElMessage.warning('nohasselectedAccount');
         return;
       }
     } else {
-      // 导出所有账号
+      // ExportallAccount
       accounts = accountsStore.filteredAccounts;
       if (accounts.length === 0) {
-        ElMessage.warning('没有可导出的账号');
+        ElMessage.warning('no availableExportAccount');
         return;
       }
     }
     
-    // 按待导出账号集合能力，决定 Devin 两个选项是否渲染
-    // - Auth1 Token：至少一个账号持有 devin_auth1_token
-    // - Session Token：至少一个 Devin 认证提供方账号且 token 非空
+    // bywaitExport Accountsset合can力，decide Devin twooptionwhetherrender
+    // - Auth1 Token：at leastone accounts持has devin_auth1_token
+    // - Session Token：at leastone Devin auth提供sideAccountand token non-empty
     const hasDevinAuth1 = accounts.some(a => !!a.devin_auth1_token);
     const hasDevinSession = accounts.some(a => a.auth_provider === 'devin' && !!a.token);
 
     const devinAuth1OptionHtml = hasDevinAuth1 ? `
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportContent" value="devin_auth1_token" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">邮箱 + Devin Auth1 Token</span>
-            <span style="color: #909399; margin-left: 8px;">可二次换取 session / 换机迁移</span>
+            <span style="font-weight: 500;">Email + Devin Auth1 Token</span>
+            <span style="color: #909399; margin-left: 8px;">cansecondaryexchange for session / 换机migrate</span>
           </label>` : '';
     const devinSessionOptionHtml = hasDevinSession ? `
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportContent" value="devin_session_token" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">邮箱 + Devin Session Token</span>
-            <span style="color: #909399; margin-left: 8px;">当前登录会话凭证（短期有效）</span>
+            <span style="font-weight: 500;">Email + Devin Session Token</span>
+            <span style="color: #909399; margin-left: 8px;">CurrentLoginsessioncredential（短periodvalid）</span>
           </label>` : '';
 
-    // 创建 HTML 字符串形式的单选按钮
+    // create HTML stringformsingleselectbutton
     const radioHtml = `
       <div style="padding: 20px 0;">
         <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #ebeef5;">
-          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">导出内容</div>
+          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">ExportContent</div>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportContent" value="password" checked style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">邮箱 + 密码</span>
-            <span style="color: #909399; margin-left: 8px;">传统登录凭证</span>
+            <span style="font-weight: 500;">Email + Password</span>
+            <span style="color: #909399; margin-left: 8px;">traditionalLogincredential</span>
           </label>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportContent" value="refresh_token" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">邮箱 + Refresh Token</span>
-            <span style="color: #909399; margin-left: 8px;">可直接刷新获取账号信息</span>
+            <span style="font-weight: 500;">Email + Refresh Token</span>
+            <span style="color: #909399; margin-left: 8px;">candirectlyRefreshfetchAccount Info</span>
           </label>${devinAuth1OptionHtml}${devinSessionOptionHtml}
         </div>
         <div style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #ebeef5;">
-          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">导出格式</div>
+          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">Exportformat</div>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportFormat" value="3" checked style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">文本格式</span>
-            <span style="color: #909399; margin-left: 8px;">简单列表</span>
+            <span style="font-weight: 500;">textformat</span>
+            <span style="color: #909399; margin-left: 8px;">简singleList</span>
           </label>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportFormat" value="1" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">CSV格式</span>
-            <span style="color: #909399; margin-left: 8px;">适合 Excel 打开</span>
+            <span style="font-weight: 500;">CSVformat</span>
+            <span style="color: #909399; margin-left: 8px;">suitable Excel open</span>
           </label>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportFormat" value="2" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">JSON格式</span>
-            <span style="color: #909399; margin-left: 8px;">适合程序处理</span>
+            <span style="font-weight: 500;">JSONformat</span>
+            <span style="color: #909399; margin-left: 8px;">suitable程序handle</span>
           </label>
         </div>
         <div>
-          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">导出方式</div>
+          <div style="font-weight: 500; margin-bottom: 10px; color: #606266;">Exportmethod</div>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportTarget" value="clipboard" checked style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">复制到剪贴板</span>
-            <span style="color: #909399; margin-left: 8px;">直接粘贴使用</span>
+            <span style="font-weight: 500;">Copytoclipboard</span>
+            <span style="color: #909399; margin-left: 8px;">directlyPasteuse</span>
           </label>
           <label style="display: block; margin: 10px 0; cursor: pointer; font-size: 14px;">
             <input type="radio" name="exportTarget" value="file" style="margin-right: 10px; cursor: pointer; transform: scale(1.2);" />
-            <span style="font-weight: 500;">下载文件</span>
-            <span style="color: #909399; margin-left: 8px;">保存到本地</span>
+            <span style="font-weight: 500;">Downloadfile</span>
+            <span style="color: #909399; margin-left: 8px;">Saveto local</span>
           </label>
         </div>
       </div>
     `;
     
     await ElMessageBox({
-      title: '选择导出格式',
+      title: 'selectExportformat',
       message: radioHtml,
       showCancelButton: true,
-      confirmButtonText: '导出',
-      cancelButtonText: '取消',
+      confirmButtonText: 'Export',
+      cancelButtonText: 'Cancel',
       dangerouslyUseHTMLString: true,
       customClass: 'export-dialog',
       beforeClose: (action, instance, done) => {
@@ -1947,7 +1947,7 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
       }
     });
     
-    // 获取选中的值
+    // fetchselectedvalue
     const selectedContentRadio = document.querySelector('input[name="exportContent"]:checked') as HTMLInputElement;
     const selectedFormatRadio = document.querySelector('input[name="exportFormat"]:checked') as HTMLInputElement;
     const selectedTargetRadio = document.querySelector('input[name="exportTarget"]:checked') as HTMLInputElement;
@@ -1955,9 +1955,9 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
     const format = selectedFormatRadio ? selectedFormatRadio.value : '1';
     const target = selectedTargetRadio ? selectedTargetRadio.value : 'file';
     
-    // 根据导出内容类型获取凭证
-    // devin_session_token 仅对 auth_provider==='devin' 的账号有意义：
-    // 旧 Firebase 账号的 token 字段持有 Firebase access_token，将其作为 Devin session 导出会产生误导，因此置空
+    // based onExportContenttypefetchcredential
+    // devin_session_token only for auth_provider==='devin' Accounthas意义：
+    // old Firebase Account token field持has Firebase access_token，willitsmakeas Devin session Exportwill产生误导，becausethissetempty
     const getCredential = (account: any) => {
       switch (exportContent) {
         case 'refresh_token':
@@ -1973,7 +1973,7 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
     };
 
     const credentialMeta: Record<string, { label: string; key: string; fileSuffix: string }> = {
-      password:            { label: '密码',                key: 'password',            fileSuffix: ''        },
+      password:            { label: 'Password',                key: 'password',            fileSuffix: ''        },
       refresh_token:       { label: 'Refresh Token',       key: 'refresh_token',       fileSuffix: '_token'  },
       devin_auth1_token:   { label: 'Devin Auth1 Token',   key: 'devin_auth1_token',   fileSuffix: '_auth1'  },
       devin_session_token: { label: 'Devin Session Token', key: 'devin_session_token', fileSuffix: '_session'},
@@ -1989,8 +1989,8 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
     
     switch(format) {
       case '1': // CSV
-        // 剪贴板不需要 BOM
-        content = target === 'clipboard' ? `邮箱,${credentialLabel},备注,分组,状态,套餐\n` : `\uFEFF邮箱,${credentialLabel},备注,分组,状态,套餐\n`;
+        // clipboarddoes not need BOM
+        content = target === 'clipboard' ? `Email,${credentialLabel},Remark,Group,Status,Plan\n` : `\uFEFFEmail,${credentialLabel},Remark,Group,Status,Plan\n`;
         accounts.forEach(account => {
           content += `"${account.email}","${getCredential(account)}","${account.nickname || ''}","${account.group || ''}","${account.status || ''}","${account.plan_name || ''}"\n`;
         });
@@ -2009,7 +2009,7 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
         filename = `accounts${fileSuffix}_${timestamp}.json`;
         break;
         
-      case '3': // 文本
+      case '3': // text
         accounts.forEach(account => {
           content += `${account.email} ${getCredential(account)}\n`;
         });
@@ -2018,11 +2018,11 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
     }
     
     if (target === 'clipboard') {
-      // 复制到剪贴板
+      // Copytoclipboard
       await navigator.clipboard.writeText(content);
-      ElMessage.success(`已复制 ${accounts.length} 个账号到剪贴板`);
+      ElMessage.success(`Copied ${accounts.length}  accountstoclipboard`);
     } else {
-      // 创建下载链接
+      // createDownloadlink
       const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -2033,40 +2033,40 @@ async function handleExportAccounts(selectedOnly: boolean = false) {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
       
-      ElMessage.success(`已导出 ${accounts.length} 个账号`);
+      ElMessage.success(`Exported ${accounts.length}  accounts`);
     }
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`导出失败: ${error}`);
+      ElMessage.error(`Exportfailed: ${error}`);
     }
   }
 }
 
 async function showAddGroupDialog() {
   try {
-    const { value } = await ElMessageBox.prompt('请输入分组名称', '添加分组', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    const { value } = await ElMessageBox.prompt('Please enter group name', 'Add Group', {
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
       inputPattern: /^.{1,20}$/,
-      inputErrorMessage: '分组名称长度应为1-20个字符'
+      inputErrorMessage: 'Group namelengthshouldas1-20character'
     });
     
     await settingsStore.addGroup(value);
-    ElMessage.success('分组添加成功');
+    ElMessage.success('GroupAdded successfully');
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`添加分组失败: ${error}`);
+      ElMessage.error(`Add Groupfailed: ${error}`);
     }
   }
 }
 
 async function showRenameGroupDialog(oldName: string) {
   try {
-    const { value } = await ElMessageBox.prompt('请输入新的分组名称', `重命名分组 "${oldName}"`, {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    const { value } = await ElMessageBox.prompt('Please enternewGroup name', `Rename Group "${oldName}"`, {
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
       inputPattern: /^.{1,20}$/,
-      inputErrorMessage: '分组名称长度应为1-20个字符',
+      inputErrorMessage: 'Group namelengthshouldas1-20character',
       inputValue: oldName
     });
     
@@ -2075,13 +2075,13 @@ async function showRenameGroupDialog(oldName: string) {
     }
     
     await settingsStore.renameGroup(oldName, value);
-    ElMessage.success('分组重命名成功');
+    ElMessage.success('Group重namednamesuccessful');
     
-    // 刷新账号列表
+    // Refresh account list
     await accountsStore.loadAccounts();
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`重命名分组失败: ${error}`);
+      ElMessage.error(`Rename Groupfailed: ${error}`);
     }
   }
 }
@@ -2089,29 +2089,29 @@ async function showRenameGroupDialog(oldName: string) {
 async function showDeleteGroupConfirm(name: string) {
   try {
     await ElMessageBox.confirm(
-      `确定要删除分组 "${name}" 吗？该分组下的账号将被移至"未分组"`,
-      '删除分组',
+      `Confirmneed toDelete Group "${name}" ?？theGroup'sAccountwillwasmove至"notGroup"`,
+      'Delete Group',
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }
     );
     
     await settingsStore.deleteGroup(name);
-    ElMessage.success('分组删除成功');
+    ElMessage.success('GroupDeletesuccessful');
     
-    // 刷新账号列表
+    // Refresh account list
     await accountsStore.loadAccounts();
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`删除分组失败: ${error}`);
+      ElMessage.error(`Delete Groupfailed: ${error}`);
     }
   }
 }
 
-// 获取当前活跃 Windsurf / Windsurf - Next 客户端的账号信息
-// 后端按「进程优先 + state.vscdb mtime fallback」自动选择活跃客户端
+// fetchCurrentActive Windsurf / Windsurf - Next ClientAccount Info
+// backendby「进程priority + state.vscdb mtime fallback」autoselectActiveClient
 async function fetchCurrentWindsurfInfo() {
   try {
     const info = await settingsApi.getCurrentWindsurfInfo();
@@ -2121,31 +2121,31 @@ async function fetchCurrentWindsurfInfo() {
     if (info.version) {
       windsurfVersion.value = info.version;
     }
-    // 活跃客户端展示名（驱动关于对话框标题动态切换）
+    // ActiveClientshowname（驱动AboutDialogtitledynamicSwitch）
     if (info.client_display_name) {
       windsurfClientDisplayName.value = info.client_display_name;
     }
   } catch (error) {
-    console.error('获取当前Windsurf信息失败:', error);
+    console.error('fetchCurrentWindsurfInfofailed:', error);
   }
 }
 
-// 关闭批量分组对话框
+// disabledbatchGroupDialog
 function closeBatchGroupDialog() {
   showBatchGroupDialog.value = false;
   batchGroupTarget.value = '';
 }
 
-// 批量更改分组
+// Batch Change Group
 async function handleBatchUpdateGroup() {
   const selectedIds = Array.from(accountsStore.selectedAccounts);
   if (selectedIds.length === 0) {
-    ElMessage.warning('请先选择账号');
+    ElMessage.warning('Please select accounts first');
     return;
   }
   
   if (!batchGroupTarget.value) {
-    ElMessage.warning('请选择目标分组');
+    ElMessage.warning('pleaseSelect target group');
     return;
   }
   
@@ -2155,7 +2155,7 @@ async function handleBatchUpdateGroup() {
     let successCount = 0;
     let failedCount = 0;
     
-    // 逐个更新账号的分组
+    // eachUpdateAccountGroup
     for (const id of selectedIds) {
       const account = accountsStore.accounts.find(a => a.id === id);
       if (account) {
@@ -2164,40 +2164,40 @@ async function handleBatchUpdateGroup() {
           await accountsStore.updateAccount(updatedAccount);
           successCount++;
         } catch (error) {
-          console.error(`更新账号 ${account.email} 分组失败:`, error);
+          console.error(`UpdateAccount ${account.email} Groupfailed:`, error);
           failedCount++;
         }
       }
     }
     
-    // 显示结果
+    // Show Results
     if (failedCount === 0) {
-      ElMessage.success(`成功将 ${successCount} 个账号移动到"${batchGroupTarget.value}"分组`);
+      ElMessage.success(`successfulwill ${successCount}  accountsmove动to"${batchGroupTarget.value}"Group`);
     } else {
-      ElMessage.warning(`完成：成功 ${successCount} 个，失败 ${failedCount} 个`);
+      ElMessage.warning(`Done：successful ${successCount} ，failed ${failedCount} `);
     }
     
-    // 关闭对话框并刷新
+    // disabledDialog and Refresh
     closeBatchGroupDialog();
     accountsStore.clearSelection();
     await accountsStore.loadAccounts();
   } catch (error) {
-    ElMessage.error(`批量更改分组失败: ${error}`);
+    ElMessage.error(`Batch Change Groupfailed: ${error}`);
   } finally {
     isBatchUpdatingGroup.value = false;
   }
 }
 
-// 显示关于对话框
+// displayAboutDialog
 function showAboutDialog() {
   showAbout.value = true;
 }
 
-// 初始化时获取当前账号信息和应用版本
+// initializewhenfetchCurrentAccount Info and applyVersion
 onMounted(async () => {
   fetchCurrentWindsurfInfo();
   
-  // 获取应用版本号
+  // fetchapplyVersion
   try {
     const versionInfo = await invoke<any>('get_app_version');
     appVersion.value = versionInfo.version;
@@ -2205,13 +2205,13 @@ onMounted(async () => {
     console.error('Failed to get app version:', error);
   }
   
-  // 初始化排序配置
+  // initializesort config
   initSortConfig();
   
-  // 初始化自动重置定时器
+  // initializeAuto Resettimer
   initAutoResetTimers();
 
-  // 启动静默检测更新（延迟 3 秒，避开启动高峰；store 内部 24h 防抖 + 跳过版本）
+  // launch静默detectUpdate（delay 3 seconds，避enabled动高峰；store internal 24h debounce + Skip Version）
   window.setTimeout(async () => {
     try {
       const hasUpdate = await updaterStore.checkUpdate(true);
@@ -2224,7 +2224,7 @@ onMounted(async () => {
   }, 3000);
 });
 
-// 组件卸载时清除自动重置定时器
+// on component unmountClearAuto Resettimer
 onUnmounted(() => {
   autoResetTimerMap.value.forEach(timer => clearInterval(timer));
   autoResetTimerMap.value.clear();
@@ -2246,7 +2246,7 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-/* 全局隐藏侧边栏的所有滚动条 */
+/* globalhideSidebarallscrollitems */
 .el-aside {
   overflow: hidden !important;
 }
@@ -2298,7 +2298,7 @@ onUnmounted(() => {
   }
 }
 
-/* 收缩状态下标题样式 */
+/* 收缩Statusundertitlestyle */
 .sidebar.el-aside--collapse .app-title {
   padding: 16px 8px;
 }
@@ -2309,7 +2309,7 @@ onUnmounted(() => {
   overflow: hidden !important;
 }
 
-/* 隐藏Element Plus菜单的滚动条 */
+/* hideElement Plusmenusinglescrollitems */
 .sidebar-menu::-webkit-scrollbar {
   display: none;
 }
@@ -2398,7 +2398,7 @@ onUnmounted(() => {
   flex-wrap: nowrap;
 }
 
-/* 圆形按钮徒加徽章样式 */
+/* circlebutton徒加badgestyle */
 .header-right :deep(.el-badge) {
   vertical-align: middle;
 }
@@ -2414,7 +2414,7 @@ onUnmounted(() => {
 }
 
 
-/* 全选按钮分隔线 */
+/* Select Allbuttondelimiterline */
 .header-right .select-all-button {
   margin-left: 4px;
   position: relative;
@@ -2433,9 +2433,9 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-/* 批量操作按钮 - 已通过父元素统一设置间距 */
+/* Batch Operationsbutton - Approved父elementunifySettings间距 */
 
-/* 主要操作按钮样式 */
+/* primaryneed toOperationButton Style */
 .header-right :deep(.el-button--primary:not(.is-circle)) {
   background: linear-gradient(135deg, #409eff 0%, #3b8cef 100%);
   border: none;
@@ -2446,7 +2446,7 @@ onUnmounted(() => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 圆形主要按钮 - 蓝色 */
+/* circleprimaryneed tobutton - blue */
 .header-right :deep(.el-button--primary.is-circle) {
   background: linear-gradient(135deg, #409eff 0%, #3b8cef 100%);
   border: none;
@@ -2472,7 +2472,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(64, 158, 255, 0.2);
 }
 
-/* 危险按钮 - 红色（批量删除） */
+/* 危险button - red（Batch Delete） */
 .header-right :deep(.el-button--danger.is-circle) {
   background: linear-gradient(135deg, #f56c6c 0%, #f04848 100%);
   border: none;
@@ -2492,7 +2492,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(245, 108, 108, 0.2);
 }
 
-/* 成功按钮 - 绿色（批量转让订阅） */
+/* successfulbutton - green（Batch Transfer Subscription） */
 .header-right :deep(.el-button--success.is-circle) {
   background: linear-gradient(135deg, #67c23a 0%, #5daf34 100%);
   border: none;
@@ -2507,7 +2507,7 @@ onUnmounted(() => {
   box-shadow: 0 4px 12px rgba(103, 194, 58, 0.4);
 }
 
-/* 警告按钮 - 橙色（批量刷新状态） */
+/* Warningbutton - orange（Batch Refresh Status） */
 .header-right :deep(.el-button--warning.is-circle) {
   background: linear-gradient(135deg, #e6a23c 0%, #d48a1f 100%);
   border: none;
@@ -2527,7 +2527,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(103, 194, 58, 0.2);
 }
 
-/* 普通按钮样式 */
+/* normalButton Style */
 .header-right :deep(.el-button--default) {
   background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
   border: 1px solid #dcdfe6;
@@ -2552,14 +2552,14 @@ onUnmounted(() => {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-/* 圆形按钮基础样式 */
+/* circlebuttonbasicstyle */
 .header-right :deep(.el-button.is-circle) {
   transition: all 0.3s ease;
   width: 40px;
   height: 40px;
 }
 
-/* 默认圆形按钮 - 统一的灰色风格 */
+/* defaultcirclebutton - unifygraystyle */
 .header-right :deep(.el-button--default.is-circle) {
   color: #606266 !important;  
   background: #ffffff;
@@ -2575,7 +2575,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
 }
 
-/* 特别处理圆形按钮的图标颜色 */
+/* 特otherhandlecirclebuttoniconcolor */
 .header-right :deep(.el-button.is-circle .el-icon) {
   color: inherit !important;
   font-weight: 500;
@@ -2590,13 +2590,13 @@ onUnmounted(() => {
   transform: rotate(90deg) scale(0.95);
 }
 
-/* 按钮图标样式 */
+/* buttoniconstyle */
 .header-right :deep(.el-button .el-icon) {
   font-size: 18px;
   transition: all 0.3s ease;
 }
 
-/* 默认按钮的图标颜色 */
+/* defaultbuttoniconcolor */
 .header-right :deep(.el-button--default .el-icon) {
   color: #606266 !important;
 }
@@ -2605,7 +2605,7 @@ onUnmounted(() => {
   color: #409eff !important;
 }
 
-/* 全选按钮 - 选中时特殊处理 */
+/* Select Allbutton - selectedwhenspecialhandle */
 .header-right :deep(.el-button--primary.is-circle[class*="el-button--primary"]:first-child) {
   background: #409eff;
   border: none;
@@ -2613,7 +2613,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);
 }
 
-/* 动态出现的按钮动画 */
+/* dynamicappearbuttonanimation */
 .header-right :deep(.el-button--danger.is-circle),
 .header-right :deep(.el-button--success.is-circle),
 .header-right :deep(.el-button--warning.is-circle) {
@@ -2632,18 +2632,18 @@ onUnmounted(() => {
 }
 
 
-/* 按钮内文字样式 */
+/* buttoninsidetextstyle */
 .header-right :deep(.el-button span) {
   font-size: 14px;
   letter-spacing: 0.3px;
 }
 
-/* 按钮加载状态 */
+/* buttonLoadingStatus */
 .header-right :deep(.el-button.is-loading) {
   opacity: 0.8;
 }
 
-/* 导出对话框样式 */
+/* ExportDialogstyle */
 .export-dialog {
   .el-message-box__message {
     padding: 0 !important;
@@ -2665,14 +2665,14 @@ onUnmounted(() => {
   }
 }
 
-/* 按钮禁用状态 */
+/* buttonDisableStatus */
 .header-right :deep(.el-button.is-disabled) {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
 }
 
-/* 筛选面板样式 */
+/* filterpanelstyle */
 .filter-panel {
   background: #ffffff;
   border-radius: 10px;
@@ -2760,7 +2760,7 @@ onUnmounted(() => {
   font-size: 12px;
 }
 
-/* 筛选面板动画 */
+/* filterpanelanimation */
 .filter-slide-enter-active,
 .filter-slide-leave-active {
   transition: all 0.3s ease;
@@ -2772,7 +2772,7 @@ onUnmounted(() => {
   transform: translateY(-10px);
 }
 
-/* 分页容器 */
+/* Paginationcontainer */
 .pagination-container {
   display: flex;
   justify-content: center;
@@ -2788,7 +2788,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* 筛选按钮样式 */
+/* filterButton Style */
 .filter-toggle-btn {
   margin-left: 12px;
 }
@@ -2818,7 +2818,7 @@ onUnmounted(() => {
   padding: 0;
 }
 
-/* 响应式布局 */
+/* responsivelayout */
 @media (max-width: 1400px) {
   .accounts-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -2849,7 +2849,7 @@ onUnmounted(() => {
   }
 }
 
-/* 暗色主题支持 */
+/* Dark Themesupport */
 :root.dark .sidebar {
   background: #1e1e1e;
   border-color: rgba(255, 255, 255, 0.08);
@@ -2868,7 +2868,7 @@ onUnmounted(() => {
   background-color: rgba(64, 158, 255, 0.05);
 }
 
-/* 分组项样式 */
+/* Groupitemstyle */
 .group-item {
   position: relative;
 }
@@ -2915,7 +2915,7 @@ onUnmounted(() => {
   background-color: rgba(245, 108, 108, 0.1);
 }
 
-/* 暗色主题适配 */
+/* Dark Themeadapt */
 :root.dark .sidebar-menu .el-menu-item.is-active {
   background-color: rgba(64, 158, 255, 0.1);
   color: #409eff;
@@ -3029,7 +3029,7 @@ onUnmounted(() => {
   background: #121212;
 }
 
-/* 深色模式筛选面板 */
+/* Dark Modefilterpanel */
 :root.dark .filter-panel {
   background: #1e1e1e;
   border-color: rgba(255, 255, 255, 0.08);
@@ -3048,13 +3048,13 @@ onUnmounted(() => {
   color: #4a5568;
 }
 
-/* 深色模式分页 */
+/* Dark ModePagination */
 :root.dark .pagination-container .el-pagination {
   background: #1e1e1e;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* 批量分组对话框样式 */
+/* batchGroupDialogstyle */
 .batch-group-content {
   padding: 10px 0;
 }
@@ -3074,7 +3074,7 @@ onUnmounted(() => {
   color: #a0aec0;
 }
 
-/* 批量转让对话框样式 */
+/* batchtransferDialogstyle */
 .email-count-hint {
   font-size: 14px;
   color: #606266;
@@ -3102,16 +3102,16 @@ onUnmounted(() => {
   color: #a0aec0;
 }
 
-/* ==================== 分组管理子菜单：超出限高后局部滚动 ====================
- * 背景：全局 `.sidebar :deep(::-webkit-scrollbar) { display: none !important; }` 强制隐藏
- *   了侧边栏所有滚动条。当分组数量较多（如 > 8 个）时，el-sub-menu 展开
- *   区会把下方其它菜单项顶出视口，用户无法访问亦无法滚动。
+/* ==================== Group Managementchildmenusingle：超out限高after局部scroll ====================
+ * background：global `.sidebar :deep(::-webkit-scrollbar) { display: none !important; }` forcehide
+ *   Sidebarallscrollitems。whenGroupCount较multiple（e.g. > 8 ）when，el-sub-menu expand
+ *   areawillputundersideothermenusingleitem顶outview口，Usernowayaccess亦nowayscroll。
  *
- * 方案：只在 .groups-submenu 的展开容器（:deep(.el-menu)）上重新启用滚动：
- *   1. 限制 max-height（约 8 项高度），超出则出现滚动条；
- *   2. 用更高特异性 + !important 覆盖全局 scrollbar 隐藏规则，定制一条 6px 细滚动条；
- *   3. "添加分组"按钮用 position: sticky 钉在底部，滚动时始终可见。
- * 折叠态（collapse）下 sub-menu 是 popper 形式渲染在 <body> 下，不会命中本规则，无副作用。
+ * solution：onlyin .groups-submenu expandcontainer（:deep(.el-menu)）onre-Enablescroll：
+ *   1. limit max-height（约 8 itemheight），超outthenappearscrollitems；
+ *   2. usemore高特异property + !important coverglobal scrollbar hiderules，定制oneitems 6px 细scrollitems；
+ *   3. "Add Group"buttonuse position: sticky 钉inbottom，scrollwhenalwayscansee。
+ * collapsed state（collapse）under sub-menu is popper formrenderin <body> under，notwillnamedthisrules，no副makeuse。
  */
 
 .sidebar-menu .groups-submenu :deep(.el-menu) {
@@ -3137,7 +3137,7 @@ onUnmounted(() => {
   background-color: var(--el-border-color-darker) !important;
 }
 
-/* “添加分组”固定在展开区底部：滚动分组列表时该按钮始终可见 */
+/* “Add Group”fixedinexpandareabottom：scrollGroupListwhenthebuttonalwayscansee */
 .sidebar-menu .groups-submenu :deep(.group-add-action) {
   position: sticky;
   bottom: 0;
@@ -3149,15 +3149,15 @@ onUnmounted(() => {
 </style>
 
 <!--
-  折叠态 sub-menu 的 popper 被 Element Plus 通过 Teleport 渲染到 <body> 下，
-  已脱离本组件的 DOM 子树；scoped style 的 `:deep()` 无法穿透 Teleport，
-  因此折叠态的滚动样式必须放在下面这个“非 scoped”的 style 块里，
-  通过 popper-class="groups-submenu-popper" 精准锁定，避免污染全局。
+  collapsed state sub-menu  popper was Element Plus via Teleport renderto <body> under，
+  already 脱离thiscomponent DOM subtree；scoped style  `:deep()` nowaypenetrate Teleport，
+  becausethiscollapsed statescrollstylemust放inunderside这“non- scoped” style blockin，
+  via popper-class="groups-submenu-popper" 精准锁定，avoid污染global。
 -->
 <style>
-/* ==================== 分组管理子菜单：折叠态 popper 浮层 ==================== */
+/* ==================== Group Managementchildmenusingle：collapsed state popper overlay ==================== */
 
-/* popper 的 ul.el-menu 限高并启用滚动；容器相对定位是为了让 sticky 的“添加分组”生效 */
+/* popper  ul.el-menu 限高 and Enablescroll；containermutualfor定isaslet sticky “Add Group”生效 */
 .groups-submenu-popper .el-menu {
   max-height: 70vh;
   overflow-y: auto !important;
@@ -3182,7 +3182,7 @@ onUnmounted(() => {
   background-color: var(--el-border-color-darker) !important;
 }
 
-/* “添加分组”按钮贴底：滚动分组列表时始终可见 */
+/* “Add Group”button贴底：scrollGroupListwhenalwayscansee */
 .groups-submenu-popper .el-menu .group-add-action {
   position: sticky;
   bottom: 0;

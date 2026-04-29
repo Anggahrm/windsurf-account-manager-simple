@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    title="团队设置 (Team Settings)"
+    title="Team Settings (Team Settings)"
     width="700px"
     :close-on-click-modal="false"
     destroy-on-close
@@ -10,22 +10,22 @@
     <div v-loading="loading" class="settings-container">
       <!-- Windsurf Settings -->
       <div class="settings-section">
-        <h3 class="section-title">Windsurf 设置</h3>
+        <h3 class="section-title">Windsurf Settings</h3>
         
         <!-- Models -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">模型配置 (Models)</span>
-            <span class="setting-desc">配置要在 Windsurf 中使用的模型</span>
+            <span class="setting-name">model config (Models)</span>
+            <span class="setting-desc">configneed toin Windsurf inusemodel</span>
           </div>
-          <el-button size="small" @click="openModelsConfig">配置</el-button>
+          <el-button size="small" @click="openModelsConfig">config</el-button>
         </div>
         
         <!-- Enable Web Search -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">网页搜索 (Web Search)</span>
-            <span class="setting-desc">允许 Cascade 搜索网页获取相关信息</span>
+            <span class="setting-name">网pageSearch (Web Search)</span>
+            <span class="setting-desc">allow Cascade Search网pagefetchrelatedInfo</span>
           </div>
           <el-switch v-model="settings.enableWebSearch" @change="handleSettingChange" />
         </div>
@@ -33,8 +33,8 @@
         <!-- Auto Run Terminal Commands -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">自动运行命令 (Auto Run Commands)</span>
-            <span class="setting-desc">允许 Cascade 在用户机器上自动执行命令</span>
+            <span class="setting-name">autoruncommand (Auto Run Commands)</span>
+            <span class="setting-desc">allow Cascade inUsermachineonautoexecutecommand</span>
           </div>
           <el-switch v-model="settings.allowAutoRunCommands" @change="handleSettingChange" />
         </div>
@@ -42,8 +42,8 @@
         <!-- MCP Servers -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">MCP 服务器</span>
-            <span class="setting-desc">允许用户使用和配置 MCP 服务器</span>
+            <span class="setting-name">MCP Server</span>
+            <span class="setting-desc">allowUseruse and config MCP Server</span>
           </div>
           <el-switch v-model="settings.allowMcpServers" @change="handleSettingChange" />
         </div>
@@ -51,30 +51,30 @@
         <!-- Whitelisted MCP Servers -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">MCP 白名单</span>
-            <span class="setting-desc">未添加 MCP 服务器时，默认所有服务器都在白名单中</span>
+            <span class="setting-name">MCP whitelist</span>
+            <span class="setting-desc">notAdd MCP Serverwhen，defaultallServerallinwhitelistin</span>
           </div>
-          <el-button size="small" @click="openMcpWhitelist">添加服务器</el-button>
+          <el-button size="small" @click="openMcpWhitelist">AddServer</el-button>
         </div>
         
         <!-- App Deploys -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">应用部署 (App Deploys) <el-tag size="small" type="warning">BETA</el-tag></span>
-            <span class="setting-desc">管理团队在 Cascade 中的部署权限</span>
+            <span class="setting-name">applydeploy (App Deploys) <el-tag size="small" type="warning">BETA</el-tag></span>
+            <span class="setting-desc">ManagementTeamin Cascade indeployPermission</span>
           </div>
           <el-select v-model="settings.appDeploysMode" size="small" style="width: 160px" @change="handleSettingChange">
-            <el-option label="完全部署权限" value="full" />
-            <el-option label="仅内部团队" value="teams" />
-            <el-option label="禁用部署" value="disabled" />
+            <el-option label="完All署Permission" value="full" />
+            <el-option label="only internalTeam" value="teams" />
+            <el-option label="Disabledeploy" value="disabled" />
           </el-select>
         </div>
         
         <!-- Conversation Sharing -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">对话分享 (Conversation Sharing)</span>
-            <span class="setting-desc">允许团队成员分享 Cascade 对话</span>
+            <span class="setting-name">dialogshare (Conversation Sharing)</span>
+            <span class="setting-desc">allowTeam Membersshare Cascade dialog</span>
           </div>
           <el-switch v-model="settings.allowConversationSharing" @change="handleSettingChange" />
         </div>
@@ -83,7 +83,7 @@
         <div class="setting-item">
           <div class="setting-info">
             <span class="setting-name">DeepWiki</span>
-            <span class="setting-desc">启用 DeepWiki 悬浮卡片和代码符号的 IDE 内文章</span>
+            <span class="setting-desc">Enable DeepWiki hovercard and codecode符 IDE insidetext章</span>
           </div>
           <el-switch v-model="settings.enableDeepwiki" @change="handleSettingChange" />
         </div>
@@ -91,8 +91,8 @@
         <!-- Fast Context -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">快速上下文 (Fast Context)</span>
-            <span class="setting-desc">启用快速上下文功能</span>
+            <span class="setting-name">quickonundertext (Fast Context)</span>
+            <span class="setting-desc">EnablequickonundertextFeature</span>
           </div>
           <el-switch v-model="settings.enableFastContext" @change="handleSettingChange" />
         </div>
@@ -100,17 +100,17 @@
         <!-- Codemaps -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">代码地图 (Codemaps)</span>
-            <span class="setting-desc">生成、查看和分享交互式代码地图</span>
+            <span class="setting-name">code map (Codemaps)</span>
+            <span class="setting-desc">generate、View and share交互式code map</span>
           </div>
-          <el-button size="small" @click="codemapsDialogVisible = true">配置</el-button>
+          <el-button size="small" @click="codemapsDialogVisible = true">config</el-button>
         </div>
         
         <!-- Vibe and Replace -->
         <div class="setting-item">
           <div class="setting-info">
             <span class="setting-name">Vibe and Replace</span>
-            <span class="setting-desc">启用高级代码编辑的 Vibe and Replace 功能</span>
+            <span class="setting-desc">EnableAdvancedcodecodeEdit Vibe and Replace Feature</span>
           </div>
           <el-switch v-model="settings.allowVibeAndReplace" @change="handleSettingChange" />
         </div>
@@ -118,8 +118,8 @@
         <!-- Github Integration -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">Github 集成</span>
-            <span class="setting-desc">在团队的 GitHub 组织中安装 Windsurf 进行 PR 审查</span>
+            <span class="setting-name">Github integration</span>
+            <span class="setting-desc">inTeam GitHub grouporgininstall Windsurf proceed PR review</span>
           </div>
           <el-switch v-model="settings.allowGithubReviews" @change="handleSettingChange" />
         </div>
@@ -127,49 +127,49 @@
       
       <!-- Other Settings -->
       <div class="settings-section">
-        <h3 class="section-title">其他设置</h3>
+        <h3 class="section-title">otherSettings</h3>
         
         <!-- Domain Management -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">域名管理 (Domain Management)</span>
-            <span class="setting-desc">管理和验证团队域名</span>
+            <span class="setting-name">DomainManagement (Domain Management)</span>
+            <span class="setting-desc">Management and VerifyTeamDomain</span>
           </div>
-          <el-button size="small" disabled>配置</el-button>
+          <el-button size="small" disabled>config</el-button>
         </div>
         
         <!-- SSO and SAML Configuration -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">SSO 和 SAML 配置</span>
-            <span class="setting-desc">设置 Azure、Google、Okta 或自定义 SAML 单点登录</span>
+            <span class="setting-name">SSO  and  SAML config</span>
+            <span class="setting-desc">Settings Azure、Google、Okta  or custom SAML singlepointLogin</span>
           </div>
-          <el-button size="small" disabled>配置</el-button>
+          <el-button size="small" disabled>config</el-button>
         </div>
         
         <!-- Service Key Configuration -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">服务密钥配置 (Service Key)</span>
-            <span class="setting-desc">生成用于 SCIM 用户配置和分析 API 的服务密钥</span>
+            <span class="setting-name">serviceSecret Keyconfig (Service Key)</span>
+            <span class="setting-desc">generateused for SCIM Userconfig and Analysis API serviceSecret Key</span>
           </div>
-          <el-button size="small" disabled>配置</el-button>
+          <el-button size="small" disabled>config</el-button>
         </div>
         
         <!-- Role Management -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">角色管理 (Role Management)</span>
-            <span class="setting-desc">管理用户可拥有的角色列表</span>
+            <span class="setting-name">RoleManagement (Role Management)</span>
+            <span class="setting-desc">ManagementUsercanownhasRoleList</span>
           </div>
-          <el-button size="small" disabled>配置</el-button>
+          <el-button size="small" disabled>config</el-button>
         </div>
         
         <!-- Individual Level Analytics -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">个人级分析 (Individual Analytics)</span>
-            <span class="setting-desc">个人级别的使用分析功能</span>
+            <span class="setting-name">personlevelAnalysis (Individual Analytics)</span>
+            <span class="setting-desc">personleveluseAnalysisFeature</span>
           </div>
           <el-switch v-model="settings.allowIndividualAnalytics" @change="handleSettingChange" />
         </div>
@@ -177,8 +177,8 @@
         <!-- Attribution Toggle -->
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-name">代码归属 (Attribution) <el-tag size="small" type="warning">BETA</el-tag></span>
-            <span class="setting-desc">启用后 Windsurf 将阻止写入有归属的代码</span>
+            <span class="setting-name">codecodebelong (Attribution) <el-tag size="small" type="warning">BETA</el-tag></span>
+            <span class="setting-desc">After enabling Windsurf will阻止write入hasbelongcodecode</span>
           </div>
           <el-switch v-model="settings.allowAttribution" @change="handleSettingChange" />
         </div>
@@ -187,9 +187,9 @@
     
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="dialogVisible = false">关闭</el-button>
+        <el-button @click="dialogVisible = false">disabled</el-button>
         <el-button type="primary" :loading="saving" @click="saveSettings">
-          <el-icon><Check /></el-icon> 保存设置
+          <el-icon><Check /></el-icon> Save Settings
         </el-button>
       </div>
     </template>
@@ -197,17 +197,17 @@
     <!-- Models Configuration Dialog -->
     <el-dialog
       v-model="modelsDialogVisible"
-      title="模型配置 (Models)"
+      title="model config (Models)"
       width="700px"
       append-to-body
       @open="loadModelsConfig"
     >
       <div class="models-config" v-loading="loadingModels">
-        <p class="models-desc">配置要在 Windsurf 中使用的模型，每个类别可选择多个模型</p>
+        <p class="models-desc">configneed toin Windsurf inusemodel，everyclassotherOptional择multiplemodel</p>
         
         <!-- Cascade Models -->
         <div class="models-section">
-          <h4>Cascade 模型</h4>
+          <h4>Cascade model</h4>
           <el-select
             v-model="selectedCascadeModels"
             multiple
@@ -215,7 +215,7 @@
             collapse-tags
             collapse-tags-tooltip
             :max-collapse-tags="5"
-            placeholder="选择 Cascade 模型"
+            placeholder="select Cascade model"
             style="width: 100%"
             popper-class="model-select-dropdown"
           >
@@ -238,7 +238,7 @@
         
         <!-- Command Models -->
         <div class="models-section">
-          <h4>Command 模型</h4>
+          <h4>Command model</h4>
           <el-select
             v-model="selectedCommandModels"
             multiple
@@ -246,7 +246,7 @@
             collapse-tags
             collapse-tags-tooltip
             :max-collapse-tags="5"
-            placeholder="选择 Command 模型"
+            placeholder="select Command model"
             style="width: 100%"
             popper-class="model-select-dropdown"
           >
@@ -269,7 +269,7 @@
         
         <!-- Extension Models -->
         <div class="models-section">
-          <h4>Extension 模型</h4>
+          <h4>Extension model</h4>
           <el-select
             v-model="selectedExtensionModels"
             multiple
@@ -277,7 +277,7 @@
             collapse-tags
             collapse-tags-tooltip
             :max-collapse-tags="5"
-            placeholder="选择 Extension 模型"
+            placeholder="select Extension model"
             style="width: 100%"
             popper-class="model-select-dropdown"
           >
@@ -296,31 +296,31 @@
         </div>
       </div>
       <template #footer>
-        <el-button @click="modelsDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="savingModels" @click="saveModelsConfig">保存</el-button>
+        <el-button @click="modelsDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" :loading="savingModels" @click="saveModelsConfig">Save</el-button>
       </template>
     </el-dialog>
     
     <!-- MCP Whitelist Dialog -->
     <el-dialog
       v-model="mcpDialogVisible"
-      title="添加 MCP 服务器"
+      title="Add MCP Server"
       width="500px"
       append-to-body
     >
       <div class="mcp-add-dialog">
         <div class="mcp-header">
-          <span class="mcp-label">服务器 ID</span>
+          <span class="mcp-label">Server ID</span>
           <el-link type="primary" @click="mcpManualMode = !mcpManualMode">
-            {{ mcpManualMode ? '从列表选择' : '手动输入' }}
+            {{ mcpManualMode ? 'fromListselect' : 'manuallyinput' }}
           </el-link>
         </div>
         
-        <!-- 下拉选择模式 -->
+        <!-- underpullselectMode -->
         <el-select
           v-if="!mcpManualMode"
           v-model="selectedMcpPlugin"
-          placeholder="选择 MCP 服务器"
+          placeholder="select MCP Server"
           filterable
           style="width: 100%; margin-bottom: 16px"
           :loading="loadingPlugins"
@@ -339,31 +339,31 @@
           </el-option>
         </el-select>
         
-        <!-- 手动输入模式 -->
+        <!-- manuallyinputMode -->
         <el-input
           v-else
           v-model="newMcpServer"
-          placeholder="输入 MCP 服务器 ID"
+          placeholder="input MCP Server ID"
           style="margin-bottom: 16px"
         />
         
         <div class="mcp-config-section">
-          <span class="mcp-label">服务器配置 (JSON)</span>
+          <span class="mcp-label">Serverconfig (JSON)</span>
           <el-input
             v-model="mcpServerConfig"
             type="textarea"
             :rows="4"
-            placeholder="参考 MCP 服务器文档获取配置详情。留空将使用默认配置。"
+            placeholder="reference MCP ServerdocumentfetchconfigDetails。leave emptywillusedefaultconfig。"
           />
         </div>
         
         <div class="mcp-help-text">
-          需要帮助？查看 <el-link type="primary" href="https://docs.windsurf.com/mcp" target="_blank">文档</el-link> 获取配置详情
+          need帮助？View <el-link type="primary" href="https://docs.windsurf.com/mcp" target="_blank">document</el-link> fetchconfigDetails
         </div>
         
-        <!-- 已添加的服务器列表 -->
+        <!-- AddedServerList -->
         <div class="mcp-added-list" v-if="mcpServers.length">
-          <div class="mcp-added-header">已添加的服务器</div>
+          <div class="mcp-added-header">AddedServer</div>
           <div class="mcp-list">
             <el-tag
               v-for="(server, index) in mcpServers"
@@ -378,44 +378,44 @@
         </div>
       </div>
       <template #footer>
-        <el-button @click="mcpDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="addSelectedMcpServer">添加</el-button>
+        <el-button @click="mcpDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addSelectedMcpServer">Add</el-button>
       </template>
     </el-dialog>
     
     <!-- Codemaps Configuration Dialog -->
     <el-dialog
       v-model="codemapsDialogVisible"
-      title="代码地图 (Codemaps)"
+      title="code map (Codemaps)"
       width="500px"
       append-to-body
     >
       <div class="codemaps-config">
-        <p class="codemaps-desc">生成、查看和分享交互式代码地图</p>
+        <p class="codemaps-desc">generate、View and share交互式code map</p>
         
         <div class="codemaps-setting">
           <div class="setting-info">
-            <span class="setting-name">启用代码地图 (Enable Codemaps)</span>
-            <span class="setting-desc">允许团队生成和查看代码地图</span>
+            <span class="setting-name">Enablecode map (Enable Codemaps)</span>
+            <span class="setting-desc">allowTeamgenerate and Viewcode map</span>
           </div>
           <el-switch v-model="settings.enableCodemaps" />
         </div>
         
         <div class="codemaps-setting">
           <div class="setting-info">
-            <span class="setting-name">代码地图分享 (Codemap Sharing)</span>
-            <span class="setting-desc">允许团队分享代码地图</span>
+            <span class="setting-name">code mapshare (Codemap Sharing)</span>
+            <span class="setting-desc">allowTeamsharecode map</span>
           </div>
           <el-select v-model="settings.codemapSharing" size="small" style="width: 130px">
-            <el-option label="启用" value="enabled" />
-            <el-option label="仅团队" value="team" />
-            <el-option label="禁用" value="disabled" />
+            <el-option label="Enable" value="enabled" />
+            <el-option label="only Team" value="team" />
+            <el-option label="Disable" value="disabled" />
           </el-select>
         </div>
       </div>
       <template #footer>
-        <el-button @click="codemapsDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveCodemapsConfig">保存</el-button>
+        <el-button @click="codemapsDialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="saveCodemapsConfig">Save</el-button>
       </template>
     </el-dialog>
   </el-dialog>
@@ -444,7 +444,7 @@ const codemapsDialogVisible = ref(false);
 const newMcpServer = ref('');
 const mcpServers = ref<string[]>([]);
 
-// MCP Plugin 相关
+// MCP Plugin related
 const mcpManualMode = ref(false);
 const selectedMcpPlugin = ref('');
 const loadingPlugins = ref(false);
@@ -474,7 +474,7 @@ const settings = reactive({
 // Models configuration
 interface ModelInfo {
   name: string;
-  multiplier: number; // 倍率: 0=Free, 0.5=0.5x, 1=1x, 2=2x, 3=3x
+  multiplier: number; // multiplier: 0=Free, 0.5=0.5x, 1=1x, 2=2x, 3=3x
 }
 
 const loadingModels = ref(false);
@@ -490,7 +490,7 @@ const selectedCascadeModels = ref<string[]>([]);
 const selectedCommandModels = ref<string[]>([]);
 const selectedExtensionModels = ref<string[]>([]);
 
-// 获取模型倍率
+// fetchmodelmultiplier
 function getModelMultiplier(modelName: string, type: 'cascade' | 'command' | 'extension'): number {
   let infos: ModelInfo[] = [];
   if (type === 'cascade') infos = cascadeModelInfos.value;
@@ -501,7 +501,7 @@ function getModelMultiplier(modelName: string, type: 'cascade' | 'command' | 'ex
   return model?.multiplier ?? 1;
 }
 
-// 格式化倍率显示
+// formatmultiplierdisplay
 function formatMultiplier(multiplier: number): string {
   if (multiplier === 0) return '(Free)';
   if (multiplier === 1) return '(1x credits)';
@@ -509,7 +509,7 @@ function formatMultiplier(multiplier: number): string {
   return `(${multiplier}x credits)`;
 }
 
-// 获取倍率样式类
+// fetchmultiplierstyleclass
 function getMultiplierClass(multiplier: number): string {
   if (multiplier === 0) return 'free';
   if (multiplier <= 0.5) return 'low';
@@ -532,24 +532,24 @@ watch(dialogVisible, (val) => {
 async function loadSettings() {
   loading.value = true;
   try {
-    // 调用 GetTeamConfigRecord API 获取当前设置
+    // call GetTeamConfigRecord API fetchCurrentSettings
     console.log('Loading team config for account:', props.accountId);
     const result = await invoke('get_team_config', { id: props.accountId }) as any;
     console.log('Team config result:', JSON.stringify(result, null, 2));
     
     if (result.success && result.data) {
       const config = result.data;
-      // 解析嵌套的团队配置数据
-      // 响应格式: { "subMesssage_1": { "int_5": 1, ... } } 或 { "1": { ... } }
+      // parsenestTeamconfigdata
+      // responseformat: { "subMesssage_1": { "int_5": 1, ... } }  or  { "1": { ... } }
       const teamConfig = config["subMesssage_1"] || config["1"] || config;
       console.log('Parsed teamConfig:', JSON.stringify(teamConfig, null, 2));
       
-      // 辅助函数：获取字段值（支持 int_X 和 X 两种格式）
+      // helper functioncount：fetchfieldvalue（support int_X  and  X two种format）
       const getField = (fieldNum: number): any => {
         return teamConfig[`int_${fieldNum}`] ?? teamConfig[`string_${fieldNum}`] ?? teamConfig[`${fieldNum}`] ?? teamConfig[fieldNum];
       };
       
-      // 辅助函数：解析 protobuf 布尔值 (1=true, 0/undefined=false)
+      // helper functioncount：parse protobuf boolean (1=true, 0/undefined=false)
       const parseBool = (fieldNum: number, defaultVal = false): boolean => {
         const val = getField(fieldNum);
         if (val === 1 || val === true || val === "1") return true;
@@ -557,7 +557,7 @@ async function loadSettings() {
         return defaultVal;
       };
       
-      // TeamConfig proto 字段映射:
+      // TeamConfig proto fieldmapping:
       // field 5: allow_mcp_servers, field 7: allow_auto_run_commands
       // field 10: allow_app_deployments, field 12: allow_github_reviews
       // field 13: allow_github_description_edits, field 17: allow_individual_level_analytics
@@ -566,7 +566,7 @@ async function loadSettings() {
       // field 25: allow_browser_experimental_features, field 27: allow_vibe_and_replace
       // field 28: disable_deepwiki, field 31: disable_codemaps, field 33: disable_fast_context
       
-      // 允许类字段 (allow_xxx): 如果存在且为1则为 true
+      // allowclassfield (allow_xxx): ifsaveinandas1thenas true
       settings.allowAutoRunCommands = parseBool(7, true);
       settings.allowMcpServers = parseBool(5, true);
       settings.allowConversationSharing = parseBool(18, false);
@@ -577,8 +577,8 @@ async function loadSettings() {
       settings.allowAttribution = parseBool(22, false);
       settings.allowBrowserFeatures = parseBool(25, false);
       
-      // 禁用类字段 (disable_xxx): 如果为1则功能禁用，UI显示为关闭
-      // 如果字段不存在，说明没有禁用，功能是启用的
+      // Disableclassfield (disable_xxx): if is1thenFeatureDisable，UIdisplayasdisabled
+      // iffieldnotsavein，descriptionnohasDisable，FeatureisEnable
       settings.enableDeepwiki = !parseBool(28, false);
       settings.enableCodemaps = !parseBool(31, false);
       settings.enableFastContext = !parseBool(33, false);
@@ -619,20 +619,20 @@ async function loadSettings() {
       });
     } else if (result.error) {
       console.warn('Failed to load team config:', result.error);
-      // 如果是权限问题，静默处理
-      ElMessage.warning('该账号可能没有团队管理权限');
+      // ifisPermission问topic，静默handle
+      ElMessage.warning('theAccountpossiblynohasTeam ManagementPermission');
     }
   } catch (error: any) {
     console.error('Failed to load team settings:', error);
-    const errorMsg = error?.message || error?.toString() || '未知错误';
-    ElMessage.warning(`加载失败: ${errorMsg}`);
+    const errorMsg = error?.message || error?.toString() || 'Unknown error';
+    ElMessage.warning(`Load failed: ${errorMsg}`);
   } finally {
     loading.value = false;
   }
 }
 
 function handleSettingChange() {
-  // 可以在这里添加即时保存逻辑
+  // cantoin这inAddi.e.whenSave逻辑
 }
 
 async function saveSettings() {
@@ -662,13 +662,13 @@ async function saveSettings() {
     
     const result = await invoke('update_team_config', { id: props.accountId, config: updateData }) as any;
     if (result.success) {
-      ElMessage.success('团队设置已保存');
+      ElMessage.success('Team Settingsalready Save');
     } else {
-      ElMessage.error(result.error || '保存失败');
+      ElMessage.error(result.error || 'Savefailed');
     }
   } catch (error) {
     console.error('Failed to save team settings:', error);
-    ElMessage.error('保存团队设置失败');
+    ElMessage.error('SaveTeam Settingsfailed');
   } finally {
     saving.value = false;
   }
@@ -681,7 +681,7 @@ function openModelsConfig() {
 async function loadModelsConfig() {
   loadingModels.value = true;
   try {
-    // 获取可用模型列表
+    // fetchcanusemodelList
     const modelConfigResult = await invoke('get_cascade_model_configs', { id: props.accountId }) as any;
     console.log('Model configs:', modelConfigResult);
     
@@ -692,31 +692,31 @@ async function loadModelsConfig() {
       console.log('subMesssage_2 (sorts):', JSON.stringify(data.subMesssage_2, null, 2));
       console.log('subMesssage_3 (default):', JSON.stringify(data.subMesssage_3, null, 2));
       
-      // 响应格式: CascadeModelConfigData
+      // responseformat: CascadeModelConfigData
       // - subMesssage_1 = client_model_configs (repeated ClientModelConfig)
-      // - 每个 ClientModelConfig 的 string_1 = label (模型名称)
+      // - every ClientModelConfig  string_1 = label (Model Name)
       let modelConfigs: any[] = [];
       
-      // 尝试多种可能的字段名和嵌套层级
+      // trymultiple种possiblyfieldname and nesthierarchy
       const field1 = data.subMesssage_1 || data.subMessage_1 || data.repeated_1 || data["1"];
       console.log('Field1 type:', typeof field1, 'isArray:', Array.isArray(field1));
       
       if (Array.isArray(field1)) {
         modelConfigs = field1;
       } else if (field1 && typeof field1 === 'object') {
-        // 检查是否有嵌套的 repeated 字段
+        // check ifhasnest repeated field
         const nested = field1.repeated_1 || field1.subMesssage_1 || field1["1"];
         if (Array.isArray(nested)) {
           modelConfigs = nested;
         } else if (field1.string_1) {
-          // 如果是单个对象，检查它是否有 string_1 字段
+          // ifissingleforobject，checkitwhetherhas string_1 field
           modelConfigs = [field1];
         }
       }
       
       console.log('Model configs count:', modelConfigs.length);
       
-      // 提取模型名称和倍率 - 从每个元素的 string_1 和 float_3 字段获取
+      // 提getModel Name and multiplier - fromeveryelement string_1  and  float_3 fieldfetch
       // ClientModelConfig: label=1(string), multiplier=3(float), disabled=4(bool)
       const allModels: string[] = [];
       const enabledModels: string[] = [];
@@ -725,10 +725,10 @@ async function loadModelsConfig() {
       if (Array.isArray(modelConfigs)) {
         modelConfigs.forEach((config: any, idx: number) => {
           const modelName = config.string_1 || config.label || config["1"];
-          // multiplier 字段 (field 3): 倍率，没有该字段表示免费模型
+          // multiplier field (field 3): multiplier，nohasthefieldrepresentFreemodel
           const rawMultiplier = config.float_3 ?? config.multiplier ?? config["3"];
-          const multiplier = rawMultiplier !== undefined ? rawMultiplier : 0; // 无 float_3 = Free
-          // disabled 字段 (field 4): true=未选中, false=已选中
+          const multiplier = rawMultiplier !== undefined ? rawMultiplier : 0; // no float_3 = Free
+          // disabled field (field 4): true=notselected, false=Selected
           const isDisabled = config.bool_4 === true || config.disabled === true || config["4"] === true;
           
           console.log(`Config ${idx}:`, modelName, 'multiplier:', multiplier, 'disabled:', isDisabled);
@@ -744,7 +744,7 @@ async function loadModelsConfig() {
       
       console.log('All cascade models:', allModels.length, 'Enabled:', enabledModels.length);
       
-      // 可用模型 = 所有模型，已选模型 = disabled=false 的模型
+      // canusemodel = allmodel，already selectmodel = disabled=false model
       cascadeModelInfos.value = modelInfos;
       availableCascadeModels.value = allModels.sort();
       selectedCascadeModels.value = enabledModels;
@@ -761,7 +761,7 @@ async function loadModelsConfig() {
       ];
     }
     
-    // 获取 Command 模型配置
+    // fetch Command model config
     const commandConfigResult = await invoke('get_command_model_configs', { id: props.accountId }) as any;
     console.log('Command configs:', commandConfigResult);
     
@@ -770,14 +770,14 @@ async function loadModelsConfig() {
       const cmdField1 = cmdData.subMesssage_1 || cmdData.subMessage_1 || cmdData.repeated_1 || cmdData["1"];
       
       if (Array.isArray(cmdField1)) {
-        // 从 Command API 获取模型列表并设置为已选
+        // from Command API fetchmodelList and Settingsasalready select
         const commandModels: string[] = [];
         const cmdModelInfos: ModelInfo[] = [];
         cmdField1.forEach((config: any) => {
           const modelName = config.string_1 || config.label || config["1"];
-          // multiplier 字段 (field 3): 倍率，没有该字段表示免费模型
+          // multiplier field (field 3): multiplier，nohasthefieldrepresentFreemodel
           const rawMultiplier = config.float_3 ?? config.multiplier ?? config["3"];
-          const multiplier = rawMultiplier !== undefined ? rawMultiplier : 0; // 无 float_3 = Free
+          const multiplier = rawMultiplier !== undefined ? rawMultiplier : 0; // no float_3 = Free
           if (modelName) {
             commandModels.push(modelName);
             cmdModelInfos.push({ name: modelName, multiplier: typeof multiplier === 'number' ? multiplier : 1 });
@@ -787,11 +787,11 @@ async function loadModelsConfig() {
         console.log('Command models from API:', commandModels);
         commandModelInfos.value = cmdModelInfos;
         availableCommandModels.value = commandModels;
-        selectedCommandModels.value = commandModels; // Command API 返回的就是已选模型
+        selectedCommandModels.value = commandModels; // Command API Back就isalready selectmodel
       }
     }
     
-    // 获取当前团队的模型配置
+    // fetchCurrentTeammodel config
     const controlsResult = await invoke('get_team_organizational_controls', { id: props.accountId }) as any;
     console.log('Team controls:', controlsResult);
     console.log('Team controls data keys:', controlsResult.data ? Object.keys(controlsResult.data) : 'no data');
@@ -800,20 +800,20 @@ async function loadModelsConfig() {
       const data = controlsResult.data;
       console.log('Full data:', JSON.stringify(data, null, 2));
       
-      // 响应格式: { subMessage_1: { string_1: team_id, repeated_2: [...], repeated_3: [...], repeated_6: [...] } }
+      // responseformat: { subMessage_1: { string_1: team_id, repeated_2: [...], repeated_3: [...], repeated_6: [...] } }
       const controls = data.subMessage_1 || data.subMesssage_1 || data["1"] || data;
       console.log('Controls keys:', Object.keys(controls));
       console.log('Controls:', controls);
       
-      // 解析 team_id，可能包含 protobuf 前缀需要清理
+      // parse team_id，possiblycontains protobuf prefixneedcleanup
       let rawTeamId = controls.string_1 || controls["1"] || '';
-      // 移除可能的 protobuf 嵌套消息前缀 (如 "\n$")
+      // removepossibly protobuf nestmessageprefix (e.g. "\n$")
       if (typeof rawTeamId === 'string' && rawTeamId.includes('$')) {
         rawTeamId = rawTeamId.substring(rawTeamId.indexOf('$') + 1);
       }
       teamId.value = rawTeamId;
       
-      // 解析已选模型 - Rust parser 使用 string_X 格式
+      // parsealready selectmodel - Rust parser use string_X format
       const parseRepeatedString = (field: any): string[] => {
         if (Array.isArray(field)) return field;
         if (typeof field === 'string') return [field];
@@ -821,7 +821,7 @@ async function loadModelsConfig() {
       };
       
       // string_2 = Cascade, string_3 = Command, string_6 = Extension
-      // 只有当 API 返回了已选模型时才覆盖，否则保留从 Recommended 列表获取的默认值
+      // only whenwhen API Backalready selectmodelonly thencover，nothenkeepfrom Recommended Listfetchdefault value
       const cascadeFromApi = parseRepeatedString(controls.string_2 || controls.repeated_2 || controls["2"]);
       const commandFromApi = parseRepeatedString(controls.string_3 || controls.repeated_3 || controls["3"]);
       const extensionFromApi = parseRepeatedString(controls.string_6 || controls.repeated_6 || controls["6"]);
@@ -836,7 +836,7 @@ async function loadModelsConfig() {
         selectedExtensionModels.value = extensionFromApi;
       }
       
-      // 同时从已选模型中更新可用列表（如果有新的模型）
+      // samewhenfromalready selectmodelinUpdatecanuseList（ifhasnewmodel）
       selectedCascadeModels.value.forEach(m => {
         if (!availableCascadeModels.value.includes(m)) {
           availableCascadeModels.value.push(m);
@@ -862,7 +862,7 @@ async function loadModelsConfig() {
     }
   } catch (error) {
     console.error('Failed to load models config:', error);
-    ElMessage.error('加载模型配置失败');
+    ElMessage.error('Loadingmodel configfailed');
   } finally {
     loadingModels.value = false;
   }
@@ -870,7 +870,7 @@ async function loadModelsConfig() {
 
 async function saveModelsConfig() {
   if (!teamId.value) {
-    ElMessage.warning('该账号不是团队账号，无法保存模型配置');
+    ElMessage.warning('theAccountnotisTeamAccount，nowaySavemodel config');
     return;
   }
   
@@ -885,28 +885,28 @@ async function saveModelsConfig() {
     }) as any;
     
     if (result.success) {
-      ElMessage.success('模型配置已保存');
+      ElMessage.success('model configalready Save');
       modelsDialogVisible.value = false;
     } else {
-      ElMessage.error(result.error || '保存失败');
+      ElMessage.error(result.error || 'Savefailed');
     }
   } catch (error) {
     console.error('Failed to save models config:', error);
-    ElMessage.error('保存模型配置失败');
+    ElMessage.error('Savemodel configfailed');
   } finally {
     savingModels.value = false;
   }
 }
 
 function saveCodemapsConfig() {
-  // Codemaps 设置会在主保存时一起保存
+  // Codemaps SettingswillinprimarySavewhenonestartSave
   codemapsDialogVisible.value = false;
-  ElMessage.success('Codemaps 配置已更新');
+  ElMessage.success('Codemaps configalready Update');
 }
 
 function openMcpWhitelist() {
   mcpDialogVisible.value = true;
-  // 重置状态
+  // ResetStatus
   selectedMcpPlugin.value = '';
   newMcpServer.value = '';
   mcpServerConfig.value = '';
@@ -930,7 +930,7 @@ async function loadMcpPlugins() {
         description: p.description,
         trustLevel: p.trustLevel
       }));
-      // 按标题排序
+      // bytitlesort
       availableMcpPlugins.value.sort((a, b) => a.title.localeCompare(b.title));
     }
   } catch (error) {
@@ -944,15 +944,15 @@ function addSelectedMcpServer() {
   const serverId = mcpManualMode.value ? newMcpServer.value.trim() : selectedMcpPlugin.value;
   if (serverId && !mcpServers.value.includes(serverId)) {
     mcpServers.value.push(serverId);
-    // 重置输入
+    // Resetinput
     selectedMcpPlugin.value = '';
     newMcpServer.value = '';
     mcpServerConfig.value = '';
-    ElMessage.success(`已添加 ${serverId}`);
+    ElMessage.success(`Added ${serverId}`);
   } else if (mcpServers.value.includes(serverId)) {
-    ElMessage.warning('该服务器已在白名单中');
+    ElMessage.warning('theServeralready inwhitelistin');
   } else {
-    ElMessage.warning('请选择或输入服务器 ID');
+    ElMessage.warning('Please select or inputServer ID');
   }
 }
 
@@ -1049,7 +1049,7 @@ function removeMcpServer(index: number) {
   }
 }
 
-// 下拉选项样式 (全局样式)
+// underpulloptionstyle (globalstyle)
 :global(.model-select-dropdown) {
   .el-select-dropdown__item {
     padding: 8px 12px;
