@@ -317,7 +317,7 @@ function resetState() {
 
 function addLog(message: string, type: 'success' | 'error' | 'info') {
   const now = new Date();
-  const time = `${now.getHours().toString().padstart(2, '0')}:${now.getMinutes().toString().padstart(2, '0')}:${now.getSeconds().toString().padstart(2, '0')}`;
+  const time = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
   executionLogs.value.push({ time, message, type });
   
   // autoscrolltobottom

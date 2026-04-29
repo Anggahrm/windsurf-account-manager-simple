@@ -387,7 +387,7 @@ function decodeAndShowResponse() {
       let hex = '';
       for (let i = 0; i < decodedBytes.length; i++) {
         const byte = decodedBytes.charCodeAt(i);
-        hex += byte.toString(16).padstart(2, '0') + ' ';
+        hex += byte.toString(16).padStart(2, '0') + ' ';
         if ((i + 1) % 16 === 0) {
           hex += '\n';
         }

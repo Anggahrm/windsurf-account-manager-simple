@@ -148,7 +148,7 @@
               <el-option
                 v-for="m in 12"
                 :key="m"
-                :label="m.toString().padstart(2, '0')"
+                :label="m.toString().padStart(2, '0')"
                 :value="m"
               />
             </el-select>
@@ -458,7 +458,7 @@ function generateCards() {
   }
   
   const bin = binList.value[selectedBinIndex.value];
-  const expiry = `${expiryMonth.value.toString().padstart(2, '0')}/${(expiryYear.value % 100).toString().padstart(2, '0')}`;
+  const expiry = `${expiryMonth.value.toString().padStart(2, '0')}/${(expiryYear.value % 100).toString().padStart(2, '0')}`;
   
   const cards: GeneratedCard[] = [];
   for (let i = 0; i < generateCount.value; i++) {

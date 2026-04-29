@@ -514,7 +514,7 @@ export interface OperationLog {
   account_id?: string;
   account_email?: string;
   operation_type: OperationType;
-  status: Operation status;
+  status: OperationStatus;
   message: string;
   details?: any;
 }
@@ -531,7 +531,7 @@ export type OperationType =
   | 'edit_account'
   | 'batch_operation';
 
-export type Operation status = 'success' | 'failed' | 'pending' | 'processing';
+export type OperationStatus = 'success' | 'failed' | 'pending' | 'processing';
 
 export interface UpdateSeatsResult {
   success: boolean;

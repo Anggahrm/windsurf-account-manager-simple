@@ -112,7 +112,7 @@ export const useUpdaterStore = defineStore('updater', () => {
     try {
       await pendingUpdate.downloadAndInstall((event: DownloadEvent) => {
         switch (event.event) {
-          case 'started':
+          case 'Started':
             contentLength.value = event.data.contentLength ?? 0;
             downloaded.value = 0;
             break;

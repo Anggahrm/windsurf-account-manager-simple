@@ -116,7 +116,7 @@
         <div class="sponsor-grid">
           <div class="sponsor-item alipay">
             <div class="qr-wrapper">
-              <img src="/Alipaypayment.png" alt="Alipay" class="sponsor-qr" />
+              <img src="/支付宝支付.png" alt="Alipay" class="sponsor-qr" />
               <div class="qr-overlay">
                 <span class="qr-text">Alipay扫code</span>
               </div>
@@ -128,7 +128,7 @@
           </div>
           <div class="sponsor-item wechat">
             <div class="qr-wrapper">
-              <img src="/WeChat Pay.png" alt="WeChat Pay" class="sponsor-qr" />
+              <img src="/微信支付.png" alt="WeChat Pay" class="sponsor-qr" />
               <div class="qr-overlay">
                 <span class="qr-text">WeChat scancode</span>
               </div>
