@@ -30,19 +30,19 @@
         </div>
 
         <div v-if="updaterStore.meta?.date" class="release-date">
-          send布Time：{{ formatDate(updaterStore.meta.date) }}
+          Publish Time: {{ formatDate(updaterStore.meta.date) }}
         </div>
 
         <div class="release-notes">
-          <div class="notes-title">UpdateContent</div>
-          <pre class="notes-body">{{ updaterStore.meta?.body?.trim() || '（thisVersionnot提供Updatedescription）' }}</pre>
+          <div class="notes-title">Update Content</div>
+          <pre class="notes-body">{{ updaterStore.meta?.body?.trim() || '(This version does not provide update description)' }}</pre>
         </div>
       </template>
 
       <template v-else-if="phase === 'downloading' || phase === 'installing'">
         <div class="state-block">
           <p class="progress-title">
-            {{ phase === 'installing' ? 'currentlyinstall...' : 'currentlyDownloadNew Version...' }}
+            {{ phase === 'installing' ? 'Currently installing...' : 'Currently downloading new version...' }}
           </p>
           <el-progress
             :percentage="updaterStore.progressPercent"
@@ -145,12 +145,12 @@ const dialogTitle = computed(() => {
     case 'checking':
       return 'Check for Updates';
     case 'available':
-      return 'sendnowNew Version';
+      return 'Send New Version';
     case 'downloading':
     case 'installing':
-      return 'Updateproceedin';
+      return 'Update Proceeding';
     case 'ready':
-      return 'Updatealready ready';
+      return 'Update Already Ready';
     case 'up_to_date':
       return 'Already the latest version';
     case 'error':
