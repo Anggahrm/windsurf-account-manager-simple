@@ -981,22 +981,22 @@ async function handleFirebaseSubmit() {
     group: formData.group || 'Default Group'
   });
 
-  ElMessage.success('AccountAdded successfully，fetchingAccount Info...');
+  ElMessage.success('Account added successfully, fetching account info...');
 
-  // autoLogin and fetchAccountdetailedInfo
+  // Auto login and fetch account detailed info
   try {
     const loginResult = await apiService.loginAccount(newAccount.id);
 
     if (loginResult.success) {
       const latestAccount = await accountApi.getAccount(newAccount.id);
       await accountsStore.updateAccount(latestAccount);
-      ElMessage.success('Account Infoalready Update');
+      ElMessage.success('Account Info already updated');
     } else {
-      ElMessage.warning('AccountAdded，butLogin failed，pleasemanuallyRefresh');
+      ElMessage.warning('Account added, but login failed, please manually refresh');
     }
   } catch (infoError) {
     console.error('Failed to get account info:', infoError);
-    ElMessage.warning('AccountAdded，butfetchdetailedInfofailed，pleasemanuallyRefresh');
+    ElMessage.warning('Account added, but fetch detailed info failed, please manually refresh');
   }
 
   handleClose();

@@ -14,40 +14,40 @@
         <div class="circle circle-2"></div>
       </div>
       
-      <!-- Warningicon -->
+      <!-- Warning Icon -->
       <div class="warning-section">
         <div class="warning-icon">
           <el-icon :size="48"><WarningFilled /></el-icon>
         </div>
-        <h2 class="warning-title">重need to提awake</h2>
+        <h2 class="warning-title">Important Notice</h2>
       </div>
 
-      <!-- Free声明 -->
+      <!-- Free Statement -->
       <div class="free-notice">
         <div class="notice-card">
           <div class="notice-icon">
             <el-icon :size="24"><InfoFilled /></el-icon>
           </div>
           <div class="notice-content">
-            <p class="notice-main">this softwareas <span class="highlight">completeFree</span> 开源软item</p>
-            <p class="notice-sub">if你is花钱购买，那么 <span class="warning-text">你was骗！</span></p>
+            <p class="notice-main">This software is <span class="highlight">completely free</span> open-source software</p>
+            <p class="notice-sub">If you paid for this, <span class="warning-text">you were scammed!</span></p>
           </div>
         </div>
       </div>
 
-      <!-- NoticeList -->
+      <!-- Notice List -->
       <div class="tips-section">
         <div class="tip-item">
           <el-icon class="tip-icon"><CircleCheck /></el-icon>
-          <span>this softwareonly for learning and exchangeuse</span>
+          <span>This software is only for learning and exchange use</span>
         </div>
         <div class="tip-item">
           <el-icon class="tip-icon"><CircleCheck /></el-icon>
-          <span>pleasedo notused foranymerchant业useway</span>
+          <span>Please do not use for any commercial purposes</span>
         </div>
         <div class="tip-item">
           <el-icon class="tip-icon"><CircleCheck /></el-icon>
-          <span>禁止倒卖，sendnow必究</span>
+          <span>Reselling is prohibited, legal action will be taken</span>
         </div>
       </div>
 
@@ -55,19 +55,19 @@
       <div class="group-section">
         <h3 class="section-title">
           <el-icon><ChatDotRound /></el-icon>
-          <span>joinCommunity Group</span>
+          <span>Join Community Group</span>
         </h3>
         <div class="qr-container">
-          <img src="/Community Group.png" alt="Community Group二维code" class="qr-image" />
-          <p class="qr-tip">WeChat scancodejoinCommunity Group</p>
+          <img src="/Community Group.png" alt="Community Group QR code" class="qr-image" />
+          <p class="qr-tip">WeChat scan code to join Community Group</p>
         </div>
       </div>
 
-      <!-- Confirmbutton -->
+      <!-- Confirm Button -->
       <div class="action-section">
         <el-button type="primary" size="large" @click="handleConfirm" class="confirm-btn">
           <el-icon><Select /></el-icon>
-          <span>Iknown晓</span>
+          <span>I understand</span>
         </el-button>
       </div>
     </div>
@@ -154,7 +154,7 @@ function handleClosed() {
   left: -75px;
 }
 
-/* Warningarea */
+/* Warning Area */
 .warning-section {
   text-align: center;
   margin-bottom: 20px;
@@ -187,7 +187,7 @@ function handleClosed() {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Free声明 */
+/* Free Statement */
 .free-notice {
   margin-bottom: 20px;
 }
@@ -242,7 +242,7 @@ function handleClosed() {
   font-weight: 700;
 }
 
-/* NoticeList */
+/* Notice List */
 .tips-section {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 10px;
@@ -314,7 +314,7 @@ function handleClosed() {
   margin: 0;
 }
 
-/* Confirmbutton */
+/* Confirm Button */
 .action-section {
   text-align: center;
 }
@@ -340,7 +340,7 @@ function handleClosed() {
   margin-right: 8px;
 }
 
-/* Dark Themeadapt */
+/* Dark Theme Adapt */
 :root.dark .welcome-content {
   background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
 }

@@ -2048,25 +2048,25 @@ async function showAddGroupDialog() {
       confirmButtonText: 'Confirm',
       cancelButtonText: 'Cancel',
       inputPattern: /^.{1,20}$/,
-      inputErrorMessage: 'Group namelengthshouldas1-20character'
+      inputErrorMessage: 'Group name length should be 1-20 characters'
     });
     
     await settingsStore.addGroup(value);
-    ElMessage.success('GroupAdded successfully');
+    ElMessage.success('Group added successfully');
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`Add Groupfailed: ${error}`);
+      ElMessage.error(`Add Group failed: ${error}`);
     }
   }
 }
 
 async function showRenameGroupDialog(oldName: string) {
   try {
-    const { value } = await ElMessageBox.prompt('Please enternewGroup name', `Rename Group "${oldName}"`, {
+    const { value } = await ElMessageBox.prompt('Please enter new Group name', `Rename Group "${oldName}"`, {
       confirmButtonText: 'Confirm',
       cancelButtonText: 'Cancel',
       inputPattern: /^.{1,20}$/,
-      inputErrorMessage: 'Group namelengthshouldas1-20character',
+      inputErrorMessage: 'Group name length should be 1-20 characters',
       inputValue: oldName
     });
     
@@ -2075,13 +2075,13 @@ async function showRenameGroupDialog(oldName: string) {
     }
     
     await settingsStore.renameGroup(oldName, value);
-    ElMessage.success('Group重namednamesuccessful');
+    ElMessage.success('Group renamed successfully');
     
     // Refresh account list
     await accountsStore.loadAccounts();
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`Rename Groupfailed: ${error}`);
+      ElMessage.error(`Rename Group failed: ${error}`);
     }
   }
 }
@@ -2089,7 +2089,7 @@ async function showRenameGroupDialog(oldName: string) {
 async function showDeleteGroupConfirm(name: string) {
   try {
     await ElMessageBox.confirm(
-      `Confirmneed toDelete Group "${name}" ?？theGroup'sAccountwillwasmove至"notGroup"`,
+      `Confirm need to delete Group "${name}"? The group's accounts will move to "No Group"`,
       'Delete Group',
       {
         confirmButtonText: 'Confirm',
@@ -2099,13 +2099,13 @@ async function showDeleteGroupConfirm(name: string) {
     );
     
     await settingsStore.deleteGroup(name);
-    ElMessage.success('GroupDeletesuccessful');
+    ElMessage.success('Group deleted successfully');
     
     // Refresh account list
     await accountsStore.loadAccounts();
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error(`Delete Groupfailed: ${error}`);
+      ElMessage.error(`Delete Group failed: ${error}`);
     }
   }
 }

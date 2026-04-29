@@ -323,7 +323,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="changeSubscription" placement="top">
+        <el-tooltip content="Change Subscription" placement="top">
           <el-button
             size="small"
             :icon="Sell"
@@ -333,7 +333,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="fetchtriallink" placement="top">
+        <el-tooltip content="Fetch Trial Link" placement="top">
           <el-button
             size="small"
             :icon="Link"
@@ -343,7 +343,7 @@
           />
         </el-tooltip>
 
-        <el-tooltip content="checkProTrial Eligibility" placement="top">
+        <el-tooltip content="Check Pro Trial Eligibility" placement="top">
           <el-button
             size="small"
             :icon="Trophy"
@@ -876,7 +876,7 @@ const refreshButtonTooltip = computed(() => {
     return 'RefreshToken';
   }
   const isExpired = dayjs(props.account.token_expires_at).isBefore(dayjs());
-  return isExpired ? 'RefreshToken（Expired）' : 'RefreshAccount Info（Tokenvalid）';
+  return isExpired ? 'Refresh Token (Expired)' : 'Refresh Account Info (Token valid)';
 });
 
 // Subscription ExpiresDateformat
@@ -1081,11 +1081,11 @@ async function handleRefreshToken() {
         ElMessage.error('TokenRefresh failed');
       }
     } else {
-      // Tokenstill然valid，onlyRefreshAccount Info
+      // Token still valid, only Refresh Account Info
       const result = await apiService.getCurrentUser(props.account.id);
       if (result.success && result.user_info) {
         ElMessage.success({
-          message: `Account Infoalready Update\nTokenExpiry至: ${new Date(props.account.token_expires_at!).toLocaleString()}`,
+          message: `Account Info already updated\nToken expiry: ${new Date(props.account.token_expires_at!).toLocaleString()}`,
           duration: 2500,
           showClose: true
         });
@@ -1093,25 +1093,25 @@ async function handleRefreshToken() {
         // Update account info
         const updatedAccount = { ...props.account, status: 'active' as const };
         
-        // UpdateUserBasic Info（containsapi_key and DisableStatus）
+        // Update User Basic Info (contains api_key and Disable Status)
         if (result.user_info.user?.api_key) {
           updatedAccount.windsurf_api_key = result.user_info.user.api_key;
         }
-        // UpdateAccountDisableStatus
+        // Update Account Disable Status
         if (result.user_info.user?.disable_codeium !== undefined) {
           updatedAccount.is_disabled = result.user_info.user.disable_codeium;
         }
         
-        // UpdatePlanInfo
+        // Update Plan Info
         if (result.user_info.plan?.plan_name) {
           updatedAccount.plan_name = result.user_info.plan.plan_name;
         }
-        // from plan inread billing_strategy
+        // Read billing_strategy from plan
         if (result.user_info.plan?.billing_strategy !== undefined) {
           updatedAccount.billing_strategy = result.user_info.plan.billing_strategy;
         }
         
-        // merge plan_status innewQuotafield（avoidcoverbackendalready Savedata）
+        // Merge plan_status into new quota field (avoid covering backend already saved data)
         if (result.plan_status) {
           if (result.plan_status.billing_strategy !== undefined) {
             updatedAccount.billing_strategy = result.plan_status.billing_strategy;

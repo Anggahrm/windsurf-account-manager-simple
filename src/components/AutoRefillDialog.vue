@@ -17,17 +17,17 @@
             :loading="saving"
             @click="toggleEnabled"
           >
-            {{ settings.enabled ? 'DisableAuto Recharge' : 'EnableAuto Recharge' }}
+            {{ settings.enabled ? 'Disable Auto Recharge' : 'Enable Auto Recharge' }}
           </el-button>
         </div>
         <div class="status-description" v-if="settings.enabled">
-          <span class="highlight">${{ settings.topUpSpent }}</span> Used，monthlybudget
-          <span class="highlight">${{ settings.monthlyTopUpAmount }}</span>。
-          when余额低于 15 Creditswhen，willAuto Recharge
-          <span class="highlight">${{ settings.topUpIncrement }}</span>。
+          <span class="highlight">${{ settings.topUpSpent }}</span> Used, monthly budget
+          <span class="highlight">${{ settings.monthlyTopUpAmount }}</span>.
+          When balance below 15 Credits, will auto recharge
+          <span class="highlight">${{ settings.topUpIncrement }}</span>.
         </div>
         <div class="status-description" v-else>
-          Auto RechargenotEnable。After enabling，whenCredits余额低于 15 willAuto Recharge。
+          Auto Recharge not enabled. After enabling, when credits below 15 will auto recharge.
         </div>
       </div>
 
@@ -35,11 +35,11 @@
       <div class="settings-section" v-if="settings.enabled">
         <el-divider />
         
-        <!-- monthlybudget -->
+        <!-- Monthly Budget -->
         <div class="setting-item">
           <div class="setting-label">
-            <span class="label-title">monthlybudgeton限</span>
-            <span class="label-desc">SettingseverymonthAuto RechargeMaxamount</span>
+            <span class="label-title">Monthly Budget Limit</span>
+            <span class="label-desc">Set monthly auto recharge max amount</span>
           </div>
           <div class="setting-options">
             <span class="currency">$</span>

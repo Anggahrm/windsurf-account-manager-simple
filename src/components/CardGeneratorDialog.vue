@@ -13,7 +13,7 @@
           <div class="header-icon">
             <el-icon><CreditCard /></el-icon>
           </div>
-          <h3 class="header-text">Virtual Card Generatormanager</h3>
+          <h3 class="header-text">Virtual Card Generator Manager</h3>
         </div>
         <el-button :icon="Close" circle @click="visible = false" class="close-btn" />
       </div>
@@ -26,7 +26,7 @@
           <div class="section-icon">
             <el-icon><Collection /></el-icon>
           </div>
-          <span>cardBINManagement</span>
+          <span>Card BIN Management</span>
           <el-tag size="small" type="info" class="count-tag">{{ binList.length }}</el-tag>
         </div>
         
@@ -119,20 +119,20 @@
           </div>
           
           <div class="option-row">
-            <span class="option-label">Nameformat</span>
+            <span class="option-label">Name Format</span>
             <el-select v-model="nameFormat" size="small" class="full-width">
-              <el-option label="random英textname" value="random" />
-              <el-option label="customName" value="custom" />
+              <el-option label="Random English Name" value="random" />
+              <el-option label="Custom Name" value="custom" />
             </el-select>
           </div>
           
           <div class="option-row" v-if="nameFormat === 'custom'">
-            <span class="option-label">cardholderName</span>
+            <span class="option-label">Cardholder Name</span>
             <el-input v-model="customName" placeholder="e.g.: JOHN DOE" size="small" class="full-width" />
           </div>
           
           <div class="option-row">
-            <span class="option-label">Expiry年份</span>
+            <span class="option-label">Expiry Year</span>
             <el-input-number
               v-model="expiryYear"
               :min="currentYear"

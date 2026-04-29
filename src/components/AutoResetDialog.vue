@@ -14,36 +14,36 @@
           <div class="header-icon">
             <el-icon><Timer /></el-icon>
           </div>
-          <h3 class="header-text">Auto ResetCredits</h3>
+          <h3 class="header-text">Auto Reset Credits</h3>
         </div>
         <el-button :icon="Close" circle @click="visible = false" class="close-btn" />
       </div>
     </template>
     
     <el-tabs v-model="activeTab" @tab-change="handleTabChange" class="custom-tabs">
-      <!-- Tab 1: rulesconfig -->
-      <el-tab-pane label="rulesconfig" name="rules">
+      <!-- Tab 1: Rules Config -->
+      <el-tab-pane label="Rules Config" name="rules">
         <div class="tab-content">
           <!-- Addconfigarea -->
           <el-card class="add-config-card" shadow="never">
             <template #header>
               <div class="card-header">
-                <span>AddAuto Resetrules</span>
+                <span>Add Auto Reset Rules</span>
               </div>
             </template>
             
             <el-form :model="newConfig" label-width="100px" size="default">
               <el-row :gutter="16">
                 <el-col :span="12">
-                  <el-form-item label="targettype">
+                  <el-form-item label="Target Type">
                     <el-radio-group v-model="newConfig.targetType" @change="handleTargetTypeChange">
-                      <el-radio value="group">byGroup</el-radio>
-                      <el-radio value="account">byAccount</el-radio>
+                      <el-radio value="group">By Group</el-radio>
+                      <el-radio value="account">By Account</el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="selecttarget">
+                  <el-form-item label="Select Target">
                     <el-select 
                       v-if="newConfig.targetType === 'group'"
                       v-model="newConfig.targetId" 
@@ -85,7 +85,7 @@
               
               <el-row :gutter="16">
                 <el-col :span="8">
-                  <el-form-item label="checkinterval">
+                  <el-form-item label="Check Interval">
                     <el-input-number
                       v-model="newConfig.checkInterval"
                       :min="1"
@@ -102,7 +102,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="Usage Ratethreshold">
+                  <el-form-item label="Usage Rate Threshold">
                     <el-input-number
                       v-model="newConfig.usageThreshold"
                       :min="1"
@@ -113,7 +113,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="Remainingthreshold">
+                  <el-form-item label="Remaining Threshold">
                     <el-input-number
                       v-model="newConfig.remainingThreshold"
                       :min="0"
@@ -129,21 +129,21 @@
               <el-form-item>
                 <el-button type="primary" @click="handleAddConfig" :loading="adding">
                   <el-icon><Plus /></el-icon>
-                  Addrules
+                  Add Rules
                 </el-button>
                 <span class="tip-text">
-                  whenUsage Rate ≥ {{ newConfig.usageThreshold }}% and Remaining Credits ≤ {{ newConfig.remainingThreshold }} whentriggerReset
+                  when Usage Rate ≥ {{ newConfig.usageThreshold }}% and Remaining Credits ≤ {{ newConfig.remainingThreshold }} trigger reset
                 </span>
               </el-form-item>
             </el-form>
           </el-card>
           
-          <!-- ConfiguredrulesList -->
+          <!-- Configured Rules List -->
           <el-card class="config-list-card" shadow="never">
             <template #header>
               <div class="card-header">
                 <div class="header-left">
-                  <span>Configuredrules ({{ filteredConfigs.length }}/{{ configs.length }})</span>
+                  <span>Configured Rules ({{ filteredConfigs.length }}/{{ configs.length }})</span>
                   <el-pagination
                     v-if="filteredConfigs.length > 0"
                     v-model:current-page="configCurrentPage"
@@ -172,7 +172,7 @@
                     :loading="checkingAll"
                   >
                     <el-icon><Refresh /></el-icon>
-                    immediatelycheckAll
+                    Immediately Check All
                   </el-button>
                   <el-button 
                     v-if="filteredConfigs.length > 0" 
@@ -182,14 +182,14 @@
                     :loading="resettingAll"
                   >
                     <el-icon><RefreshRight /></el-icon>
-                    immediatelyResetAll
+                    Immediately Reset All
                   </el-button>
                 </div>
               </div>
             </template>
             
-            <el-table :data="paginatedConfigs" v-loading="loading" empty-text="NoneAuto Resetrules">
-              <el-table-column label="target" min-width="280">
+            <el-table :data="paginatedConfigs" v-loading="loading" empty-text="No Auto Reset Rules">
+              <el-table-column label="Target" min-width="280">
                 <template #default="{ row }">
                   <div class="target-info">
                     <el-tag :type="row.targetType === 'group' ? 'primary' : 'success'" size="small">
@@ -200,20 +200,20 @@
                       <span v-if="getTargetNickname(row)" class="nickname">({{ getTargetNickname(row) }})</span>
                     </span>
                     <span v-if="row.targetType === 'group'" class="group-info">
-                      <el-tag type="warning" size="small" effect="plain">primary{{ getGroupStats(row.targetId).masters }}</el-tag>
-                      <el-tag type="info" size="small" effect="plain">Member{{ getGroupStats(row.targetId).members }}</el-tag>
+                      <el-tag type="warning" size="small" effect="plain">Primary: {{ getGroupStats(row.targetId).masters }}</el-tag>
+                      <el-tag type="info" size="small" effect="plain">Members: {{ getGroupStats(row.targetId).members }}</el-tag>
                     </span>
                   </div>
                 </template>
               </el-table-column>
               
-              <el-table-column label="checkinterval" width="90" align="center">
+              <el-table-column label="Check Interval" width="90" align="center">
                 <template #default="{ row }">
-                  {{ row.checkInterval }}minutes
+                  {{ row.checkInterval }} minutes
                 </template>
               </el-table-column>
               
-              <el-table-column label="triggeritemsitem" width="140">
+              <el-table-column label="Trigger Condition" width="140">
                 <template #default="{ row }">
                   <div class="condition-info">
                     <span>Usage Rate ≥ {{ row.usageThreshold }}%</span>
@@ -222,14 +222,14 @@
                 </template>
               </el-table-column>
               
-              <el-table-column label="ontimecheck" width="120">
+              <el-table-column label="On Time Check" width="120">
                 <template #default="{ row }">
                   <span v-if="row.lastCheckAt">{{ formatTime(row.lastCheckAt) }}</span>
                   <span v-else class="no-data">-</span>
                 </template>
               </el-table-column>
               
-              <el-table-column label="ontimeReset" width="120">
+              <el-table-column label="On Time Reset" width="120">
                 <template #default="{ row }">
                   <span v-if="row.lastResetAt">{{ formatTime(row.lastResetAt) }}</span>
                   <span v-else class="no-data">-</span>
@@ -260,21 +260,21 @@
         </div>
       </el-tab-pane>
       
-      <!-- Tab 2: Resetrecord -->
-      <el-tab-pane label="Resetrecord" name="records">
+      <!-- Tab 2: Reset Record -->
+      <el-tab-pane label="Reset Record" name="records">
         <div class="tab-content">
           <el-card shadow="never">
             <template #header>
               <div class="card-header">
-                <span>Resethistoryrecord ({{ recordsTotal }})</span>
+                <span>Reset History Record ({{ recordsTotal }})</span>
                 <el-button v-if="recordsTotal > 0" type="danger" link @click="handleClearRecords">
                   <el-icon><Delete /></el-icon>
-                  Clearrecord
+                  Clear Record
                 </el-button>
               </div>
             </template>
             
-            <el-table :data="records" v-loading="recordsLoading" empty-text="NoneResetrecord">
+            <el-table :data="records" v-loading="recordsLoading" empty-text="No Reset Records">
               <el-table-column label="Account" min-width="200">
                 <template #default="{ row }">
                   <div>
@@ -284,13 +284,13 @@
                 </template>
               </el-table-column>
               
-              <el-table-column label="primary account" min-width="180">
+              <el-table-column label="Primary Account" min-width="180">
                 <template #default="{ row }">
                   {{ row.master_email }}
                 </template>
               </el-table-column>
               
-              <el-table-column label="Resetbeforeuse" width="120" align="center">
+              <el-table-column label="Reset Before Use" width="120" align="center">
                 <template #default="{ row }">
                   <span>{{ formatNumber(row.used_quota_before / 100) }}</span>
                   <span class="usage-percent">({{ row.usage_percent }}%)</span>
@@ -303,7 +303,7 @@
                 </template>
               </el-table-column>
               
-              <el-table-column label="autojoin" width="80" align="center">
+              <el-table-column label="Auto Join" width="80" align="center">
                 <template #default="{ row }">
                   <el-tag :type="row.auto_joined ? 'success' : 'info'" size="small">
                     {{ row.auto_joined ? 'is' : 'no' }}
@@ -335,17 +335,17 @@
         </div>
       </el-tab-pane>
       
-      <!-- Tab 3: Statisticsoverview -->
-      <el-tab-pane label="Statisticsoverview" name="stats">
+      <!-- Tab 3: Statistics Overview -->
+      <el-tab-pane label="Statistics Overview" name="stats">
         <div class="tab-content">
           <el-card shadow="never">
             <template #header>
               <div class="card-header">
-                <span>AccountResetStatistics ({{ statsTotal }})</span>
+                <span>Account Reset Statistics ({{ statsTotal }})</span>
               </div>
             </template>
             
-            <el-table :data="stats" v-loading="statsLoading" empty-text="NoneStatisticsdata">
+            <el-table :data="stats" v-loading="statsLoading" empty-text="No Statistics Data">
               <el-table-column label="Account" min-width="200">
                 <template #default="{ row }">
                   <div>
@@ -355,25 +355,25 @@
                 </template>
               </el-table-column>
               
-              <el-table-column label="Resetcount" width="100" align="center">
+              <el-table-column label="Reset Count" width="100" align="center">
                 <template #default="{ row }">
                   <el-tag type="primary">{{ row.reset_count }}</el-tag>
                 </template>
               </el-table-column>
               
-              <el-table-column label="accumulatecountuseQuota" width="140" align="center">
+              <el-table-column label="Accumulated Used Quota" width="140" align="center">
                 <template #default="{ row }">
                   {{ formatNumber(row.total_used_quota / 100) }}
                 </template>
               </el-table-column>
               
-              <el-table-column label="平allevery timeuse" width="140" align="center">
+              <el-table-column label="Average Per Reset" width="140" align="center">
                 <template #default="{ row }">
                   {{ row.reset_count > 0 ? formatNumber(Math.round(row.total_used_quota / row.reset_count / 100)) : '-' }}
                 </template>
               </el-table-column>
               
-              <el-table-column label="ontimeReset" width="160">
+              <el-table-column label="On Time Reset" width="160">
                 <template #default="{ row }">
                   <span v-if="row.last_reset_at">{{ formatFullTime(row.last_reset_at) }}</span>
                   <span v-else class="no-data">-</span>
@@ -402,17 +402,17 @@
     <!-- EditDialog -->
     <el-dialog
       v-model="showEditDialog"
-      title="EditAuto Resetrules"
+      title="Edit Auto Reset Rules"
       width="450px"
       :close-on-click-modal="false"
       append-to-body
     >
       <el-form :model="editForm" label-width="100px" v-if="editingConfig">
-        <el-form-item label="target">
+        <el-form-item label="Target">
           <span>{{ getTargetName(editingConfig) }}</span>
         </el-form-item>
         
-        <el-form-item label="checkinterval">
+        <el-form-item label="Check Interval">
           <el-input-number
             v-model="editForm.checkInterval"
             :min="1"
@@ -421,14 +421,14 @@
           />
           <span class="unit-label">minutes</span>
           <div class="interval-presets">
-            <el-button size="small" text @click="editForm.checkInterval = 5">5minutes</el-button>
-            <el-button size="small" text @click="editForm.checkInterval = 10">10minutes</el-button>
-            <el-button size="small" text @click="editForm.checkInterval = 30">30minutes</el-button>
-            <el-button size="small" text @click="editForm.checkInterval = 60">60minutes</el-button>
+            <el-button size="small" text @click="editForm.checkInterval = 5">5 minutes</el-button>
+            <el-button size="small" text @click="editForm.checkInterval = 10">10 minutes</el-button>
+            <el-button size="small" text @click="editForm.checkInterval = 30">30 minutes</el-button>
+            <el-button size="small" text @click="editForm.checkInterval = 60">60 minutes</el-button>
           </div>
         </el-form-item>
         
-        <el-form-item label="Usage Ratethreshold">
+        <el-form-item label="Usage Rate Threshold">
           <el-input-number
             v-model="editForm.usageThreshold"
             :min="1"
@@ -438,7 +438,7 @@
           <span class="unit-label">%</span>
         </el-form-item>
         
-        <el-form-item label="Remainingthreshold">
+        <el-form-item label="Remaining Threshold">
           <el-input-number
             v-model="editForm.remainingThreshold"
             :min="0"
@@ -451,7 +451,7 @@
         
         <el-form-item>
           <span class="tip-text">
-            whenUsage Rate ≥ {{ editForm.usageThreshold }}% and Remaining Credits ≤ {{ editForm.remainingThreshold }} whentriggerReset
+            When Usage Rate ≥ {{ editForm.usageThreshold }}% and Remaining Credits ≤ {{ editForm.remainingThreshold }} trigger reset
           </span>
         </el-form-item>
       </el-form>

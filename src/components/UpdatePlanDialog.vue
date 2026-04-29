@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    title="changeSubscriptionplan"
+    title="Change Subscription Plan"
     width="1100px"
     class="plan-dialog"
     :close-on-click-modal="false"
@@ -11,7 +11,7 @@
       <!-- CurrentPlanInfo -->
       <div v-if="account?.plan_name" class="current-plan-info">
         <div class="info-left">
-          <div class="info-label">CurrentSubscriptionPlan</div>
+          <div class="info-label">Current Subscription Plan</div>
           <div class="info-value">
             <el-tag :class="['plan-tag', `plan-${account.plan_name?.toLowerCase()}`]" effect="dark">
               <el-icon><Trophy /></el-icon>
@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="info-right" v-if="account.total_quota">
-          <div class="quota-label">Quotausage info</div>
+          <div class="quota-label">Quota Usage Info</div>
           <div class="quota-value">
             <span class="used">{{ formatQuota(account.used_quota) }}</span>
             <span class="separator">/</span>
@@ -356,13 +356,13 @@ const billingPreview = ref<{
   billing_end?: string;
 } | null>(null);
 
-// Cancelreasonoption
+// Cancel Reason Option
 const cancelReasons = [
-  { value: 'too_expensive', label: '价格太贵' },
-  { value: 'not_using', label: 'no longeruse' },
-  { value: 'missing_features', label: 'MissingFeature' },
-  { value: 'switching_service', label: 'Switchtootherservice' },
-  { value: 'other', label: 'otherreason' }
+  { value: 'too_expensive', label: 'Too expensive' },
+  { value: 'not_using', label: 'No longer use' },
+  { value: 'missing_features', label: 'Missing Feature' },
+  { value: 'switching_service', label: 'Switch to other service' },
+  { value: 'other', label: 'Other reason' }
 ];
 
 watch(() => props.modelValue, (val) => {
