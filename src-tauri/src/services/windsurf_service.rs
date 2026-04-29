@@ -30,45 +30,45 @@ pub struct WindsurfService {
 
 impl WindsurfService {
     pub fn new() -> Self {
-        // 使用全局共享的 HTTP 客户端，避免每次请求都创建新实例
+        // Use globally shared HTTP client to avoid creating new instance for each request
         Self {
             client: super::get_http_client(),
         }
     }
 
     fn build_request_body(&self, token: &str, seat_count: i32) -> Vec<u8> {
-        // UpdateSeats的body格式: 0x0a + token长度(varint) + token + 0x10 + seat_count
+        // UpdateSeats body format: 0x0a + token length (varint) + token + 0x10 + seat_count
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
         
         let mut body = vec![0x0a];
         
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             body.push(token_length as u8);
         } else {
-            // 对于JWT token（通常>1000字节），需要两字节的varint
+            // For JWT tokens (usually >1000 bytes), need two-byte varint
             body.push(((token_length & 0x7F) | 0x80) as u8);
             body.push((token_length >> 7) as u8);
         }
         
-        // Token内容
+        // Token content
         body.extend_from_slice(token_bytes);
         
-        // 座位数（field 2, varint）
+        // Seat count (field 2, varint)
         body.push(0x10);
         body.push(seat_count as u8);
         
         body
     }
 
-    /// 构建更新计划请求体
+    /// Build update plan request body
     /// 
     /// Protobuf 结构 (UpdatePlanRequest):
     /// - Field 1 (LengthDelimited): auth_token (string)
     /// - Field 2 (Varint): price (StripePrice enum)
-    /// - Field 3 (Varint): preview (bool) - 预览模式
-    /// - Field 4 (Varint): payment_period (PaymentPeriod enum: 1=月付, 2=年付)
+    /// - Field 3 (Varint): preview (bool) - Preview mode
+    /// - Field 4 (Varint): payment_period (PaymentPeriod enum: 1=Monthly, 2=Yearly)
     /// - Field 5 (Varint): teams_tier (TeamsTier enum: 1-11)
     fn build_update_plan_body(&self, token: &str, plan_type: &str, payment_period: u8, preview: bool) -> Vec<u8> {
         let token_bytes = token.as_bytes();
@@ -76,7 +76,7 @@ impl WindsurfService {
 
         let mut body = vec![0x0a];
 
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             body.push(token_length as u8);
         } else {
@@ -87,8 +87,8 @@ impl WindsurfService {
         body.extend_from_slice(token_bytes);
         
         // Field 2: price (StripePrice)
-        // 1 = STRIPE_PRICE_TEAMS_MONTHLY (月付价格)
-        // 2 = STRIPE_PRICE_TEAMS_YEARLY (年付价格)
+        // 1 = STRIPE_PRICE_TEAMS_MONTHLY (Monthly price)
+        // 2 = STRIPE_PRICE_TEAMS_YEARLY (Yearly price)
         body.push(0x10);
         body.push(if payment_period == 2 { 0x02 } else { 0x01 });
         
@@ -99,15 +99,15 @@ impl WindsurfService {
         }
         
         // Field 4: payment_period (0x20 = field 4 varint)
-        // 1 = PAYMENT_PERIOD_MONTH (月付)
-        // 2 = PAYMENT_PERIOD_YEAR (年付)
+        // 1 = PAYMENT_PERIOD_MONTH (Monthly)
+        // 2 = PAYMENT_PERIOD_YEAR (Yearly)
         body.push(0x20);
         body.push(if payment_period == 2 { 0x02 } else { 0x01 });
         
         // Field 5: teams_tier (0x28 = field 5 varint)
         body.push(0x28);
 
-        // 根据订阅类型添加不同的后缀字节 (TeamsTier枚举值)
+        // Add different suffix bytes based on subscription type (TeamsTier enum value)
         match plan_type.to_lowercase().as_str() {
             "free" => body.push(0x00),                     // 0 = TEAMS_TIER_UNSPECIFIED (Free)
             "teams" => body.push(0x01),                    // 1 = TEAMS_TIER_TEAMS
@@ -129,18 +129,18 @@ impl WindsurfService {
             "max" => body.push(0x12),                      // 18 = TEAMS_TIER_MAX
             "devin_free" => body.push(0x13),               // 19 = TEAMS_TIER_DEVIN_FREE
             "devin_trial" => body.push(0x14),              // 20 = TEAMS_TIER_DEVIN_TRIAL
-            "enterprise" | _ => body.push(0x0a),           // 默认使用 ENTERPRISE_SELF_SERVE
+            "enterprise" | _ => body.push(0x0a),           // Default to ENTERPRISE_SELF_SERVE
         }
 
         body
     }
 
-    /// 构建取消订阅请求体
+    /// Build cancel subscription request body
     ///
-    /// Protobuf 结构：
+    /// Protobuf structure:
     /// - Field 1 (LengthDelimited): Firebase ID Token
-    /// - Field 2 (Varint): 1 (表示取消操作)
-    /// - Field 5 (LengthDelimited): 取消原因字符串
+    /// - Field 2 (Varint): 1 (indicates cancel operation)
+    /// - Field 5 (LengthDelimited): Cancel reason string
     fn build_cancel_plan_body(&self, token: &str, reason: &str) -> Vec<u8> {
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
@@ -149,7 +149,7 @@ impl WindsurfService {
 
         let mut body = vec![0x0a]; // Field 1, wire type 2 (LengthDelimited)
 
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             body.push(token_length as u8);
         } else {
@@ -157,17 +157,17 @@ impl WindsurfService {
             body.push((token_length >> 7) as u8);
         }
 
-        // Token内容
+        // Token content
         body.extend_from_slice(token_bytes);
 
-        // Field 2: int32 = 1 (表示取消操作)
+        // Field 2: int32 = 1 (indicates cancel operation)
         body.push(0x10); // Field 2, wire type 0 (Varint)
         body.push(0x01); // value = 1
 
-        // Field 5: 取消原因字符串
+        // Field 5: Cancel reason string
         body.push(0x2a); // Field 5, wire type 2 (LengthDelimited)
 
-        // 原因字符串长度
+        // Reason string length
         if reason_length < 128 {
             body.push(reason_length as u8);
         } else {
@@ -175,24 +175,24 @@ impl WindsurfService {
             body.push((reason_length >> 7) as u8);
         }
 
-        // 原因字符串内容
+        // Reason string content
         body.extend_from_slice(reason_bytes);
 
         body
     }
 
-    /// 构建恢复订阅请求体
+    /// Build resume subscription request body
     ///
-    /// Protobuf 结构：
+    /// Protobuf structure:
     /// - Field 1 (LengthDelimited): Firebase ID Token
-    /// - Field 3 (Varint): 1 (表示恢复操作)
+    /// - Field 3 (Varint): 1 (indicates resume operation)
     fn build_resume_plan_body(&self, token: &str) -> Vec<u8> {
         let token_bytes = token.as_bytes();
         let token_length = token_bytes.len();
 
         let mut body = vec![0x0a]; // Field 1, wire type 2 (LengthDelimited)
 
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             body.push(token_length as u8);
         } else {
@@ -200,10 +200,10 @@ impl WindsurfService {
             body.push((token_length >> 7) as u8);
         }
 
-        // Token内容
+        // Token content
         body.extend_from_slice(token_bytes);
 
-        // Field 3: int32 = 1 (表示恢复操作)
+        // Field 3: int32 = 1 (indicates resume operation)
         body.push(0x18); // Field 3, wire type 0 (Varint)
         body.push(0x01); // value = 1
 
@@ -339,32 +339,32 @@ impl WindsurfService {
                     let status_code = response.status().as_u16();
                     let response_bytes = response.bytes().await.unwrap_or_default();
                     
-                    // 尝试解析响应
+                    // Try to parse response
                     let mut raw_response = String::from_utf8_lossy(&response_bytes).to_string();
                     let mut parsed_data = None;
                     
-                    // 200 或 204 都表示成功
+                    // 200 or 204 both indicate success
                     if status_code == 200 || status_code == 204 {
-                        // 尝试解析Protobuf响应
+                        // Try to parse Protobuf response
                         if response_bytes.len() > 0 {
                             match crate::services::proto_parser::ProtobufParser::parse_update_seats_response(&response_bytes) {
                                 Ok(parsed) => {
                                     println!("[UpdateSeats] Successfully parsed response: {:?}", parsed);
                                     parsed_data = Some(parsed.clone());
                                     
-                                    // 检查解析后的成功状态
+                                    // Check parsed success status
                                     if let Some(parsed_success) = parsed.get("success").and_then(|v| v.as_bool()) {
                                         success = parsed_success;
                                     } else {
-                                        success = true; // 如果没有明确的失败标志，视为成功
+                                        success = true; // If no explicit failure flag, treat as success
                                     }
                                     
-                                    // 构造更详细的响应
+                                    // Build more detailed response
                                     raw_response = parsed.to_string();
                                 },
                                 Err(e) => {
                                     println!("[UpdateSeats] Failed to parse response: {}", e);
-                                    // 解析失败但状态码是200/204，仍视为成功
+                                    // Parse failed but status code is 200/204, still treat as success
                                     success = true;
                                 }
                             }
@@ -373,7 +373,7 @@ impl WindsurfService {
                         }
                     }
                     
-                    // 构造尝试结果
+                    // Build attempt result
                     let mut attempt_result = AttemptResult {
                         attempt: i as usize + 1,
                         status_code: Some(status_code),
@@ -382,9 +382,9 @@ impl WindsurfService {
                         timestamp: chrono::Utc::now().to_rfc3339(),
                     };
                     
-                    // 如果有解析数据，添加到结果中
+                    // If there is parsed data, add to result
                     if let Some(data) = parsed_data {
-                        // 将解析的数据作为JSON字符串存储
+                        // Store parsed data as JSON string
                         if let Ok(json_str) = serde_json::to_string_pretty(&data) {
                             attempt_result.raw_response = Some(json_str);
                         }
@@ -392,7 +392,7 @@ impl WindsurfService {
                     
                     attempts.push(attempt_result);
                     
-                    // 如果成功，直接返回，不需要继续重试
+                    // If successful, return directly, no need to continue retrying
                     if success {
                         break;
                     }
@@ -430,7 +430,7 @@ impl WindsurfService {
         
         let mut full_body = vec![0x0a];
         
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             full_body.push(token_length as u8);
         } else {
@@ -481,17 +481,17 @@ impl WindsurfService {
                 println!("[GetTeamCreditEntries] Response size: {} bytes", response_bytes.len());
                 
                 if status_code == 200 {
-                    // 空响应可能表示没有积分记录
+                    // Empty response may indicate no credit records
                     if response_bytes.len() == 0 {
                         println!("[GetTeamCreditEntries] Empty response - no credit entries found");
                         return Ok(json!({
                             "success": true,
                             "entries": [],
                             "total_entries": 0,
-                            "message": "该团队暂无积分记录"
+                            "message": "This team has no credit records"
                         }));
                     }
-                    // 打印响应的前100个字节用于调试
+                    // Print first 100 bytes of response for debugging
                     let preview = if response_bytes.starts_with(b"data:application/proto;base64,") {
                         "Base64 encoded response"
                     } else {
@@ -499,7 +499,7 @@ impl WindsurfService {
                     };
                     println!("[GetTeamCreditEntries] Response format: {}", preview);
                     
-                    // 尝试解析Protobuf响应
+                    // Try to parse Protobuf response
                     match crate::services::proto_parser::ProtobufParser::parse_get_team_credit_entries_response(&response_bytes) {
                         Ok(parsed) => {
                             println!("[GetTeamCreditEntries] Successfully parsed credit entries response");
@@ -552,7 +552,7 @@ impl WindsurfService {
         
         let mut full_body = vec![0x0a];
         
-        // Token长度（使用varint编码）
+        // Token length (using varint encoding)
         if token_length < 128 {
             full_body.push(token_length as u8);
         } else {
@@ -596,7 +596,7 @@ impl WindsurfService {
                 println!("[GetTeamBilling] Response size: {} bytes", response_bytes.len());
                 
                 if status_code == 200 && response_bytes.len() > 0 {
-                    // 尝试解析Protobuf响应
+                    // Try to parse Protobuf response
                     match crate::services::proto_parser::ProtobufParser::parse_get_team_billing_response(&response_bytes) {
                         Ok(parsed) => {
                             println!("[GetTeamBilling] Successfully parsed billing response");
@@ -3055,41 +3055,41 @@ impl WindsurfService {
             .to_ascii_lowercase();
         let body_bytes = response.bytes().await.map_err(|e| AppError::Api(e.to_string()))?;
 
-        // 非 200：直接当失败
+        // Non-200: directly treat as failure
         if status_code != 200 {
             let error_text = String::from_utf8_lossy(&body_bytes).to_string();
             return Ok(serde_json::json!({
                 "success": false,
                 "status_code": status_code,
-                "error": "检查试用资格失败",
+                "error": "Failed to check trial eligibility",
                 "error_details": error_text,
             }));
         }
 
-        // Content-Type 校验：只接受 proto；其它（如 Connect 的 application/json 错误包装）判异常
+        // Content-Type validation: only accept proto; others (like Connect's application/json error wrapper) are considered exceptions
         let is_proto_ct = content_type.starts_with("application/proto")
             || content_type.starts_with("application/protobuf")
             || content_type.starts_with("application/x-protobuf")
-            || content_type.is_empty(); // 某些代理可能不带 header，暂放行由 body 解析兜底
+            || content_type.is_empty(); // Some proxies may not send header, temporarily allow pass with body parsing as fallback
         if !is_proto_ct {
             return Ok(serde_json::json!({
                 "success": false,
                 "status_code": status_code,
-                "error": "响应 Content-Type 非 protobuf，疑似 token 失效或后端异常",
+                "error": "Response Content-Type is not protobuf, possibly token expired or backend exception",
                 "content_type": content_type,
                 "error_details": String::from_utf8_lossy(&body_bytes).to_string(),
             }));
         }
 
-        // body 解析：严格按 protobuf wire format 扫描 field 1 的 bool 值
+        // Body parsing: strictly scan field 1's bool value according to protobuf wire format
         match parse_is_eligible_strict(&body_bytes) {
             Ok(is_eligible) => Ok(serde_json::json!({
                 "success": true,
                 "is_eligible": is_eligible,
-                "message": if is_eligible { "您有资格免费试用Pro" } else { "您暂无Pro试用资格" },
+                "message": if is_eligible { "You are eligible for free Pro trial" } else { "You currently have no Pro trial eligibility" },
             })),
             Err(reason) => {
-                // 响应形态异常：不报"合格"，fail-fast
+                // Response format exception: do not report "qualified", fail-fast
                 let hex_preview: String = body_bytes
                     .iter()
                     .take(32)
@@ -3099,7 +3099,7 @@ impl WindsurfService {
                 Ok(serde_json::json!({
                     "success": false,
                     "status_code": status_code,
-                    "error": format!("响应格式异常: {}", reason),
+                    "error": format!("Response format exception: {}", reason),
                     "body_len": body_bytes.len(),
                     "body_hex_preview": hex_preview,
                 }))
@@ -3107,9 +3107,9 @@ impl WindsurfService {
         }
     }
 
-    // ==================== 用户API密钥管理 API ====================
+    // ==================== User API Key Management API ====================
 
-    /// 获取用户API密钥摘要列表 (GetApiKeySummary)
+    /// Get user API key summary list (GetApiKeySummary)
     pub async fn get_api_key_summary(&self, ctx: &AuthContext) -> AppResult<serde_json::Value> {
         let token = ctx.token_str();
         let url = format!("{}/exa.seat_management_pb.SeatManagementService/GetApiKeySummary", WINDSURF_BASE_URL);

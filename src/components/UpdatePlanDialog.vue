@@ -163,11 +163,11 @@
         <div class="loop-header">
           <div class="loop-title">
             <el-icon><Refresh /></el-icon>
-            <span>cycle changeMode</span>
+            <span>Cycle Change Mode</span>
           </div>
           <el-switch v-model="loopMode" :disabled="isLooping" />
         </div>
-        <p class="loop-desc">After enablingwill持续executeSubscriptionchange，directtoconsecutive3timefailed or manuallyStop</p>
+        <p class="loop-desc">After enabling will continuously execute subscription change, directly to consecutive 3 times failed or manually stop</p>
         
         <!-- loopexecuteStatus -->
         <div v-if="isLooping || loopStats.totalAttempts > 0" class="loop-status">
@@ -187,7 +187,7 @@
           </div>
           <div v-if="loopStats.consecutiveFailures > 0" class="consecutive-warn">
             <el-icon><Warning /></el-icon>
-            consecutivefailed: {{ loopStats.consecutiveFailures }} / 3
+            consecutive failed: {{ loopStats.consecutiveFailures }} / 3
           </div>
           <div v-if="loopStats.lastError" class="last-error">
             <el-icon><InfoFilled /></el-icon>
@@ -196,11 +196,11 @@
         </div>
       </div>
 
-      <!-- SubscriptionManagementarea -->
+      <!-- Subscription Management area -->
       <div class="subscription-management">
         <div class="management-header">
-          <span class="title">SubscriptionManagement</span>
-          <span class="subtitle">ManagementyouSubscription status</span>
+          <span class="title">Subscription Management</span>
+          <span class="subtitle">Manage your subscription status</span>
         </div>
 
         <div class="subscription-actions">
@@ -287,26 +287,26 @@ const paymentPeriod = ref<number>(1);
 
 // Subscriptionplanconfig
 const planConfigs = [
-  { key: 'free', name: 'Free', tier: 0, icon: 'Present', color: '#6b7280', desc: 'Free', features: ['basicFeature', 'Freeuse', '社areasupport'] },
-  { key: 'teams', name: 'Teams', tier: 1, icon: 'UserFilled', color: '#10b981', desc: 'Team', features: ['Team协make', 'multipleUserManagement', 'setinbilling'] },
-  { key: 'pro', name: 'Pro', tier: 2, icon: 'Star', color: '#3b82f6', desc: 'Pro', features: ['personPro', 'AdvancedFeature', 'prioritysupport'] },
-  { key: 'enterprise_saas', name: 'Enterprise SaaS', tier: 3, icon: 'OfficeBuilding', color: '#8b5cf6', desc: 'EnterpriseSaaSversion', features: ['Enterpriselevel安full', 'SaaSdeploy', 'APIaccess'] },
-  { key: 'hybrid', name: 'Hybrid', tier: 4, icon: 'Connection', color: '#f59e0b', desc: 'mixdeployversion', features: ['mix云deploy', '灵活config', 'data隔离'] },
-  { key: 'enterprise_self_hosted', name: 'Enterprise Self-Hosted', tier: 5, icon: 'Monitor', color: '#ec4899', desc: 'Enterpriseself-hostedversion', features: ['localdeploy', 'complete控制', 'data自primary'] },
-  { key: 'waitlist_pro', name: 'Waitlist Pro', tier: 6, icon: 'Clock', color: '#6366f1', desc: 'waitListPro', features: ['预约access', 'priority体验', '特otheroptimal惠'] },
-  { key: 'teams_ultimate', name: 'Teams Ultimate', tier: 7, icon: 'Trophy', color: '#14b8a6', desc: 'TeamFlagship', features: ['AllTeamFeature', 'unlimitedQuota', 'VIPsupport'] },
-  { key: 'pro_ultimate', name: 'Pro Ultimate', tier: 8, icon: 'Medal', color: '#f97316', desc: 'ProFlagship', features: ['AllProFeature', 'unlimitedQuota', 'VIPsupport'] },
-  { key: 'trial', name: 'Trial', tier: 9, icon: 'Promotion', color: '#84cc16', desc: 'Trial', features: ['限when体验', 'AllFeature', 'noneedpaid'] },
-  { key: 'enterprise_self_serve', name: 'Enterprise Self-Serve', tier: 10, icon: 'Briefcase', color: '#a855f7', desc: 'Enterpriseself-serviceversion', features: ['EnterpriselevelFeature', 'self-serviceManagement', 'SLA保障'] },
-  { key: 'enterprise_saas_pooled', name: 'Enterprise SaaS Pooled', tier: 11, icon: 'Grid', color: '#0891b2', desc: 'EnterpriseSaaSPooled', features: ['total享资源pool', 'popupproperty扩展', '成thisoptimal'] },
-  { key: 'devin_enterprise', name: 'Devin Enterprise', tier: 12, icon: 'Cpu', color: '#dc2626', desc: 'DevinEnterprise', features: ['AIProxy', 'Enterpriselevel', 'Team Management'] },
-  { key: 'devin_teams', name: 'Devin Teams', tier: 14, icon: 'Cpu', color: '#e11d48', desc: 'DevinTeam', features: ['AIProxy', 'Team协make', 'multipleUser'] },
-  { key: 'devin_teams_v2', name: 'Devin Teams V2', tier: 15, icon: 'Cpu', color: '#be123c', desc: 'DevinTeamV2', features: ['AIProxy', 'TeamV2', 'enhanceFeature'] },
-  { key: 'devin_pro', name: 'Devin Pro', tier: 16, icon: 'Cpu', color: '#ea580c', desc: 'DevinPro', features: ['AIProxy', 'ProFeature', 'personuse'] },
-  { key: 'devin_max', name: 'Devin Max', tier: 17, icon: 'Cpu', color: '#c2410c', desc: 'DevinFlagship', features: ['AIProxy', 'unlimitedFeature', 'most高config'] },
-  { key: 'max', name: 'Max', tier: 18, icon: 'StarFilled', color: '#7c3aed', desc: 'Flagship', features: ['most高config', 'unlimitedQuota', 'fullFeaturesolve锁'] },
-  { key: 'devin_free', name: 'Devin Free', tier: 19, icon: 'Cpu', color: '#9ca3af', desc: 'DevinFree', features: ['AIProxy', 'basicFeature', 'Freeuse'] },
-  { key: 'devin_trial', name: 'Devin Trial', tier: 20, icon: 'Cpu', color: '#f472b6', desc: 'DevinTrial', features: ['AIProxy', '限when体验', 'AllFeature'] },
+  { key: 'free', name: 'Free', tier: 0, icon: 'Present', color: '#6b7280', desc: 'Free', features: ['Basic Feature', 'Free Use', 'Community Support'] },
+  { key: 'teams', name: 'Teams', tier: 1, icon: 'UserFilled', color: '#10b981', desc: 'Team', features: ['Team Collaboration', 'Multiple User Management', 'Set in Billing'] },
+  { key: 'pro', name: 'Pro', tier: 2, icon: 'Star', color: '#3b82f6', desc: 'Pro', features: ['Personal Pro', 'Advanced Feature', 'Priority Support'] },
+  { key: 'enterprise_saas', name: 'Enterprise SaaS', tier: 3, icon: 'OfficeBuilding', color: '#8b5cf6', desc: 'Enterprise SaaS Version', features: ['Enterprise Level Security Full', 'SaaS Deploy', 'API Access'] },
+  { key: 'hybrid', name: 'Hybrid', tier: 4, icon: 'Connection', color: '#f59e0b', desc: 'Mixed Deploy Version', features: ['Mixed Cloud Deploy', 'Flexible Config', 'Data Isolation'] },
+  { key: 'enterprise_self_hosted', name: 'Enterprise Self-Hosted', tier: 5, icon: 'Monitor', color: '#ec4899', desc: 'Enterprise Self-Hosted Version', features: ['Local Deploy', 'Complete Control', 'Data Self Primary'] },
+  { key: 'waitlist_pro', name: 'Waitlist Pro', tier: 6, icon: 'Clock', color: '#6366f1', desc: 'Waitlist Pro', features: ['Reservation Access', 'Priority Experience', 'Special Benefits'] },
+  { key: 'teams_ultimate', name: 'Teams Ultimate', tier: 7, icon: 'Trophy', color: '#14b8a6', desc: 'Team Flagship', features: ['All Team Feature', 'Unlimited Quota', 'VIP Support'] },
+  { key: 'pro_ultimate', name: 'Pro Ultimate', tier: 8, icon: 'Medal', color: '#f97316', desc: 'Pro Flagship', features: ['All Pro Feature', 'Unlimited Quota', 'VIP Support'] },
+  { key: 'trial', name: 'Trial', tier: 9, icon: 'Promotion', color: '#84cc16', desc: 'Trial', features: ['Limited Time Experience', 'All Feature', 'No Need Paid'] },
+  { key: 'enterprise_self_serve', name: 'Enterprise Self-Serve', tier: 10, icon: 'Briefcase', color: '#a855f7', desc: 'Enterprise Self-Service Version', features: ['Enterprise Level Feature', 'Self-Service Management', 'SLA Guarantee'] },
+  { key: 'enterprise_saas_pooled', name: 'Enterprise SaaS Pooled', tier: 11, icon: 'Grid', color: '#0891b2', desc: 'Enterprise SaaS Pooled', features: ['Total Shared Resource Pool', 'Pop-up Property Expansion', 'Cost Optimization'] },
+  { key: 'devin_enterprise', name: 'Devin Enterprise', tier: 12, icon: 'Cpu', color: '#dc2626', desc: 'Devin Enterprise', features: ['AI Proxy', 'Enterprise Level', 'Team Management'] },
+  { key: 'devin_teams', name: 'Devin Teams', tier: 14, icon: 'Cpu', color: '#e11d48', desc: 'Devin Team', features: ['AI Proxy', 'Team Collaboration', 'Multiple User'] },
+  { key: 'devin_teams_v2', name: 'Devin Teams V2', tier: 15, icon: 'Cpu', color: '#be123c', desc: 'Devin Team V2', features: ['AI Proxy', 'Team V2', 'Enhanced Feature'] },
+  { key: 'devin_pro', name: 'Devin Pro', tier: 16, icon: 'Cpu', color: '#ea580c', desc: 'Devin Pro', features: ['AI Proxy', 'Pro Feature', 'Personal Use'] },
+  { key: 'devin_max', name: 'Devin Max', tier: 17, icon: 'Cpu', color: '#c2410c', desc: 'Devin Flagship', features: ['AI Proxy', 'Unlimited Feature', 'Highest Configuration'] },
+  { key: 'max', name: 'Max', tier: 18, icon: 'StarFilled', color: '#7c3aed', desc: 'Flagship', features: ['Highest Configuration', 'Unlimited Quota', 'Full Feature Solution'] },
+  { key: 'devin_free', name: 'Devin Free', tier: 19, icon: 'Cpu', color: '#9ca3af', desc: 'Devin Free', features: ['AI Proxy', 'Basic Feature', 'Free Use'] },
+  { key: 'devin_trial', name: 'Devin Trial', tier: 20, icon: 'Cpu', color: '#f472b6', desc: 'Devin Trial', features: ['AI Proxy', 'Limited Time Experience', 'All Feature'] },
 ];
 const loading = ref(false);
 const cancelLoading = ref(false);
